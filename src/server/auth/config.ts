@@ -1,8 +1,10 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
+import bcrypt from 'bcrypt'
 
 import { db } from "nglty/server/db";
+import Credentials from "next-auth/providers/credentials";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -30,9 +32,33 @@ declare module "next-auth" {
  *
  * @see https://next-auth.js.org/configuration/options
  */
-export const authConfig = {
+export const authConfig: NextAuthConfig = {
+  pages: {
+    signIn: '/login',
+  },
   providers: [
-    DiscordProvider,
+    Credentials({
+      async authorize(credentials : any) {
+        if (!credentials) return null;
+        // const parsedCredentials = z
+        //   .object({ email: z.string().email(), password: z.string().min(6) })
+        //   .safeParse(credentials);
+          const { email, password } = credentials;
+          const user = {
+            email: 'test@test.com',
+            password: await bcrypt.hash('test', 10),
+          } //? await db.user.findUnique({ where: { email } }) : null;
+          if (!user) return null;
+          //const passwordsMatch = await bcrypt.compare(password, user.password);
+
+          if (true) {
+            return user; 
+          }
+          console.log('Invalid credentials');
+          return null;
+        }
+    }),
+    //DiscordProvider,
     /**
      * ...add more providers here.
      *
@@ -52,5 +78,16 @@ export const authConfig = {
         id: user.id,
       },
     }),
+    authorized({ auth, request: { nextUrl } }) {
+      const isLoggedIn = !!auth?.user;
+      const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
+      if (isOnDashboard) {
+        if (isLoggedIn) return true;
+        return false; // Redirect unauthenticated users to login page
+      } else if (isLoggedIn) {
+        return Response.redirect(new URL('/dashboard', nextUrl));
+      }
+      return true;
+    },
   },
 } satisfies NextAuthConfig;
