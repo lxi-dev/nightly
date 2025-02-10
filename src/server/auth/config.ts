@@ -1,6 +1,5 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
-import DiscordProvider from "next-auth/providers/discord";
 import bcrypt from 'bcrypt'
 
 import { db } from "nglty/server/db";
@@ -38,15 +37,16 @@ export const authConfig: NextAuthConfig = {
   },
   providers: [
     Credentials({
-      async authorize(credentials : any) {
+      async authorize(credentials : Partial<Record<string, unknown>>) {
         if (!credentials) return null;
         // const parsedCredentials = z
         //   .object({ email: z.string().email(), password: z.string().min(6) })
         //   .safeParse(credentials);
-          const { email, password } = credentials;
+          const { email, password } = await credentials;
           const user = {
             email: 'test@test.com',
-            password: await bcrypt.hash('test', 10),
+            signupMail: email ? true : false,
+            password: password,
           } //? await db.user.findUnique({ where: { email } }) : null;
           if (!user) return null;
           //const passwordsMatch = await bcrypt.compare(password, user.password);
