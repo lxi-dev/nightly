@@ -1,6 +1,5 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
-import bcrypt from 'bcrypt'
 
 import { db } from "nglty/server/db";
 import Credentials from "next-auth/providers/credentials";
@@ -42,7 +41,7 @@ export const authConfig: NextAuthConfig = {
         // const parsedCredentials = z
         //   .object({ email: z.string().email(), password: z.string().min(6) })
         //   .safeParse(credentials);
-          const { email, password } = await credentials;
+          const { email, password } = credentials;
           const user = {
             email: 'test@test.com',
             signupMail: email ? true : false,
