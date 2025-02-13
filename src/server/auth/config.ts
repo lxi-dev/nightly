@@ -3,6 +3,7 @@ import { type DefaultSession, type NextAuthConfig } from "next-auth";
 
 import { db } from "nglty/server/db";
 import Credentials from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -35,6 +36,10 @@ export const authConfig: NextAuthConfig = {
     signIn: '/login',
   },
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET
+    }),
     Credentials({
       async authorize(credentials : Partial<Record<string, unknown>>) {
         if (!credentials) return null;
@@ -90,3 +95,4 @@ export const authConfig: NextAuthConfig = {
     },
   },
 } satisfies NextAuthConfig;
+

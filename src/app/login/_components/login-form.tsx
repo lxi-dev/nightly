@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 'use client';
  
 import {
@@ -6,35 +8,36 @@ import {
   ArrowRightIcon,
   ExclamationCircleIcon,
 } from '@heroicons/react/24/outline';
+import { motion } from 'framer-motion';
+import { signIn } from 'nglty/server/auth';
 import { authenticate } from 'nglty/server/auth/actions';
 import { useActionState } from 'react';
  
 export default function LoginForm() {
-  const [errorMessage, formAction, isPending] = useActionState(
+  const [errorMessage, formAction, _isPending] = useActionState(
     authenticate,
     undefined,
   );
  //
   return (
-    <main className=''>
-    <form   action={formAction} className="space-y-3 ">
-      <div className="w-100 p-6 bg-white border border-gray-200 bg-white rounded-lg shadow dark:border-gray-700 z-20">
-      <div className='text-black text-center mt-4'>
-        <h3 className='text-xl'>Willkommen bei Nightly! 🌙</h3>
-        <p className='mt-4 text-sm'>Einem Netzwerk zum  <br></br>rausgehen und zurückholen.</p>
-        <p className='text-xs font-semibold text-slate-600 mt-8 mb-4'>Anmelden</p>
-      </div>
+    <main className='dark'>
+    <form action={formAction} className="space-y-3 dark:text-white ">
+      {/* <div className="flex-grow h-px bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-100"></div>
+      <span className="mx-4 text-neutral-500 dark:text-neutral-400 text-sm">ANMELDEN</span>
+      <div className="flex-grow h-px bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-100"></div> */}
+    {/* </div> */}
         <div className="flex-col m-auto align-center w-72 flex">  
           <div>
             <label
-              className="mb-3 mt-3 block text-xs font-medium text-black"
+              className="mb-1 mt-0 block text-xs font-medium text-black dark:text-white"
               htmlFor="email"
             >
               Email
             </label>
             <div className="relative">
               <input
-                className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                disabled={true}
+                className="peer block w-full disabled:bg-zink-800 rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500 bg-zink-900"
                 id="email"
                 type="email"
                 name="email"
@@ -44,16 +47,18 @@ export default function LoginForm() {
               <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
           </div>
-          <div className="mt-2">
+          <div className="mt-3">
             <label
-              className="mb-1 block text-xs font-medium text-black"
+              className="mb-1 mt-0 block text-xs font-medium text-black dark:text-white"
               htmlFor="password"
             >
               Password
             </label>
             <div className="relative">
               <input
-                className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                disabled={true}
+
+                className="peer block w-full rounded-md border border-gray-200 disabled:bg-zink-800 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
                 id="password"
                 type="password"
                 name="password"
@@ -63,15 +68,28 @@ export default function LoginForm() {
               />
               <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
-          </div>
-        </div>
-        <div className='mt-12'>
-        <button className="mt-4 w-full" aria-disabled={isPending}>
-            Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
-          </button>
+            </div>
+            <p className='font-light text-xs text-center mt-4'>Noch keinen Account? Jetzt <a className='underline hover:text-purple-600' href='/register'>Anmelden!</a></p>
+        <div className="relative flex items-center mt-12">
+        <div className="flex-grow h-px bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-100"></div>
+      <span className="mx-4 text-neutral-500 dark:text-neutral-400 text-sm">ANMELDEN</span>
+      <div className="flex-grow h-px bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-100"></div>
+       </div>
+        <div className='mt-4'>
+        <motion.button 
+         whileHover={{ scale: 1.02 }}
+         onHoverStart={event => {}}
+         onHoverEnd={event => {}}
+         onClick={() => signIn("credentials")}
+         aria-disabled={true}
+         className="mt-4 w-full dark:bg-white dark:text-black dark:disabled:bg-zink-800 items-center justify-center rounded-md"
+          >
+            <span className="p-2 font-light text-center flex flex-row items-center justify-center">
+            <ArrowRightIcon className="ml-4 w-5 h-5 text-black" />
+            </span>
+          </motion.button>
           </div>
 
-        <p className='font-light text-xs text-center mt-4'>Noch keinen Account? Jetzt <a className='underline hover:text-purple-600' href='/register'>Anmelden!</a></p>
         <div
           className="flex h-6 items-end space-x-1"
           aria-live="polite"
@@ -84,7 +102,7 @@ export default function LoginForm() {
             </>
           )}
         </div>
-      </div>
+        </div>
     </form>
     </main>
   );

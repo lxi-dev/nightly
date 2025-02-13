@@ -1,4 +1,4 @@
-import Logo from 'nglty/components/elements/logo';
+import Logo from 'nglty/components/elements/logo/logo';
 import LoginForm from './_components/login-form';
 import UnicornStudioComponent from 'nglty/components/backgrounds/unicorn-studio';
 
