@@ -1,9 +1,7 @@
 'use client';
-import Link from "next/link";
 import { StarsBackground } from "../backgrounds/stars";
 import { BentoBox } from "../elements/box";
-import { Seperator } from "../elements/seperator"
-import { User } from "next-auth";
+import type { User } from "next-auth";
 
 export const ActionsBento = ({ user } : { user: User}) => {
 

@@ -13,13 +13,13 @@ export const BentoBox = ({ colSpan, rowSpan, children, classes, animated}: { col
         initial={{ transform: "translateY(50px)", opacity: 0 }}
         animate={{ transform: "translateY(0px)", opacity: 1 }}
         transition={{ duration: 0, type: "spring" }}
-            className={`${bentoClass} col-span-${colSpan} row-span-${rowSpan} ${classes ? classes : 'hover:border-aurora-900'}`}
+            className={`${bentoClass} col-span-${colSpan} row-span-${rowSpan} ${classes ?? 'hover:border-aurora-900'}`}
         >
             {children}
         </motion.div>
         ) : (
             <div
-                className={`${bentoClass} col-span-${colSpan} row-span-${rowSpan} ${classes ? classes : 'hover:border-aurora-900'}`}
+                className={`${bentoClass} col-span-${colSpan} row-span-${rowSpan} ${classes ?? 'hover:border-aurora-900'}`}
             >
                 {children}
             </div> 
