@@ -16,17 +16,17 @@ export default async function Page() {
             <div className="flex flex-col items-center justify-between gap-4 pt-8 pl-12 pr-16 pb-0 bg-white dark:bg-black">
             <div className="w-full flex flex-row items-center gap-2">
                 <BigButton 
-                    redirect='/events/create'
+                    redirect='/happenings/create'
                     backgroundImage='images/event-icon.jpg'/>
                 <div className="w-full pl-8 flex justify-center">
-                    <Search label="Suche nach Orten" id='1' type="text" placeholder="" />
+                    <Search label="Suche nach Happenings" id='1' type="text" placeholder="" />
                 </div>
             </div>
             <div className="grid h-31 w-full gap-4 grid-cols-2 grid-rows-1">
-                <BentoBox colSpan="1" rowSpan="1">
+                <BentoBox colSpan="1" rowSpan="1" animated>
                     <p className="text-2xl dark:text-white p-6"><b>7</b> bevorstehende </p>
                 </BentoBox>
-                <BentoBox colSpan="1" rowSpan="1">
+                <BentoBox colSpan="1" rowSpan="1" animated>
                     <p className="text-2xl dark:text-white p-6  "><b>12</b> offene Einladungen</p>
                 </BentoBox>
             </div>

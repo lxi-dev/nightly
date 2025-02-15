@@ -5,6 +5,7 @@ import { StarsBackground } from "nglty/components/backgrounds/stars";
 import Logo from "nglty/components/elements/logo/logo";
 import LoginForm from "../app/login/_components/login-form";
 import SocialMediaLogin from "../app/login/_components/social-media-login";
+import { Seperator } from "./elements/seperator";
 
 // import { useState } from "react";
 
@@ -24,13 +25,9 @@ export function SignInScreen() {
 
   return (
     <div className="flex h-screen">
-      {/* Left Side */}
       <div className="w-1/2 s:w-screen s:h-1/2 dark:bg-black shadow-lg dark:text-white flex flex-col justify-center items-center p-8 ">
-      {/* <div className='text-black dark:text-white text-center mt-4'>
-        <h3 className='text-xl'>Willkommen bei Nightly! 🌙</h3>
-        <p className='mt-4 text-sm'>Dinem Netzwerk zum  <br></br>rausgehen und zurückholen.</p>
-      </div> */}
-        <LoginForm />
+        {/* <LoginForm /> */}
+        <Seperator text="Login"></Seperator>
         <SocialMediaLogin />
       </div>
 

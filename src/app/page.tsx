@@ -20,7 +20,7 @@ export default async function Home() {
       (
         <section>
           <Header />
-          <ActionsBento />
+          <ActionsBento user={session.user}/>
         </section>
   ): <SignInScreen />}
     </main>

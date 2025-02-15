@@ -32,7 +32,6 @@ const HappeningForm = () => {
   });
 
   const colorOptions = [
-    "aurora-100",
     "aurora-200",
     "aurora-300",
     "aurora-400",
@@ -94,7 +93,7 @@ const HappeningForm = () => {
         <div className="flex flex-row justify-between">
           <div className="flex flex-row">
             <Link
-              href="/events">
+              href="/happenings">
             <button className={`w-16 h-full bg-black text-white text-md`}>
               <ArrowLeftIcon className="w-12 h-12 m-auto"/>
             </button>
@@ -206,14 +205,6 @@ const HappeningForm = () => {
       </div>
       {JSON.stringify(happening)}
     </div>
-      <div className="w-4 h-4 bg-aurora-200" />
-      <div className="w-4 h-4 bg-aurora-300" />
-      <div className="w-4 h-4 bg-aurora-400" />
-      <div className="w-4 h-4 bg-aurora-500" />
-      <div className="w-4 h-4 bg-aurora-600" />
-      <div className="w-4 h-4 bg-aurora-700" />
-      <div className="w-4 h-4 bg-aurora-800" />
-      <div className="w-4 h-4 bg-aurora-900" />
       </main>
   );
 };

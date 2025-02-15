@@ -9,7 +9,6 @@ export default {
         sans: ["var(--font-geist-sans)", ...fontFamily.sans],
       },
       colors: {
-        'aurora-100': '#01efac',
         'aurora-200': '#01cbae',
         'aurora-300': '#2082a6',
         'aurora-400': '#524096',
@@ -18,6 +17,7 @@ export default {
         'aurora-700': '#1E67C6',
         'aurora-800': '#CEB4CF',
         'aurora-900': '#DD335C',
+        'aurora': '#0C0E0C',
       }
     },
   },

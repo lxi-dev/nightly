@@ -70,14 +70,11 @@ export default function LoginForm() {
             </div>
             </div>
             <p className='font-light text-xs text-center mt-4'>Noch keinen Account? Jetzt <a className='underline hover:text-purple-600' href='/register'>Anmelden!</a></p>
-        <div className="relative flex items-center mt-12">
-        <div className="flex-grow h-px bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-100"></div>
-      <span className="mx-4 text-neutral-500 dark:text-neutral-400 text-sm">ANMELDEN</span>
-      <div className="flex-grow h-px bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-100"></div>
-       </div>
+        
+       {/*
         <div className='mt-4'>
         <motion.button 
-         whileHover={{ scale: 1.02 }}
+         whileHover={{ opacity: 0 }}
          onHoverStart={event => {}}
          onHoverEnd={event => {}}
          onClick={() => signIn("credentials")}
@@ -89,7 +86,7 @@ export default function LoginForm() {
             </span>
           </motion.button>
           </div>
-
+        */}
         <div
           className="flex h-6 items-end space-x-1"
           aria-live="polite"

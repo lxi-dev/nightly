@@ -20,7 +20,7 @@ export default async function Page() {
                     <p className="text-2xl dark:text-white">Display places User is in</p>
                 </BentoBox>
                 <BentoBox colSpan="4" rowSpan="5">
-                    <p className="text-2xl dark:text-white">Display events User is in</p>
+                    <p className="text-2xl dark:text-white">Display Happenings a User is participating in</p>
                 </BentoBox>
                 </div>
                 <div className="grid h-full w-full gap-4 p-2 grid-cols-4 grid-rows-5">

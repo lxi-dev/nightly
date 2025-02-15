@@ -24,7 +24,7 @@ const VaListItem: React.FC<VaListItemProps> = ({ happeningStatus, happeningName,
     },
   };
     const handleClick = (id: number) => () => {
-        redirect(`/events/${id}`);
+        redirect(`/happenings/${id}`);
       }
 
 return(

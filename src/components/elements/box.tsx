@@ -1,12 +1,28 @@
-const bentoClass = "flex rounded-lg border-2 flex-col bg-gray-200 dark:bg-slate-900 dark:border-white/10 border-opacity-60"
+'use client';
+
+import { motion } from "motion/react";
+
+const bentoClass = "flex rounded-3xl border flex-col bg-gray-200 dark:bg-slate-900 dark:border-aurora"
 
 
-export const BentoBox = ({ colSpan, rowSpan, children }: { colSpan: string, rowSpan: string, children: React.ReactNode }) => {
+export const BentoBox = ({ colSpan, rowSpan, children, classes, animated}: { colSpan: string, rowSpan: string, children: React.ReactNode, classes?: string, animated?: boolean }) => {
+    
     return (
-        <div 
-            className={`${bentoClass} col-span-${colSpan} row-span-${rowSpan} hover:border-aurora-900`}
+        animated ? (
+        <motion.div
+        initial={{ transform: "translateY(50px)", opacity: 0 }}
+        animate={{ transform: "translateY(0px)", opacity: 1 }}
+        transition={{ duration: 0, type: "spring" }}
+            className={`${bentoClass} col-span-${colSpan} row-span-${rowSpan} ${classes ? classes : 'hover:border-aurora-900'}`}
         >
             {children}
-        </div>
+        </motion.div>
+        ) : (
+            <div
+                className={`${bentoClass} col-span-${colSpan} row-span-${rowSpan} ${classes ? classes : 'hover:border-aurora-900'}`}
+            >
+                {children}
+            </div> 
+        )
     );
   };

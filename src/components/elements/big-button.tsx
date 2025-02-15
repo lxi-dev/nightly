@@ -16,11 +16,11 @@ export const BigButton = ({backgroundImage, redirect} : { backgroundImage?: stri
         id='create-button'
         style={{backgroundImage: backgroundImage, backgroundSize:'contain'}}
         className="shadow-sm w-20 h-20 rounded-md flex items-center justify-center relative">
-            <div className="absolute">
+            <div className="absolute z-20">
 
-            <img src={backgroundImage} className="opacity-50 hover:opacity-100"/> 
+                <PlusIcon className="text-aurora-900 dark:text-aurora-900 z-20" />
             </div>
-            <PlusIcon className="text-aurora-900" />
+            <img src={backgroundImage} className="opacity-50 dark:opacity-100 hover:opacity-100 z-0 relative"/> 
         </motion.div>
     </Link>
     );
