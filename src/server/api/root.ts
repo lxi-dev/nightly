@@ -1,4 +1,4 @@
-import { postRouter } from "nglty/server/api/routers/post";
+import { happeningRouter } from "nglty/server/api/routers/post";
 import { createCallerFactory, createTRPCRouter } from "nglty/server/api/trpc";
 
 /**
@@ -7,7 +7,7 @@ import { createCallerFactory, createTRPCRouter } from "nglty/server/api/trpc";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  post: postRouter,
+  happening: happeningRouter,
 });
 
 // export type definition of API

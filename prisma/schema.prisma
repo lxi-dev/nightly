@@ -7,19 +7,38 @@ generator client {
   provider = "prisma-client-js"
 }
  
+model Happening {
+  id             String    @id @default(cuid())
+  type           String    // 'private' | 'placebound' | 'public'
+  published      Boolean   @default(false)
+  name           String
+  venue          String
+  color          String
+  text           String?
+  dateHappening  DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  creatorId      String
+  createdBy      User      @relation("HappeningCreator", fields: [creatorId], references: [id])
+  invitees       User[]    @relation("HappeningInvitees")
+}
+
 model User {
-  id            String          @id @default(cuid())
-  name          String?
-  email         String          @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  // Optional for WebAuthn support
-  Authenticator Authenticator[]
- 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String       @id @default(cuid())
+  name            String?
+  email           String       @unique
+  emailVerified   DateTime?
+  image           String?
+  accounts        Account[]
+  sessions        Session[]
+  Authenticator   Authenticator[] // Optional for WebAuthn support
+
+  createdHappenings Happening[] @relation("HappeningCreator")
+  invitedHappenings Happening[] @relation("HappeningInvitees")
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
  
 model Account {
@@ -42,7 +61,7 @@ model Account {
  
   @@id([provider, providerAccountId])
 }
- 
+
 model Session {
   sessionToken String   @unique
   userId       String

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect } from "react";
-import { motion, useMotionValue, useMotionTemplate, animate } from "framer-motion";
+import { motion, useMotionValue, useMotionTemplate, animate } from "motion/react";
 
 interface AurorasBackgroundProps {
   className?: string;

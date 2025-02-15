@@ -28,12 +28,6 @@ export default async function Page() {
                         <p className="text-2xl dark:text-white">235</p>
                         <p className="text-2xl dark:text-white">Friends</p>
                     </BentoBox> */}
-                    <BentoBox colSpan="2" rowSpan="4">
-                        <p className="text-2xl dark:text-white">Places entdecken</p>
-                    </BentoBox>
-                    <BentoBox colSpan="2" rowSpan="4">
-                        <p className="text-2xl dark:text-white">Feed</p>
-                    </BentoBox>
                 </div>
                 </div>
             </main>

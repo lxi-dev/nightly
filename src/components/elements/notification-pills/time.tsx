@@ -13,7 +13,6 @@ const TimeNotification: React.FC<NotificationItemProps> = ({ startTime }) => {
         if (!startTime) return null;
         const eventTime = new Date(startTime);
         const now = new Date();
-        console.log(eventTime.getTime() < now.getTime());
         dayjs.extend(RelativeTime);
         if (eventTime.getTime() < now.getTime()) {
             return dayjs(startTime).fromNow();

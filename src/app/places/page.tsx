@@ -30,10 +30,10 @@ export default async function Page() {
                         <p className="text-2xl dark:text-white">Friends</p>
                     </BentoBox> */}
                     <BentoBox colSpan="2" rowSpan="4">
-                        <p className="text-2xl dark:text-white">Places entdecken</p>
+                        <p className="text-2xl dark:text-white">Places entdecken - hier karte anzeigen</p>
                     </BentoBox>
                     <BentoBox colSpan="2" rowSpan="4">
-                        <p className="text-2xl dark:text-white">Feed</p>
+                        <p className="text-2xl dark:text-white">Feed - hier feed anzeigen</p>
                     </BentoBox>
                 </div>
                 </div>

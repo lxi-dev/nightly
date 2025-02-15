@@ -1,6 +1,6 @@
 import { auth } from "nglty/server/auth";
 import { HydrateClient } from "nglty/trpc/server";
-import { SignInScreen } from "./_components/signin-screen";
+import { SignInScreen } from "../components/signin-screen";
 import { Header } from "nglty/components/ui/header";
 import { ActionsBento } from "nglty/components/ui/actions-bento";
 
