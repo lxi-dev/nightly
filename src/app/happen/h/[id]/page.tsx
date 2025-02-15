@@ -9,10 +9,11 @@ type EventPageParams = {
 
 interface EventPageProps {
   params: EventPageParams;
+  id: string;
 }
 
-export default async function Page({ params } : EventPageProps) {
-  const { id } = params;
+export default async function Page({ params } : {params: Promise<EventPageProps>}) {
+  const { id } = await params;
   const data = await api.happening.getById({id});
 
   return (
