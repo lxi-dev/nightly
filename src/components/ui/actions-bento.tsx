@@ -1,4 +1,5 @@
 'use client';
+import { AcademicCapIcon } from "@heroicons/react/24/outline";
 import { StarsBackground } from "../backgrounds/stars";
 import { BentoBox } from "../elements/box";
 import type { User } from "next-auth";
@@ -9,21 +10,46 @@ export const ActionsBento = ({ user } : { user: User}) => {
   return (
     <div className="relative flex flex-row items-center justify-between gap-4 pt-6 pl-12 pr-12 pb-0 h-screen bg-white dark:bg-black">
     <div className="relative z-10 grid h-full w-full gap-8 p-2 grid-cols-3 grid-rows-5 border-opacity-600">
-      <BentoBox colSpan="1" rowSpan="1">
-        <div className="flex flex-col justify-start">
-          <div 
-            style={{backgroundImage: `url(${user.image})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover'}}
-            id="profile-image-container" className="w-full h-10 bg-black">
+      <BentoBox colSpan="1" rowSpan="1" animated>
+        <div className="flex flex-col">
+          <div className="flex flex-row w-full justify-between">
+            <div className="w-[75%] flex p-2">
+            <div 
+              style={{backgroundImage: `url(${user.image})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover'}}
+              id="profile-image-container" className="h-12 w-12 bg-aurora-900 rounded-lg">
+            </div>
+            <div className="flex-col pl-4">
+              <p className="text-sm dark:text-gray-200">hey</p>
+              <p className="text-xl dark:text-white">{user?.name}</p>
+            </div>
+            </div>
+            <div className="flex-row -gap-2 pt-4 pr-4 float-right">
+              <AcademicCapIcon className="text-aurora-900 w-6 h-6" />
+
+            </div>
           </div>
+          <div className="w-full h-full bg-aurora-900 rounded-b-2xl">
 
-          <div className="pl-5 pt-3 pb-3">
-          <p className="text-sm dark:text-white">hey</p>
-          <p className="text-xl dark:text-white">{user?.name}</p>
-          {user.image}
-        </div>
-        </div>
-
+          <div className="h-[2px] w-full bg-slate-800"></div>
+          <p className="text-xl dark:text-white mb-4 mt-3 pl-3">Welcome back to nightly</p>
+          </div>
+          </div>
       </BentoBox>
+        {/* <div className="flex flex-col justify-between">
+              <div 
+                style={{backgroundImage: `url(${user.image})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover'}}
+                id="profile-image-container" className="h-12 w-12 bg-aurora-900 rounded-lg">
+              </div>
+
+              <p className="text-sm dark:text-gray-200">hey</p>
+              <p className="text-xl dark:text-white">{user?.name}</p>
+              
+          </div>
+          <div>
+          </div>
+        </div>
+         */}
+
       <BentoBox colSpan="2" rowSpan="1" classes="p-10">
         <a 
           href="/places"

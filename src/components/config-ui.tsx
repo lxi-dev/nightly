@@ -93,7 +93,7 @@ const HappeningForm = () => {
         <div className="flex flex-row justify-between">
           <div className="flex flex-row">
             <Link
-              href="/happenings">
+              href="/happen">
             <button className={`w-16 h-full bg-black text-white text-md`}>
               <ArrowLeftIcon className="w-12 h-12 m-auto"/>
             </button>

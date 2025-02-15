@@ -6,14 +6,15 @@ import TimeNotification from "./notification-pills/time";
 import { EyeIcon, EyeSlashIcon, HomeIcon } from "@heroicons/react/24/outline";
 
 type VaListItemProps = {
+  happeningId: string,
   happeningStatus: string,
   happeningName: string,
   happeningVenue: string,
   happeningStart: string
 }
-const VaListItem: React.FC<VaListItemProps> = ({ happeningStatus, happeningName, happeningVenue, happeningStart }) => {
+const VaListItem: React.FC<VaListItemProps> = ({ happeningId, happeningStatus, happeningName, happeningVenue, happeningStart }) => {
   const va = {
-    id: 1,
+    id: happeningId,
     status: happeningStatus,
     data: {
       config: {
@@ -23,15 +24,15 @@ const VaListItem: React.FC<VaListItemProps> = ({ happeningStatus, happeningName,
       },
     },
   };
-    const handleClick = (id: number) => () => {
-        redirect(`/happenings/${id}`);
+    const handleClick = (id: string) => () => {
+        redirect(`happen/h/${id}`);
       }
 
 return(
     <div className="w-full pl-3 pt-3 pb-3 bg-gray-100 dark:bg-slate-900 dark:text-white rounded-lg border-b-1 hover:bg-aurora-200 dark:border-white mt-2 flex items-center justify-between duration-50 cursor-pointer">
     <div 
       className="flex flex-row text-left w-[70%]"
-      onClick={handleClick(1)}
+      onClick={handleClick(happeningId ?? '')}
 >
       <span className="p-2 mt-2 mr-3">
         {/* 

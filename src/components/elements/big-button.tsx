@@ -15,7 +15,7 @@ export const BigButton = ({backgroundImage, redirect} : { backgroundImage?: stri
             animate={{ scale: 1 }}         
         id='create-button'
         style={{backgroundImage: backgroundImage, backgroundSize:'contain'}}
-        className="shadow-sm w-20 h-20 rounded-md flex items-center justify-center relative">
+        className="shadow-sm w-20 h-20 rounded-md flex items-center justify-center relative dark:invert">
             <div className="absolute z-20">
 
                 <PlusIcon className="text-aurora-900 dark:text-aurora-900 z-20" />

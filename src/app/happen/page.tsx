@@ -16,7 +16,7 @@ export default async function Page() {
             <div className="flex flex-col items-center justify-between gap-4 pt-8 pl-12 pr-16 pb-0 bg-white dark:bg-black">
             <div className="w-full flex flex-row items-center gap-2">
                 <BigButton 
-                    redirect='/happenings/create'
+                    redirect='/happen/create'
                     backgroundImage='images/event-icon.jpg'/>
                 <div className="w-full pl-8 flex justify-center">
                     <Search label="Suche nach Happenings" id='1' type="text" placeholder="" />
@@ -31,7 +31,7 @@ export default async function Page() {
                 </BentoBox>
             </div>
             <div className="dark:bg-black h-screen w-full">
-            { happenings.map((happening, i) => <VaListItem key={i} happeningStatus={happening.type} happeningName={happening.name} happeningVenue={happening.venue} happeningStart={happening.dateHappening?.toString() ?? ''} />) }
+            { happenings.map((happening, i) => <VaListItem happeningId={happening.id} key={i} happeningStatus={happening.type} happeningName={happening.name} happeningVenue={happening.venue} happeningStart={happening.dateHappening?.toString() ?? ''} />) }
             </div>
         </div>
         </main>
