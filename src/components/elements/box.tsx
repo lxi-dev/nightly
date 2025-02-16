@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react";
 
-const bentoClass = "flex rounded-3xl border flex-col bg-gray-200 dark:bg-aurora dark:border-slate-800"
+const bentoClass = "flex rounded-3xl border flex-col bg-gray-50 dark:bg-aurora dark:border-slate-800"
 
 
 export const BentoBox = ({ colSpan, rowSpan, children, classes, animated}: { colSpan: string, rowSpan: string, children: React.ReactNode, classes?: string, animated?: boolean }) => {

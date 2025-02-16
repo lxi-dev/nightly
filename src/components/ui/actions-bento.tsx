@@ -10,7 +10,7 @@ export const ActionsBento = ({ user } : { user: User}) => {
   return (
     <div className="relative flex flex-row items-center justify-between gap-4 pt-6 pl-12 pr-12 pb-0 h-screen bg-white dark:bg-black">
     <div className="relative z-10 grid h-full w-full gap-8 p-2 grid-cols-3 grid-rows-5 border-opacity-600">
-      <BentoBox colSpan="1" rowSpan="1" animated>
+      <BentoBox colSpan="1" rowSpan="1" animated classes="shadow-lg">
         <div className="flex flex-col">
           <div className="flex flex-row w-full justify-between">
             <div className="w-[75%] flex p-2">
@@ -18,7 +18,7 @@ export const ActionsBento = ({ user } : { user: User}) => {
               style={{backgroundImage: `url(${user.image})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover'}}
               id="profile-image-container" className="h-12 w-12 bg-aurora-900 rounded-lg">
             </div>
-            <div className="flex-col pl-4">
+            <div className="flex-col pl-4 items-end">
               <p className="text-sm dark:text-gray-200">hey</p>
               <p className="text-xl dark:text-white">{user?.name}</p>
             </div>
@@ -28,10 +28,10 @@ export const ActionsBento = ({ user } : { user: User}) => {
 
             </div>
           </div>
-          <div className="w-full h-full bg-aurora-900 rounded-b-2xl">
+          <div className="w-full h-full bg-gradient-to-b from-aurora-900/80 to-aurora-900 rounded-b-2xl">
 
-          <div className="h-[2px] w-full bg-slate-800"></div>
-          <p className="text-xl dark:text-white mb-4 mt-3 pl-3">Welcome back to nightly</p>
+          <div className="h-[2px] w-full bg-gray-200 dark:bg-slate-800"></div>
+          <p className="text-xl text-white dark:text-white mb-4 mt-3 pl-3">Welcome back to nightly</p>
           </div>
           </div>
       </BentoBox>

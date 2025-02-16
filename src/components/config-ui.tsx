@@ -94,27 +94,23 @@ const HappeningForm = () => {
           <div className="flex flex-row">
             <Link
               href="/happen">
-            <button className={`w-16 h-full bg-black text-white text-md`}>
-              <ArrowLeftIcon className="w-12 h-12 m-auto"/>
+            <button className={`w-16 h-full text-black dark:text-white text-md`}>
+              <ArrowLeftIcon className="w-4 h-4 m-auto"/>
             </button>
             </Link>
-            { createdHappening !== '' && 
-              <h2 className="text-xl font-bold mb-4 dark:text-white pt-4 pl-4">
-                {createdHappening}
-              </h2>
-            }
-            {
-              createdHappening === '' &&
-            <h2 className="text-xl font-bold mb-4 dark:text-white pt-4 pl-4">
-              {pending ? 'Happening in creation ...' : 'Create Happening'}
+            <h2 className="text-xl font-bold mb-4 dark:text-white pt-4 pl-2">
+              { createdHappening !== '' && <span>{createdHappening}</span>}
+              { pending && createdHappening === ''? 'Happening in creation ...' : 'Create Happening'}
             </h2>
-            }
           </div>
           <div>
           { createdHappening !== '' && 
-            <button className={`w-16 h-full bg-${happening.color} text-white text-md`}>
-              <ArrowRightIcon className="w-12 h-12 m-auto"/>
+          <Link
+          href={`/happen/h/${createdHappening}`}>
+          <button className={`mt-4 mr-4 w-6 h-6 bg-white shadow-lg rounded-md text-${happening.color} text-md`}>
+              <ArrowRightIcon className="w-4 h-4 m-auto"/>
             </button>
+            </Link>
           }
           </div>
 
