@@ -3,6 +3,7 @@ import { AcademicCapIcon } from "@heroicons/react/24/outline";
 import { StarsBackground } from "../backgrounds/stars";
 import { BentoBox } from "../elements/box";
 import type { User } from "next-auth";
+import { UserProfileIcon } from "../elements/user-icon";
 
 export const ActionsBento = ({ user } : { user: User}) => {
 
@@ -14,10 +15,7 @@ export const ActionsBento = ({ user } : { user: User}) => {
         <div className="flex flex-col">
           <div className="flex flex-row w-full justify-between">
             <div className="w-[75%] flex p-2">
-            <div 
-              style={{backgroundImage: `url(${user.image})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover'}}
-              id="profile-image-container" className="h-12 w-12 bg-aurora-900 rounded-lg">
-            </div>
+              <UserProfileIcon id={user.id!} />
             <div className="flex-col pl-4 items-end">
               <p className="text-sm dark:text-gray-200">hey</p>
               <p className="text-xl dark:text-white">{user?.name}</p>

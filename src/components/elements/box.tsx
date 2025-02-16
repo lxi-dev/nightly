@@ -19,7 +19,7 @@ export const BentoBox = ({ colSpan, rowSpan, children, classes, animated}: { col
         </motion.div>
         ) : (
             <div
-                className={`${bentoClass} col-span-${colSpan} row-span-${rowSpan} ${classes ?? 'hover:border-aurora-900'}`}
+                className={`${classes ?? 'hover:border-aurora-900'} ${bentoClass} col-span-${colSpan} row-span-${rowSpan}`}
             >
                 {children}
             </div> 

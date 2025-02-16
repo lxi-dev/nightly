@@ -7,11 +7,11 @@ const TimeScale = () => {
 
   return (
     <div
-      className="w-12 mt-12 dark:bg-gray-800 text-gray-300 text-sm flex flex-col"
+      className="w-12 mt-12 text-gray-300 text-sm flex flex-col"
     >
       {hours.map((hour) => (
         <div key={hour} className="relative h-12">
-         <div className="absolute top-0 left-12 w-[calc(100vw-4rem)] border-t border-black/20" />
+         <div className="absolute top-0 left-12 w-[calc(100vw-4rem)] border-t border-black/20 dark:border-slate-800" />
           <div className="h-full flex items-center justify-center">
             {hour}:00
           </div>

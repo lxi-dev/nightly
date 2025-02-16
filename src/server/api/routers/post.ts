@@ -63,12 +63,28 @@ export const happeningRouter = createTRPCRouter({
     return happenings;
   }),
 
+  getAllPublic: protectedProcedure.query(async ({ ctx }) => {
+    const happenings = await ctx.db.happening.findMany({
+      where: {
+        type: 'public',
+      },
+      orderBy: { createdAt: "desc" },
+      include: {
+        createdBy: true,
+      },
+    });
+
+    return happenings;
+  }),
+
   getById: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
       const happening = await ctx.db.happening.findUnique({
         where: { id: input.id },
-        include: { createdBy: true },
+        include: {
+          createdBy: true,
+        },
       });
 
       if (!happening) {
@@ -80,4 +96,35 @@ export const happeningRouter = createTRPCRouter({
 
       return happening;
     }),
+
+  createPost: protectedProcedure
+  .input(
+    z.object({
+      happeningId: z.string(),
+      text: z.string().min(1, "Post text is required"),
+      creatorId: z.string(),
+    })
+  )
+  .mutation(async ({ input, ctx }) => {
+    const post = await ctx.db.post.create({
+      data: {
+        text: input.text,
+        happeningId: input.happeningId,
+        creatorId: input.creatorId,
+      },
+    });
+
+    return post;
+  }),
+
+  getPostsByHappening: protectedProcedure
+  .input(z.object({ happeningId: z.string() }))
+  .query(async ({ input, ctx }) => {
+    const posts = await ctx.db.post.findMany({
+      where: { happeningId: input.happeningId },
+      orderBy: { createdAt: "asc" },
+    });
+
+    return posts;
+  }),
 });

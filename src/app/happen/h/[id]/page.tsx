@@ -1,5 +1,6 @@
 import { HappeningView } from 'nglty/components/ui/happening';
 import { Header } from 'nglty/components/ui/header';
+import { auth } from 'nglty/server/auth';
 import { api, HydrateClient } from 'nglty/trpc/server';
 import React from "react";
 
@@ -15,6 +16,8 @@ interface EventPageProps {
 export default async function Page({ params } : {params: Promise<EventPageProps>}) {
   const { id } = await params;
   const data = await api.happening.getById({id});
+  const posts = await api.happening.getPostsByHappening({happeningId: id})
+  const session = await auth();
 
   return (
     <HydrateClient>
@@ -22,7 +25,7 @@ export default async function Page({ params } : {params: Promise<EventPageProps>
         
             <Header />
             { !data && <div>Happening nicht gefunden</div>}
-            <HappeningView data={data}/>
+            <HappeningView data={data} session={session} posts={posts}/>
       </main>
     </HydrateClient>
   );
