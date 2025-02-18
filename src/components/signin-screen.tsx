@@ -23,8 +23,8 @@ export function SignInScreen() {
   // });
 
   return (
-    <div className="flex h-screen">
-      <div className="w-1/2 s:w-screen s:h-1/2 dark:bg-black shadow-lg dark:text-white flex flex-col justify-center items-center p-8 ">
+    <div className="flex h-screen flex-col-reverse md:flex-row">
+      <div className="w-full h-1/2 md:h-full dark:bg-black shadow-lg dark:text-white flex justify-center flex-col items-center p-8 ">
         {/* <LoginForm /> */}
         <Seperator text="Login"></Seperator>
         <SocialMediaLogin />
@@ -32,7 +32,7 @@ export function SignInScreen() {
 
       {/* Right Side */}
       <div 
-        className="w-1/2 flex justify-center items-center relative"
+        className="w-full h-full md:h-full flex justify-center items-center relative"
       >
         {/* Right side can hold any additional content */}
         <div className="absolute inset-0 z-0">

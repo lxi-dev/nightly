@@ -1,7 +1,6 @@
 'use client';
 import type { Happening, Post } from "@prisma/client";
 import RelativeTime from "dayjs/plugin/relativeTime";
-
 import dayjs from "dayjs";
 import { useState } from "react";
 import { StarsBackground } from "../backgrounds/stars";
@@ -55,6 +54,8 @@ export const HappeningView = ({ data, session, posts } : { data: Happening, sess
           });
       
           console.log("Happening post:", post);
+          setNewPost('');
+          posts.push(post);
         } catch (error) {
           console.error("Error creating happening:", error);
         }
@@ -62,7 +63,7 @@ export const HappeningView = ({ data, session, posts } : { data: Happening, sess
       };
     
     const items = [1, 2, 3, 4, 5]; // Example array
-  // const bentoClass = "flex rounded-lg border-2 flex-col bg-gray-200 dark:bg-slate-900 dark:border-white/10 border-opacity-60"
+      const helpingHandsStartTime = new Date();
   return (
     <div className="relative flex flex-col gap-4 pb-0 h-full bg-white dark:bg-black">
     <div className={`relative z-10 grid`}>
@@ -92,13 +93,12 @@ export const HappeningView = ({ data, session, posts } : { data: Happening, sess
     </div>
 
 
-      <div className="flex flex-rows gap-2 pl-12 pr-12 w-full justify-between">
-        <div className="min-w-[70%]">
-          <h2 className="text-black/10 dark:text-slate-800 text-2xl">Text</h2>
-        <BentoBox colSpan="1" rowSpan="1" classes="min-h-96 p-6">
-          <p className="dark:text-white">{data?.text}</p>
-        </BentoBox>
-
+      <div className="flex flex-col md:flex-row gap-2 pl-12 pr-12 w-full justify-between">
+        <div className="w-full pr-4">
+          <h2 className="text-black/10 dark:text-slate-100 text-2xl">Text</h2>
+        <div className="min-h-96 p-6">
+          <p className="w-full dark:text-white">{data?.text}</p>
+        </div>
         </div>
         <div className="row-span-1">
           <h2 className="text-black/10 dark:text-slate-800 text-2xl">Invites</h2>
@@ -131,7 +131,7 @@ export const HappeningView = ({ data, session, posts } : { data: Happening, sess
           <div className="flex-grow ml-2">
             <div className="text-black dark:text-white gap-4">
               <BentoBox colSpan="1" rowSpan="1" classes="w-">
-                <div className="p-2">
+                <div className="pl-2 pr-2 pt-4 pb-4">
                   <textarea
                     value={newPost}
                     onChange={(e) => setNewPost(e.target.value)}
@@ -149,7 +149,7 @@ export const HappeningView = ({ data, session, posts } : { data: Happening, sess
               <span className="text-sm font-sm">post</span><ArrowRightIcon className="ml-3 dark:text-black w-4 h-4"/>
             </button>
         { !posts && <h2 className="text-2xl text-black dark:text-white">There are no Posts yet.</h2>}
-        { posts?.map((item) => (
+        { posts?.slice().reverse().map((item) => (
 
         <div className="w-full flex items-center mt-6">
           <div className="flex-none">
@@ -158,8 +158,8 @@ export const HappeningView = ({ data, session, posts } : { data: Happening, sess
           <div className="flex-grow ml-2">
             <div className="text-black dark:text-white">
               {item.creatorId}
-              <BentoBox colSpan="1" rowSpan="1">
-                <div className="p-2">
+              <BentoBox colSpan="1" rowSpan="1" >
+                <div className="pt-4 pb-4 pl-3 pr-3">
                   <p className="dark:text-white text-black">{item.text}</p></div>
             </BentoBox>
                   <small className="text-gray-600">{item.createdAt.toString()}</small>
@@ -171,7 +171,7 @@ export const HappeningView = ({ data, session, posts } : { data: Happening, sess
       <div className="pt-8 pl-12 pr-12">
         <h2 className="text-black/10 dark:text-slate-800 text-2xl">Helping Hands</h2>
         <div className="max-h-[40%] border-b border-black/10 overflow-scroll">
-          <TimeScaleColumns />
+          <TimeScaleColumns startTime={helpingHandsStartTime}/>
         </div>
       </div>
       <div className="absolute">

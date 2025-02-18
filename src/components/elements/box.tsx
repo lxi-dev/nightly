@@ -12,8 +12,8 @@ export const BentoBox = ({ colSpan, rowSpan, children, classes, animated}: { col
         <motion.div
         initial={{ transform: "translateY(50px)", opacity: 0 }}
         animate={{ transform: "translateY(0px)", opacity: 1 }}
-        transition={{ duration: 0, type: "spring" }}
-            className={`${bentoClass} col-span-${colSpan} row-span-${rowSpan} ${classes ?? 'hover:border-aurora-900'}`}
+        transition={{ duration: 0.7, type: "spring" }}
+            className={`${classes ?? 'hover:border-aurora-900'}   ${bentoClass} col-span-${colSpan} row-span-${rowSpan}`}
         >
             {children}
         </motion.div>
