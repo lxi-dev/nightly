@@ -21,4 +21,52 @@ export const userRouter = createTRPCRouter({
 
       return {image: user.image, name: user.name};
     }),
+
+    updateProfile: protectedProcedure
+        .input(
+            z.object({
+                id: z.string(),
+                handle: z.string().optional(),
+                location: z.string().optional(),
+                age: z.string().optional(),
+                bio: z.string().optional(),
+            })
+        )
+        .mutation(async ({ input, ctx }) => {
+            const { id, handle, location, age, bio } = input;
+
+            const updatedUser = await ctx.db.user.update({
+                where: { id },
+                data: {
+                    handle,
+                    location,
+                    age,
+                    bio,
+                },
+            });
+
+            return updatedUser;
+        }),
+
+        getAllUsers: protectedProcedure.query(async ({ ctx }) => {
+          const users = await ctx.db.user.findMany({
+            where: {
+              handle: {
+                  not: null, // Only include users where handle is not null
+              },
+              id: {
+                  not: ctx.session.user.id, // Exclude the current user's ID
+              },
+          },
+              select: {
+                  id: true,
+                  name: true,
+                  image: true,
+                  handle: true,
+                  location: true,
+              },
+          });
+  
+          return users;
+      }),
 });

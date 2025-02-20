@@ -17,10 +17,10 @@ export const ActionsBento = ({ user } : { user: User}) => {
         <div className="flex flex-row md:flex-col">
           <div className="flex flex-row w-full justify-start">
             <div className="flex p-2">
-              <UserProfileIcon id={user.id!} />
+              <UserProfileIcon id={user.id} />
             <div className="flex-col pl-4 items-end">
               <p className="text-sm dark:text-gray-200">hey</p>
-              <p className="text-xl dark:text-white">{user?.name}</p>
+              <p className="text-xl dark:text-white">{user.name}</p>
             </div>
             </div>
             <div className="flex-row -gap-2 pt-4 pr-4 float-right">

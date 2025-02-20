@@ -102,6 +102,8 @@ export const HappeningView = ({ data, session, posts } : { data: Happening, sess
         </div>
         <div className="row-span-1">
           <h2 className="text-black/10 dark:text-slate-800 text-2xl">Invites</h2>
+          { data.type === 'private' &&
+          
         <BentoBox colSpan="1" rowSpan="1" classes="min-h-96 p-6">
           <p className="dark:text-white">28 Invited</p>
           <small className="pb-4 text-white">13 going - 5 pending - 7 declined</small>
@@ -117,6 +119,7 @@ export const HappeningView = ({ data, session, posts } : { data: Happening, sess
             manage invite
           </button>
         </BentoBox>
+          }
         </div>
       </div>
       <div className="pt-8 pl-12 pr-12">

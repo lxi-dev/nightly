@@ -67,6 +67,9 @@ export const happeningRouter = createTRPCRouter({
     const happenings = await ctx.db.happening.findMany({
       where: {
         type: 'public',
+        createdBy: {
+          id: { not: ctx.session.user.id }, // Exclude happenings created by the specific user ID
+        },
       },
       orderBy: { createdAt: "desc" },
       include: {
