@@ -69,7 +69,7 @@ model Post {
   id          String   @id @default(cuid())
   text        String
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  updatedAt   DateTime? @updatedAt
 
   happeningId String?
   happening   Happening? @relation(fields: [happeningId], references: [id])
