@@ -16,15 +16,15 @@ export default async function Page() {
             <Header />
             <div className="flex flex-col items-center justify-between gap-4 pt-12 pl-12 pr-12 pb-0 bg-white dark:bg-black">
                 <div className="w-full dark:text-white">
-                <BentoBox colSpan="4" rowSpan="5" classes="shadow-lg" animated>
+                <BentoBox colSpan="4" rowSpan="5" className="shadow-lg" animated>
                     <ProfileCard profile={session!} />
                 </BentoBox>
 
                     <p className="text-2xl dark:text-slate-700 mt-8">All Users on Nightly</p>
-                <BentoBox colSpan="4" rowSpan="5" classes="mt-2">
+                <BentoBox colSpan="4" rowSpan="5" className="mt-2">
                 { session?.user.handle && <UsersList />}
                 </BentoBox>
-                <BentoBox colSpan="4" rowSpan="5" classes="mt-2">
+                <BentoBox colSpan="4" rowSpan="5" className="mt-2">
                     <p className="text-2xl dark:text-white">Display places User is in</p>
                     <p className="text-2xl dark:text-white">Display Happenings a User is participating in</p>
                 </BentoBox>

@@ -6,7 +6,7 @@ datasource db {
 generator client {
   provider = "prisma-client-js"
 }
- 
+
 model Happening {
   id             String    @id @default(cuid())
   type           String    // 'private' | 'placebound' | 'public'
@@ -23,17 +23,64 @@ model Happening {
   createdBy      User      @relation("HappeningCreator", fields: [creatorId], references: [id])
   invitees       User[]    @relation("HappeningInvitees")
   posts          Post[]
+  follows        HappeningFollow[]
+}
+
+model Place {
+  id             String    @id @default(cuid())
+  name           String
+  picture        String    // URL for the image
+  description    String?
+  geoCoordinate  GeoCoordinate?
+  heartPlace     Boolean   // Indicates if this is a "place in my heart"
+  posts          Post[]    // One-to-many relationship with posts
+  openingHours   Json?     // Optional, to store opening hours in a structured format (e.g., { "monday": "9:00-17:00" })
+  followers      User[]    @relation("PlaceFollowers") // Users who follow this place
+  creatorId      String    // User ID of the creator
+  creator        User      @relation(fields: [creatorId], references: [id])
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model GeoCoordinate {
+  id        String   @id @default(cuid())
+  latitude  Float
+  longitude Float
+  placeId   String   @unique// Relation to Place
+  place     Place    @relation(fields: [placeId], references: [id])
+}
+
+
+model HappeningFollow {
+  id             String    @id @default(cuid())
+  status         String    // 'tentative' | 'going'
+  userId         String
+  happeningId    String
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  user           User      @relation(fields: [userId], references: [id])
+  happening      Happening @relation(fields: [happeningId], references: [id])
+
+  @@unique([userId, happeningId]) // Ensure a user can only follow a specific event once
 }
 
 model Post {
   id          String   @id @default(cuid())
   text        String
   createdAt   DateTime @default(now())
-  happening   Happening @relation(fields: [happeningId], references: [id])
-  happeningId String
-  // createdBy   User     @relation("PostsCreated", fields: [creatorId], references: [id])
+  updatedAt   DateTime @updatedAt
+
+  happeningId String?
+  happening   Happening? @relation(fields: [happeningId], references: [id])
+
+  placeId     String?
+  place       Place?     @relation(fields: [placeId], references: [id])
+
   creatorId   String
+  @@unique([happeningId, placeId, id]) // Ensures a post is linked to either a happening or place
 }
+
 model User {
   id              String       @id @default(cuid())
   name            String?
@@ -50,7 +97,10 @@ model User {
 
   createdHappenings Happening[] @relation("HappeningCreator")
   invitedHappenings Happening[] @relation("HappeningInvitees")
-  // postsCreated      Post[]      @relation("PostsCreated")
+  follows            HappeningFollow[]
+  following       Place[]  @relation("PlaceFollowers") // Places the user follows
+
+  places          Place[]  // Places created by the user
 
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt

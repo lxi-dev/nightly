@@ -22,10 +22,12 @@ export default async function Page({ params } : {params: Promise<EventPageProps>
   return (
     <HydrateClient>
         <main className={`${!data ? 'blur-sm' : ''}`}>
-        
             <Header />
             { !data && <div>Happening nicht gefunden</div>}
+          <div className="lg:ml-12 lg:mr-12">
+
             <HappeningView data={data} session={session} posts={posts}/>
+          </div>
       </main>
     </HydrateClient>
   );

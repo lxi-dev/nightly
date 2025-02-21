@@ -120,6 +120,59 @@ export const happeningRouter = createTRPCRouter({
     return post;
   }),
 
+  follow: protectedProcedure
+  .input(
+    z.object({
+      status: z.string(),
+      userId: z.string(),
+      happeningId: z.string(),
+    })
+  )
+  .mutation(async ({ input, ctx }) => {
+    const follow = await ctx.db.happeningFollow.create({
+      data: {
+        status: input.status,
+        userId: input.userId,
+        happeningId: input.happeningId,
+      },
+    });
+
+    return follow;
+  }),
+  updateFollow: protectedProcedure
+  .input(
+    z.object({
+      status: z.string(),
+      userId: z.string(),
+      happeningId: z.string(),
+    })
+  )
+  .mutation(async ({ input, ctx }) => {
+    const followUpdate = await ctx.db.happeningFollow.update({
+      where: {
+        userId_happeningId: { userId: input.userId, happeningId: input.happeningId },
+      },
+      data: {
+        status: input.status,
+      },
+    });
+
+    return followUpdate;
+  }),
+  
+  getFollowing: protectedProcedure
+    .input(z.object({ happeningId: z.string() }))
+    .query(async ({ input, ctx }) => {
+      const followers = ctx.db.happeningFollow.findMany({
+        where: { happeningId: input.happeningId },
+        include: { user: true },
+      });
+
+  
+      return followers;
+    }),
+
+
   getPostsByHappening: protectedProcedure
   .input(z.object({ happeningId: z.string() }))
   .query(async ({ input, ctx }) => {

@@ -1,4 +1,6 @@
+import { BigButton } from 'nglty/components/elements/big-button';
 import { BentoBox } from 'nglty/components/elements/box';
+import Search from 'nglty/components/elements/search';
 import { Header } from 'nglty/components/ui/header';
 import { HydrateClient } from 'nglty/trpc/server';
 import React from "react";
@@ -12,6 +14,14 @@ export default async function Page() {
             <Header />
             <div className="flex flex-col items-center justify-between gap-4 pt-12 pl-12 pr-12 pb-0 h-screen bg-white dark:bg-black">
                 <div className="w-full">
+                <div className="w-full flex flex-row items-center gap-2">
+                <BigButton 
+                    redirect='/places/create'
+                    backgroundImage='images/place-icon.jpg'/>
+                <div className="w-full pl-8 flex justify-center">
+                    <Search label="Suche nach Places" id='1' type="text" placeholder="" />
+                </div>
+            </div>
                     <BentoBox colSpan="1" rowSpan="1">
                         <div className="flex flex-row items-center justify-between gap-4">
                         <div className="shadow-aurora-600 shadow-sm w-20 h-20 rounded-md flex items-center justify-center">

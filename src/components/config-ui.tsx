@@ -3,6 +3,7 @@ import { api } from "nglty/trpc/react";
 import { useState } from "react";
 import { BentoBox } from "./elements/box";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
+import { Editor, EditorProvider } from "react-simple-wysiwyg";
 import Link from "next/link";
 
 type HappeningCreate = {
@@ -179,12 +180,14 @@ const HappeningForm = () => {
       </div>
       <div className="mb-4 col-span-8">
         <label className="block font-semibold mb-2 dark:text-slate-700">Text</label>
-        <textarea
-          value={happening.text}
-          onChange={(e) => handleChange("text", e.target.value)}
-          placeholder="Enter text"
-          className="w-full p-2 h-36 border rounded dark:text-white dark:bg-slate-900 dark:border-slate-800"
-        ></textarea>
+        <EditorProvider>
+          <Editor
+            value={happening.text}
+            onChange={(e) => handleChange("text", e.target.value)}
+            // placeholder="Enter text"
+            className="w-full p-2 h-36 border rounded dark:text-white dark:bg-slate-900 dark:border-slate-800"
+          ></Editor>
+        </EditorProvider>
       </div>
       <div className="mb-4 col-span-4 opacity-50 blur-sm">
         <button className={`w-full p-2 border rounded bg-slate-500`} disabled>

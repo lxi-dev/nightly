@@ -13,7 +13,7 @@ export const ActionsBento = ({ user } : { user: User}) => {
   return (
     <div className="relative flex flex-row items-center justify-between gap-4 pt-6 pl-12 pr-12 pb-0 h-screen bg-white dark:bg-black">
     <div className="relative z-10 flex flex-col md:grid h-full w-full gap-4 p-2 lg:grid-cols-3 lg:grid-rows-5 border-opacity-600">
-    <BentoBox colSpan="1" rowSpan="1" animated classes="shadow-lg">
+    <BentoBox colSpan="1" rowSpan="1" animated className="shadow-lg">
         <div className="flex flex-row md:flex-col">
           <div className="flex flex-row w-full justify-start">
             <div className="flex p-2">
@@ -35,7 +35,7 @@ export const ActionsBento = ({ user } : { user: User}) => {
           </div>
           </div>
       </BentoBox>
-      <BentoBox colSpan="2" rowSpan="1" classes="p-10" animated>
+      <BentoBox colSpan="2" rowSpan="1" className="p-10" animated>
         <a 
           href="/places"
           className="text-2xl dark:text-white">Places entdecken
@@ -59,7 +59,7 @@ export const ActionsBento = ({ user } : { user: User}) => {
       <div className="w-4 h-4 bg-aurora-800" />
       <div className="w-4 h-4 bg-aurora-900" />   */}
       </BentoBox>
-      <BentoBox colSpan="1" rowSpan="2" animated classes="overflow-hidden dark:hover:border-aurora-700 transition cursor-pointer">
+      <BentoBox colSpan="1" rowSpan="2" animated className="overflow-hidden dark:hover:border-aurora-700 transition cursor-pointer">
        <Link href="/happen">
        <div className="h-14 p-4 dark:bg-aurora-700">
 
