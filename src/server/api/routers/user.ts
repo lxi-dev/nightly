@@ -48,6 +48,23 @@ export const userRouter = createTRPCRouter({
             return updatedUser;
         }),
 
+      checkHandleAvailability: protectedProcedure
+        .input(
+            z.object({
+                handle: z.string(),
+            })
+        )
+        .query(async ({ input, ctx }) => {
+            const { handle } = input;
+
+            const existingUser = await ctx.db.user.findUnique({
+                where: { handle },
+            });
+
+            // Return true if the handle is available, false otherwise
+            return { isAvailable: !existingUser };
+        }),
+
         getAllUsers: protectedProcedure.query(async ({ ctx }) => {
           const users = await ctx.db.user.findMany({
             where: {

@@ -168,12 +168,7 @@ export const ProfileCard = ({profile} : {profile : Session}) => {
             </div>
                             
                 </div>
-                <div className="text-slate-600 p-4 justify-center m-auto text-left w-1/2 text-lg text-center">
-                <p className="p-2">
-This is your personal space where you can introduce yourself to the network. Keep in mind: without a handle, your profile remains invisible to others.
-</p><p className="">Setting a handle makes it easier for others to discover you and connect. If you choose to, you can also share your age and location, but don’t worry—these details are entirely optional.
-</p></div>
-                    </div>
+            </div>
         </main>
     );
 }

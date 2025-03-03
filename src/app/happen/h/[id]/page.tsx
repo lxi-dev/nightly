@@ -21,7 +21,7 @@ export default async function Page({ params } : {params: Promise<EventPageProps>
 
   return (
     <HydrateClient>
-        <main className={`${!data ? 'blur-sm' : ''}`}>
+        <main className={`${!data ? 'blur-sm' : ''} dark:bg-black`}>
             <Header />
             { !data && <div>Happening nicht gefunden</div>}
           <div className="lg:ml-12 lg:mr-12">

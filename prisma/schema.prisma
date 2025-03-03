@@ -32,6 +32,9 @@ model Place {
   picture        String    // URL for the image
   description    String?
   geoCoordinate  GeoCoordinate?
+  address        String?
+  city           String?
+  zipcode        String?
   heartPlace     Boolean   // Indicates if this is a "place in my heart"
   posts          Post[]    // One-to-many relationship with posts
   openingHours   Json?     // Optional, to store opening hours in a structured format (e.g., { "monday": "9:00-17:00" })

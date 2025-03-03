@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Place" ALTER COLUMN "zipcode" SET DATA TYPE TEXT;

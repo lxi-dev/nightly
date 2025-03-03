@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
-import { motion, PanInfo } from "framer-motion";
+import { motion } from "framer-motion";
+import type { PanInfo } from "framer-motion"; 
 import { PlusIcon } from "@heroicons/react/24/outline";
 import dayjs from "dayjs";
 

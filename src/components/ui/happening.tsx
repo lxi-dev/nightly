@@ -69,7 +69,7 @@ export const HappeningView = ({ data, session, posts } : { data: Happening, sess
       {/* <div className={`relative z-10 grid`}> */}
   return (
     <main>
-    <div className="relative flex flex-col h-full w-auto bg-white dark:bg-black m-4">
+    <div className="relative flex flex-col h-full w-auto m-4">
       <div className={`flex flex-row w-full h-32 rounded-md justify-between items-end bg-${data.color} shadow-lg pb-4 lg:pl-6 lg:pr-6`}>
         <div className="flex flex-col justify-start items-start">
           <h5 className="dark:text-white/50 text-black/50">created by:{data?.creatorId.toString()}</h5>
@@ -77,7 +77,7 @@ export const HappeningView = ({ data, session, posts } : { data: Happening, sess
         </div>
         {/* Right Side */}
         <div className="flex flex-col justify-between items-end">
-          <div className="absolute dark:text-black/30 text-white/30 overflow-hidden -translate-y-12">
+          <div className="absolute dark:text-black/30 text-white/30 overflow-hidden -translate-y-20">
             { data.type === 'placebound' && <HomeIcon className="w-[128px] h-[128px]"/>}
             { data.type === 'private' && <EyeSlashIcon className="w-[128px] h-[128px]"/>}
             { data.type === 'public' && <EyeIcon className="w-[128px] h-[128px]"/>}

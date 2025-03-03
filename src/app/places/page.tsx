@@ -2,6 +2,7 @@ import { BigButton } from 'nglty/components/elements/big-button';
 import { BentoBox } from 'nglty/components/elements/box';
 import Search from 'nglty/components/elements/search';
 import { Header } from 'nglty/components/ui/header';
+import { PlaceList } from 'nglty/components/ui/places-list';
 import { HydrateClient } from 'nglty/trpc/server';
 import React from "react";
 
@@ -40,7 +41,8 @@ export default async function Page() {
                         <p className="text-2xl dark:text-white">Friends</p>
                     </BentoBox> */}
                     <BentoBox colSpan="2" rowSpan="4">
-                        <p className="text-2xl dark:text-white">Places entdecken - hier karte anzeigen</p>
+                        <p className="text-2xl dark:text-white">Places entdecken</p>
+                        <PlaceList />
                     </BentoBox>
                     <BentoBox colSpan="2" rowSpan="4">
                         <p className="text-2xl dark:text-white">Feed - hier feed anzeigen</p>

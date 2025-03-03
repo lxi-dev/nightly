@@ -12,9 +12,11 @@ export default async function Home() {
       <main>
       { session?.user ? 
       (
-        <section>
+        <section className="dark:bg-black">
           <Header />
-          <ActionsBento user={session.user}/>
+          <div className="lg:ml-12 lg:mr-12 2xl:ml-72 2xl:mr-72">
+          <ActionsBento session={session}/>
+          </div>
         </section>
   ): <SignInScreen />}
     </main>
