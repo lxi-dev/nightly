@@ -1,5 +1,4 @@
-import { HappeningView } from 'nglty/components/ui/happening';
-import { Header } from 'nglty/components/ui/header';
+import { HappeningView } from 'nglty/components/happening/happening';
 import { auth } from 'nglty/server/auth';
 import { api, HydrateClient } from 'nglty/trpc/server';
 import React from "react";
@@ -21,10 +20,9 @@ export default async function Page({ params } : {params: Promise<EventPageProps>
 
   return (
     <HydrateClient>
-        <main className={`${!data ? 'blur-sm' : ''} dark:bg-black`}>
-            <Header />
+        <main className={`${!data ? 'blur-sm' : ''}`}>
             { !data && <div>Happening nicht gefunden</div>}
-          <div className="lg:ml-12 lg:mr-12">
+            <div className="md:ml-12 md:mr-12 lg:mr-36 lg:ml-36 xl:mr-72 xl:mb-72 2xl:ml-128 2xl:mr-128">
 
             <HappeningView data={data} session={session} posts={posts}/>
           </div>

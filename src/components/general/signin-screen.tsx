@@ -3,8 +3,8 @@
 import { AurorasBackground } from "nglty/components/backgrounds/auroras";
 import { StarsBackground } from "nglty/components/backgrounds/stars";
 import Logo from "nglty/components/elements/logo/logo";
-import SocialMediaLogin from "../app/login/_components/social-media-login";
-import { Seperator } from "./elements/seperator";
+import SocialMediaLogin from "../../app/login/_components/social-media-login";
+import { Seperator } from "../elements/seperator";
 
 // import { useState } from "react";
 

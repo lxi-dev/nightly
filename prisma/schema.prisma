@@ -8,22 +8,35 @@ generator client {
 }
 
 model Happening {
-  id             String    @id @default(cuid())
-  type           String    // 'private' | 'placebound' | 'public'
-  published      Boolean   @default(false)
-  name           String
-  venue          String
-  color          String
-  text           String?
-  dateHappening  DateTime?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  id                    String            @id @default(cuid())
+  type                  String            // 'private' | 'placebound' | 'public'
+  published             Boolean           @default(false)
+  name                  String
+  venue                 String?
+  color                 String
+  text                  String?
+  dateHappening         DateTime?
+  createdAt             DateTime          @default(now())
+  updatedAt             DateTime          @updatedAt
 
-  creatorId      String
-  createdBy      User      @relation("HappeningCreator", fields: [creatorId], references: [id])
-  invitees       User[]    @relation("HappeningInvitees")
-  posts          Post[]
-  follows        HappeningFollow[]
+  postsEnabled          Boolean           @default(true) // Enables or disables posts for the event
+  helpingHandsEnabled   Boolean           @default(false) // Enables or disables a feature for recruiting helpers for the event
+
+  maxParticipants       Int?              // Maximum number of participants allowed
+  tags                  String[]          // Tags or categories for filtering/searching events
+  coverImageUrl         String?           // URL for the cover image of the event
+  externalLinks         String[]          // Links to external resources (e.g., tickets, livestreams)
+  isRecurring           Boolean           @default(false) // Indicates if the event recurs periodically
+  recurrencePattern     String?           // Details about recurrence (e.g., 'weekly', 'monthly', etc.)
+  privacyLevel          String            @default("open")
+  cancellationReason    String?           // Reason for event cancellation, if applicable
+  archived              Boolean           @default(false) // Marks the event as archived, not shown in active lists
+
+  creatorId             String
+  createdBy             User              @relation("HappeningCreator", fields: [creatorId], references: [id])
+  invitees              User[]            @relation("HappeningInvitees")
+  posts                 Post[]
+  follows               HappeningFollow[]
 }
 
 model Place {
@@ -94,6 +107,7 @@ model User {
   age             String?
   location        String?
   bio             String?
+  tos             Boolean      @default(false)
   accounts        Account[]
   sessions        Session[]
   Authenticator   Authenticator[] // Optional for WebAuthn support

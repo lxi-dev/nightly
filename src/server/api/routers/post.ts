@@ -5,49 +5,51 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from "nglty/ser
 export const happeningRouter = createTRPCRouter({
   createHappening: publicProcedure
     .input(
-      z.object({
-        type: z.enum(["private", "placebound", "public"]),
-        published: z.boolean(),
-        name: z.string().min(1, "Name is required"),
-        venue: z.string().min(1, "Venue is required"),
-        color: z.string(),
-        text: z.string().optional(),
-        createdAt: z.preprocess(
-          (val) => (typeof val === "string" ? new Date(val) : val),
-          z.date()
-        ),
-        dateHappening: z.string().optional().refine(
-          (value) => !value || !isNaN(Date.parse(value)),
-          { message: "Invalid date format" }
-        ),
-        // inviteeIds: z.array(z.string()).optional(),
-      })
+        z.object({
+            type: z.enum(["private", "placebound", "public"]),
+            published: z.boolean(),
+            name: z.string().min(1, "Name is required"),
+            venue: z.string().optional(),
+            color: z.string(),
+            text: z.string().optional(),
+            createdAt: z.preprocess(
+                (val) => (typeof val === "string" ? new Date(val) : val),
+                z.date()
+            ),
+            updatedAt: z.preprocess(
+                (val) => (typeof val === "string" ? new Date(val) : val),
+                z.date()
+            ),
+            dateHappening: z.string().optional().refine(
+                (value) => !value || !isNaN(Date.parse(value)),
+                { message: "Invalid date format" }
+            ),
+            postsEnabled: z.boolean().optional().default(true),
+            helpingHandsEnabled: z.boolean().optional().default(false),
+            maxParticipants: z.number().int().positive().optional(),
+            tags: z.array(z.string()).optional(),
+            coverImageUrl: z.string().url().optional(),
+            externalLinks: z.array(z.string().url()).optional(),
+            isRecurring: z.boolean().optional().default(false),
+            recurrencePattern: z.string().optional(),
+            privacyLevel: z.enum(["open", "invite-only", "rsvp-required"]),
+            cancellationReason: z.string().optional(),
+            archived: z.boolean().optional().default(false)
+        })
     )
     .mutation(async ({ input, ctx }) => {
-      const happening = await ctx.db.happening.create({
-        data: {
-          type: input.type,
-          published: input.published,
-          name: input.name,
-          venue: input.venue,
-          color: input.color,
-          text: input.text,
-          dateHappening: input.dateHappening ? new Date(input.dateHappening) : null,
-          createdBy: {
-            connect: { id: ctx.session?.user.id },
-          },
-          // invitees: {
-          //   connect: input.inviteeIds?.map((id) => ({ id })) || [],
-          // },
-        },
-        include: {
-          createdBy: true,
-          // invitees: true,
-        },
-      });
-
-      return happening;
+        const happening = await ctx.db.happening.create({
+            data: {
+                ...input,
+                dateHappening: input.dateHappening ? new Date(input.dateHappening) : null,
+                createdBy: {
+                  connect: { id: ctx.session?.user.id },
+                },
+            }
+        });
+        return happening;
     }),
+  
 
   getHappeningsByUser: protectedProcedure.query(async ({ ctx }) => {
     const happenings = await ctx.db.happening.findMany({
@@ -182,5 +184,98 @@ export const happeningRouter = createTRPCRouter({
     });
 
     return posts;
+  }),
+
+  getByCreatorId: protectedProcedure
+  .input(z.object({ creatorId: z.string() }))
+  .query(async ({ input, ctx }) => {
+    const happenings = await ctx.db.happening.findMany({
+      where: { creatorId: input.creatorId },
+      include: {
+        createdBy: true,
+      },
+    });
+
+    return happenings;
+  }),
+
+getByVenue: protectedProcedure
+  .input(z.object({ venue: z.string() }))
+  .query(async ({ input, ctx }) => {
+    const happenings = await ctx.db.happening.findMany({
+      where: { venue: input.venue },
+      include: {
+        createdBy: true,
+      },
+    });
+
+    return happenings;
+  }),
+
+  getByDate: protectedProcedure
+  .input(z.object({ range: z.enum(["7_days", "1_month"]) }))
+  .query(async ({ input, ctx }) => {
+    const today = new Date();
+    let futureDate;
+
+    if (input.range === "7_days") {
+      futureDate = new Date();
+      futureDate.setDate(today.getDate() + 7);
+    } else if (input.range === "1_month") {
+      futureDate = new Date();
+      futureDate.setMonth(today.getMonth() + 1);
+    }
+
+    const happenings = await ctx.db.happening.findMany({
+      where: {
+        dateHappening: {
+          gte: today,
+          lte: futureDate,
+        },
+      },
+      include: {
+        createdBy: true,
+      },
+    });
+
+    return happenings;
+  }),
+
+getByType: protectedProcedure
+  .input(z.object({ type: z.string() }))
+  .query(async ({ input, ctx }) => {
+    const happenings = await ctx.db.happening.findMany({
+      where: { type: input.type },
+      include: {
+        createdBy: true,
+      },
+    });
+
+    return happenings;
+  }),
+
+search: protectedProcedure
+  .input(
+    z.object({
+      creatorId: z.string().optional(),
+      venue: z.string().optional(),
+      date: z.date().optional(),
+      type: z.string().optional(),
+    })
+  )
+  .query(async ({ input, ctx }) => {
+    const happenings = await ctx.db.happening.findMany({
+      where: {
+        creatorId: input.creatorId,
+        venue: input.venue,
+        dateHappening: input.date,
+        type: input.type,
+      },
+      include: {
+        createdBy: true,
+      },
+    });
+
+    return happenings;
   }),
 });

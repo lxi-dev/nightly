@@ -1,7 +1,6 @@
 import { BentoBox } from 'nglty/components/elements/box';
-import { UsersList } from 'nglty/components/ui/all-users';
-import { Header } from 'nglty/components/ui/header';
-import { ProfileCard } from 'nglty/components/ui/profile-card';
+import { UsersList } from 'nglty/components/users/all-users';
+import { ProfileCard } from 'nglty/components/users/profile-card';
 import { auth } from 'nglty/server/auth';
 import { HydrateClient } from 'nglty/trpc/server';
 import React from "react";
@@ -13,8 +12,7 @@ export default async function Page() {
         <HydrateClient>
             <main className='h-screen'>
         
-            <Header />
-            <div className="flex flex-col items-center justify-between gap-4 pt-12 pl-12 pr-12 pb-0 bg-white dark:bg-black">
+            <div className="flex flex-col items-center justify-between gap-4 md:ml-12 md:mr-12 lg:mr-36 lg:ml-36 xl:mr-72 xl:mb-72 2xl:ml-128 2xl:mr-128">
                 <div className="w-full dark:text-white">
                 <BentoBox colSpan="4" rowSpan="5" className="shadow-lg" animated>
                     <ProfileCard profile={session!} />

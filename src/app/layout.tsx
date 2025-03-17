@@ -4,6 +4,8 @@ import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 
 import { TRPCReactProvider } from "nglty/trpc/react";
+import { LoadingProvider } from "nglty/contexts/loadingContext";
+import { Header } from "nglty/components/general/header";
 
 export const metadata: Metadata = {
   title: "NGTLY",
@@ -19,8 +21,13 @@ export default function RootLayout({
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
-      <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+      <body className="dark:bg-aurora">
+          <TRPCReactProvider>
+            <Header />
+        <LoadingProvider>
+          {children}
+        </LoadingProvider>
+        </TRPCReactProvider>
       </body>
     </html>
   );

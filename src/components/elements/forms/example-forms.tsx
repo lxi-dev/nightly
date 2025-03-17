@@ -2,7 +2,7 @@
 
 import type { FormProps, FunnelData, PersonalInfo, PaymentInfo, Step } from "nglty/models/funnel";
 import { useState } from "react";
-import { Funnel } from "../funnel";
+import { Funnel } from "./funnel";
 
 export const PersonalInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
     const [data, setData] = useState<PersonalInfo>({ name: "", email: "" });
@@ -50,53 +50,6 @@ export const PersonalInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) 
       </form>
     );
   };
-  
-// export const AddressDetailsForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
-//     const [data, setData] = useState<AddressDetails>({ address: "", city: "" });
-  
-//     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//       const { name, value } = e.target;
-//       setData((prev) => ({ ...prev, [name]: value }));
-//     };
-  
-//     const handleSubmit = (e: React.FormEvent) => {
-//       e.preventDefault();
-//       onSubmit({ type: "addressDetails", data });
-//     };
-  
-//     return (
-//       <form onSubmit={handleSubmit} className="space-y-4">
-//         <div>
-//           <label className="block text-gray-700">Address</label>
-//           <input
-//             type="text"
-//             name="address"
-//             value={data.address}
-//             onChange={handleChange}
-//             className="w-full border-gray-300 rounded-lg shadow-sm"
-//             required
-//           />
-//         </div>
-//         <div>
-//           <label className="block text-gray-700">City</label>
-//           <input
-//             type="text"
-//             name="city"
-//             value={data.city}
-//             onChange={handleChange}
-//             className="w-full border-gray-300 rounded-lg shadow-sm"
-//             required
-//           />
-//         </div>
-//         <button
-//           type="submit"
-//           className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-//         >
-//           Next
-//         </button>
-//       </form>
-//     );
-//   };
   
 export const PaymentInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
     const [data, setData] = useState<PaymentInfo>({ cardNumber: "", expiryDate: "" });

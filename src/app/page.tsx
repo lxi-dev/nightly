@@ -1,20 +1,18 @@
 import { auth } from "nglty/server/auth";
 import { HydrateClient } from "nglty/trpc/server";
-import { SignInScreen } from "../components/signin-screen";
-import { Header } from "nglty/components/ui/header";
-import { ActionsBento } from "nglty/components/ui/actions-bento";
+import { SignInScreen } from "../components/general/signin-screen";
+import { ActionsBento } from "nglty/components/general/actions-bento";
 
 export default async function Home() {
   const session = await auth();
 
   return (
     <HydrateClient>
-      <main>
+      <main className="">
       { session?.user ? 
       (
-        <section className="dark:bg-black">
-          <Header />
-          <div className="lg:ml-12 lg:mr-12 2xl:ml-72 2xl:mr-72">
+        <section className="min-h-screen">
+          <div className="md:ml-12 md:mr-12 lg:mr-36 lg:ml-36 xl:mr-72 xl:mb-72 2xl:ml-128 2xl:mr-128">
           <ActionsBento session={session}/>
           </div>
         </section>

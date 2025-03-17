@@ -98,7 +98,7 @@ export const HappeningStats =  ({id, userId, active} : {id: string, userId?: str
     return (
         <BentoBox animated className="pl-6 pr-6 pt-4 pb-4">
         <div className="w-full dark:text-white items-center text-center">
-            { userStatus && <span className="">You are {userStatus}</span> }
+            { userStatus && <span>You are {userStatus}</span> }
         { active && (
             <div>
             <div className="flex flex-row w-full gap-4 mt-3">

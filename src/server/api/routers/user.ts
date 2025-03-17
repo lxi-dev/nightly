@@ -21,19 +21,29 @@ export const userRouter = createTRPCRouter({
 
       return {image: user.image, name: user.name};
     }),
-
+/**
+ *         name: infoData.name,
+        picture: infoData.image === "" ? defaultPictureUrl : infoData.image!,
+        bio: infoData.bio,
+        age: infoData?.age,
+        handle: handleData.handle,
+        tos: true
+ */
     updateProfile: protectedProcedure
         .input(
             z.object({
+                name: z.string(),
                 id: z.string(),
+                image: z.string().optional(),
                 handle: z.string().optional(),
                 location: z.string().optional(),
                 age: z.string().optional(),
                 bio: z.string().optional(),
+                tos: z.boolean()
             })
         )
         .mutation(async ({ input, ctx }) => {
-            const { id, handle, location, age, bio } = input;
+            const { id, handle, location, age, bio, name, image, tos } = input;
 
             const updatedUser = await ctx.db.user.update({
                 where: { id },
@@ -42,6 +52,9 @@ export const userRouter = createTRPCRouter({
                     location,
                     age,
                     bio,
+                    name,
+                    image,
+                    tos
                 },
             });
 

@@ -1,5 +1,4 @@
-import SchichtplanConfigUi from 'nglty/components/config-ui';
-import { Header } from 'nglty/components/ui/header';
+import HappeningFunnel from 'nglty/components/elements/forms/create/create-happening';
 import { HydrateClient } from 'nglty/trpc/server';
 import React from "react";
 
@@ -8,9 +7,8 @@ export default async function Page() {
   return (
         <HydrateClient>
             <main className='w-full'>
-            <Header />
-            <div className="flex flex-col items-center justify-between gap-4 pt-6 pl-16 pr-16 pb-0 bg-white dark:bg-black">
-                <SchichtplanConfigUi />
+            <div className="md:ml-12 md:mr-12 lg:mr-36 lg:ml-36 xl:mr-72 xl:mb-72 2xl:ml-128 2xl:mr-128">
+            <HappeningFunnel />
             </div>
         </main>
     </HydrateClient>

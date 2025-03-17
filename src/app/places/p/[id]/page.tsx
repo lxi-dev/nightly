@@ -1,5 +1,4 @@
-import { Header } from 'nglty/components/ui/header';
-import PlaceProfile from 'nglty/components/ui/place-page';
+import PlaceProfile from 'nglty/components/places/place-page';
 import { auth } from 'nglty/server/auth';
 import { HydrateClient } from 'nglty/trpc/server';
 import React from "react";
@@ -21,11 +20,10 @@ export default async function Page({ params } : {params: Promise<PlacePageProps>
 
   return (
     <HydrateClient>
-        <main className={`${!session ? 'blur-sm' : ''} dark:bg-black`}>
-            <Header />
-          <div className="lg:ml-12 lg:mr-12">
+        <main className={`${!session ? 'blur-sm' : ''}min-h-screen`}>
+          <div className="md:ml-12 md:mr-12 lg:mr-72 lg:ml-72 2xl:ml-128 2xl:mr-128">
 
-            <PlaceProfile id={id}/>
+            <PlaceProfile userId={session?.user.id} id={id}/>
           </div>
       </main>
     </HydrateClient>

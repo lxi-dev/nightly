@@ -75,6 +75,7 @@ export const PlaceInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
   import { Search, Check, CheckCircle, Plus, Trash2 } from "lucide-react";
 import { api } from "nglty/trpc/react";
 import { redirect } from "next/navigation";
+import { useLoading } from "nglty/contexts/loadingContext";
   
   type AnimatedTextInputProps = {
     name: string;
@@ -194,7 +195,7 @@ export const LocationForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
     };
 
     const setAdress = (e: string) => {
-      setData((prev) => ({ ...prev, adress: e}));
+      setData((prev) => ({ ...prev, address: e}));
     }
   
     const handleSubmit = (e: React.FormEvent) => {
@@ -221,17 +222,6 @@ export const LocationForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
           />
         </div>
         <div className="flex flex-row gap-4 mt-5">
-          <div className="flex flex-col w-3/4">
-          <label className="block text-gray-700">City</label>
-          <input
-            type="text"
-            name="city"
-            value={data.city}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-2xl h-12 p-3"
-            required
-          />
-          </div>
           <div className="flex flex-col w-1/4">
           <label className="block text-gray-700">Zipcode</label>
           <input
@@ -239,6 +229,17 @@ export const LocationForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
             maxLength={5}
             name="zip"
             value={data.zip}
+            onChange={handleChange}
+            className="w-full border border-gray-300 rounded-2xl h-12 p-3"
+            required
+          />
+          </div>
+          <div className="flex flex-col w-3/4">
+          <label className="block text-gray-700">City</label>
+          <input
+            type="text"
+            name="city"
+            value={data.city}
             onChange={handleChange}
             className="w-full border border-gray-300 rounded-2xl h-12 p-3"
             required
@@ -447,40 +448,59 @@ export const OpeningHoursFormInfoForm: React.FC<FormProps<FunnelData>> = ({ onSu
 
     const convertOpeningHours = (data: OpeningHoursInfo): Record<string, string> | undefined => {
       const result: Record<string, string> = {};
-
+      
       if(!data.openingHours) return undefined;
-
+      
       data.openingHours.forEach((dayInfo) => {
         const hoursString = dayInfo.hours
-          .map(({ from, to }) => `${from}-${to}`)
-          .join(", ");
-    
+        .map(({ from, to }) => `${from}-${to}`)
+        .join(", ");
+        
         result[dayInfo.day.toLowerCase()] = hoursString;
       });
-    
+      
       return result;
     }
-  
+    
+    const { showLoading, hideLoading } = useLoading();
     const handleComplete = async (data: FunnelData[]) => {
-      const placeData = data[0]?.data as PlaceInfo;
-      const locationData = data[1]?.data as AddressDetails;
-      const openingHours = data[2]?.data as OpeningHoursInfo;
+      showLoading();
+      const [placeDataEntry, locationDataEntry, openingHoursEntry] = data.map(item => item?.data);
+      const placeData = placeDataEntry as PlaceInfo;
+      const locationData = locationDataEntry as AddressDetails;
+      const openingHours = openingHoursEntry as OpeningHoursInfo;
 
-      console.log(placeData);
-      console.log(openingHours);
-
-      const place = await createPlaceMutation.mutateAsync({
+      const defaultPictureUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLC0VtEAnU3BQVLsXVa8ytCHqYS0sn9fdYDA&s";
+      const commonPayload = {
         name: placeData.name,
-        picture: placeData.image ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLC0VtEAnU3BQVLsXVa8ytCHqYS0sn9fdYDA&s",
+        picture: placeData.image === "" ? defaultPictureUrl : placeData.image!,
         description: placeData.description,
-        heartPlace: locationData.heartplace,
-        address: locationData.address,
-        city: locationData.city,
-        zipcode: locationData.zip ? locationData.zip.toString() : "",
-        openingHours: convertOpeningHours(openingHours),
-      });
-      if (place) redirect(`p/${place.id}`);
-      
+        heartPlace: locationData?.heartplace,
+      };
+    
+      let place;
+      try {
+        if (!openingHours || locationData?.heartplace) {
+          place = await createPlaceMutation.mutateAsync(commonPayload);
+        } else {
+          place = await createPlaceMutation.mutateAsync({
+            ...commonPayload,
+            address: locationData?.address,
+            city: locationData?.city,
+            zipcode: locationData?.zip?.toString() ?? "",
+            openingHours: convertOpeningHours(openingHours),
+          });
+        }
+        console.log(place);
+      } catch (error) {
+        console.error("Error completing the funnel:", error);
+      } finally {
+        if (place) {
+          hideLoading();
+          redirect(`p/${place.id}`);
+        }
+      }
+    
       console.log("Funnel completed with data:", data);
     };
   

@@ -20,17 +20,19 @@ export const ActionsBento = ({ session } : { session: Session}) => {
 
   const bentoClass = "flex rounded-lg border-2 flex-col bg-gray-200 dark:bg-slate-900 dark:border-white/10 border-opacity-60"
   return (
-    <div className="relative flex flex-row items-center justify-between gap-4 pt-6 pb-0 h-screen bg-white dark:bg-black">
-    <div className="relative z-10 flex flex-col md:grid h-full w-full gap-4 p-2 lg:grid-cols-2 lg:grid-rows-5 border-opacity-600">
-      <div className="flex flex-col my-auto gap-6 ">
+    <div className="relative h-full flex flex-row items-center justify-between gap-4 pt-6 pb-0">
+    <div className="relative z-10 flex flex-col w-full gap-4 p-2">
+      <div className="flex flex-col">
+        { user.handle && 
         <div className="flex flex-row w-full justify-start">
             <UserProfileIcon src={user.image} />
             <div className="flex-col pl-4 items-end">
-              <p className="text-sm dark:text-gray-200">hey {user.handle ?? user.handle},</p>
-              <p className="text-xl dark:text-white">{user.handle ?? 'nice to see you again!'}</p>
+              <p className="text-sm dark:text-gray-200">hey {user.handle ?? user.name},</p>
+              <p className="text-xl dark:text-white">{user.handle && 'nice to see you again!'}</p>
             </div>
         </div>
-        { user.handle ?? (
+        }
+        { !user.handle && (
           <BentoBox animated className="z-10">
           <div className="flex flex-row dark:text-white p-4 justify-between">
             <h2 className="p-2">Seems like you're new here, complete your Profile!</h2>
@@ -49,10 +51,10 @@ export const ActionsBento = ({ session } : { session: Session}) => {
       </div>
       { user.handle && (
       <BentoBox colSpan="1" rowSpan="4" className="p-4" animated>
-        <h2 className="dark:text-white text-2xl mb-4">Feed</h2>
-        <div className="w-full h-full overflow-y-scroll border-b border-gray-400">
+        <h2 className="dark:text-white text-2xl mb-4">Feed (mock)</h2>
+        <div className="w-full h-full overflow-y-scroll border-b border-gray-400 dark:text-white">
 
-        <div className="flex flex-row items-center align-center">
+        <div className="flex flex-row items-center align-center ">
           <p><u className="pr-1 text-aurora-900">@lxia</u>posted in <a className="pl-1 font-semibold">Woodgathering 2025</a>.</p>
         </div>
         <div className="flex flex-row items-center align-center">
@@ -74,26 +76,27 @@ export const ActionsBento = ({ session } : { session: Session}) => {
           <p><u className="pr-1 text-aurora-900">@margareten</u>joined <a className="pl-1 font-semibold">p.ara summer closing 2025</a>.</p>
         </div>
         </div>
-        <small className="mt-1">view all</small>
+        <small className="mt-1 dark:text-white">view all</small>
 
       </BentoBox>
       )}
-      <BentoBox colSpan="3" rowSpan="2" animated className="overflow-hidden min-h-48 bg-[url(/images/places-card-3.jpg)] bg-center bg-cover bg-no-repeat">
-        <div className="w-full h-full p-4">
-          <div className="absolute z-10">
+      <div className="flex flex-row gap-4">
+      <BentoBox animated hover className="overflow-hidden min-h-48 w-1/2  bg-[url(/images/places-card-3.jpg)] bg-center bg-cover bg-no-repeat">
+        <div className="w-full h-full">
+          <div className="absolute z-10 rounded-2xl bg-black/30 m-4 p-2 ">
 
         <a 
           href="/places"
           className="dark:text-white text-2xl mb-4">Discover Places
           </a>
-        <p className="mt-3 text-slate-700">Currently there is 1 place on this site, you can check out!</p>
           </div>
 
         </div>
         <img src='' className="z-0 relative -translate-y-16"/> 
 
       </BentoBox>
-      <BentoBox colSpan="1" rowSpan="2" animated className="overflow-hidden dark:hover:border-aurora-700 transition cursor-pointer bg-[url(/images/happeing-card-bg.png)] bg-top bg-cover bg-no-repeat">
+
+      <BentoBox animated className="overflow-hidden min-h-48 dark:hover:border-aurora-700 transition cursor-pointer bg-[url(/images/happeing-card-bg.png)] bg-top bg-cover bg-no-repeat">
        <Link href="/happen">
        <div className="h-14 p-4">
 
@@ -106,6 +109,7 @@ export const ActionsBento = ({ session } : { session: Session}) => {
         </div>
         </Link>
       </BentoBox>
+      </div>
       <div 
         className={`${bentoClass} col-span-1 p-6 row-span-3 hover:border-aurora-600`}
       >

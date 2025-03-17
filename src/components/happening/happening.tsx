@@ -83,10 +83,10 @@ export const HappeningView = ({ data, session, posts } : { data: Happening, sess
             { data.type === 'public' && <EyeIcon className="w-[128px] h-[128px]"/>}
           </div>
           <h4 className="relative text-white mb-2 dark:text-white">
-            @ {data?.venue.toString()}
+            @ {data?.venue ?? data?.venue!.toString()}
           </h4>        
           { owner && 
-            <button className="relative w-24 h-8 bg-white dark:bg-black hover:shadow-lg hover:bg-gray-50 text-black dark:text-white rounded-md text-sm font-lg shadow-sm transition">
+            <button className="relative w-24 h-8 bg-white hover:shadow-lg hover:bg-gray-50 text-black dark:text-white rounded-md text-sm font-lg shadow-sm transition">
               edit
             </button>
           }

@@ -17,7 +17,7 @@ export default {
         'aurora-700': '#1E67C6',
         'aurora-800': '#CEB4CF',
         'aurora-900': '#DD335C',
-        'aurora': '#0C0E0C',
+        'aurora': '#171616',
       }
     },
   },
