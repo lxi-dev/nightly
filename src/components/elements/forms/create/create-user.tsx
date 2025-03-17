@@ -244,7 +244,7 @@ export const UserInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit, props 
 
     useEffect(() => {
       if (!props) return
-        const session = props as User;
+        const session = props;
         if(session.name) {
           setDefaultName(session.name)
           setData({"name":session.name});
