@@ -21,7 +21,7 @@ export default async function Page({ params } : {params: Promise<PlacePageProps>
   return (
     <HydrateClient>
         <main className={`${!session ? 'blur-sm' : ''}min-h-screen`}>
-          <div className="md:ml-12 md:mr-12 lg:mr-72 lg:ml-72 2xl:ml-128 2xl:mr-128">
+          <div>
 
             <PlaceProfile userId={session?.user.id} id={id}/>
           </div>

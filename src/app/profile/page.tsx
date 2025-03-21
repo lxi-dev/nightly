@@ -12,7 +12,7 @@ export default async function Page() {
         <HydrateClient>
             <main className='h-screen'>
         
-            <div className="flex flex-col items-center justify-between gap-4 md:ml-12 md:mr-12 lg:mr-36 lg:ml-36 xl:mr-72 xl:mb-72 2xl:ml-128 2xl:mr-128">
+            <div className="flex flex-col items-center justify-between gap-4">
                 <div className="w-full dark:text-white">
                 <BentoBox colSpan="4" rowSpan="5" className="shadow-lg" animated>
                     <ProfileCard profile={session!} />

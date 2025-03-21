@@ -29,7 +29,7 @@ export const PlacesComponent: React.FC<Props> = ({ userId  }) => {
   return (
     <div className="h-full w-full gap-4">
       {/* Tabs */}
-      <div className="relative flex flex-row gap-6 border-b border-gray-300 pb-2">
+      <div className="relative flex flex-row gap-6 border-b border-gray-300 dark:border-gray-700 pb-2">
         {tabs.map((tab) => (
           <h2
             key={tab.id}

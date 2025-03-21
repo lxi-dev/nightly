@@ -7,7 +7,7 @@ export default async function Page() {
   return (
         <HydrateClient>
             <main className='w-full min-h-screen'>
-            <section className='lg:ml-12 lg:mr-12 2xl:ml-72 2xl:mr-72'>
+            <section>
                 <CreatePlaceFunnel />
             </section>
         </main>

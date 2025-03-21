@@ -26,9 +26,9 @@ export const HappeningsComponent: React.FC = () => {
 
   const { width, left } = getTabDimensions(activeTab);
   return (
-    <div className="h-full w-full gap-4 p-2">
+    <div className="h-full w-full gap-4">
       {/* Tabs */}
-      <div className="relative flex flex-row gap-6">
+      <div className="relative flex flex-row gap-6 border-b border-gray-300 dark:border-gray-700 pb-2">
         {tabs.map((tab) => (
           <h2
             key={tab.id}
@@ -43,7 +43,7 @@ export const HappeningsComponent: React.FC = () => {
         ))}
         {/* Animated Underline */}
         <motion.div
-          className="absolute bottom-0 h-1 bg-aurora-900 rounded"
+          className="absolute -bottom-1 h-1 bg-aurora-900 rounded"
           layoutId="underline"
           initial={true}
           animate={{
@@ -53,10 +53,6 @@ export const HappeningsComponent: React.FC = () => {
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
         />
       </div>
-
-      <small className="text-gray-500 dark:text-gray-600">
-        Around you is currently locked to Bremen.
-      </small>
 
       {/* Content with fade animations */}
       <div className="mt-4">

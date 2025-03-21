@@ -6,6 +6,8 @@ import { UserProfileIcon } from "../elements/user-icon";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { redirect } from "next/navigation";
+import { UserIcon } from "lucide-react";
+import { Button } from "../ui/button";
 type UserData = {
   image?: string;
   name?: string;
@@ -52,31 +54,107 @@ export const ActionsBento = ({ session } : { session: Session}) => {
       { user.handle && (
       <BentoBox colSpan="1" rowSpan="4" className="p-4" animated>
         <h2 className="dark:text-white text-2xl mb-4">Feed (mock)</h2>
-        <div className="w-full h-full overflow-y-scroll border-b border-gray-400 dark:text-white">
+              <div className="space-y-4">
+                <div className="flex items-start gap-3 pb-4 border-b dark:border-zinc-800">
+                  <UserIcon className="h-8 w-8" />
+                    {/* <AvatarImage src="/placeholder.svg?height=32&width=32" alt="@lxia" />
+                    <AvatarFallback>LX</AvatarFallback> */}
+                  {/* </Avatar> */}
+                  <div className="space-y-1">
+                    <p className="text-sm">
+                      <Link href="#" className="font-medium text-rose-600 hover:underline">
+                        @lxia
+                      </Link>
+                      <span className="text-zinc-500 dark:text-zinc-400"> posted in </span>
+                      <Link href="#" className="font-medium hover:underline">
+                        Woodgathering 2025
+                      </Link>
+                    </p>
+                    <time className="text-xs text-zinc-500 dark:text-zinc-400">2 hours ago</time>
+                  </div>
+                </div>
 
-        <div className="flex flex-row items-center align-center ">
-          <p><u className="pr-1 text-aurora-900">@lxia</u>posted in <a className="pl-1 font-semibold">Woodgathering 2025</a>.</p>
-        </div>
-        <div className="flex flex-row items-center align-center">
-          <p><u className="pr-1 text-aurora-900">&mstreue</u>posted 3 new <a className="pl-1">Happenings</a>.</p>
-        </div>
-        <div className="flex flex-row items-center align-center">
-          <p>Its <u className="pr-1 pl-1 text-aurora-900">@shenaya_s</u>Birthday today.</p>
-        </div>
-        <div className="flex flex-row items-center align-center">
-          <p><u className="pr-1 text-aurora-900">@bokcu</u>posted in <a className="pl-1 font-semibold">p.ara summer closing 2025</a>.</p>
-        </div>
-        <div className="flex flex-row items-center align-center">
-          <p><u className="pr-1 text-aurora-900">@maikmaikmaikmaikmaik</u>joined <a className="pl-1 text-aurora-900">&para</a>.</p>
-        </div>
-        <div className="flex flex-row items-center align-center">
-          <p><u className="pr-1 text-aurora-900">@bex_203</u>joined <a className="pl-1 font-semibold">Woodgathering 2025</a>.</p>
-        </div>
-        <div className="flex flex-row items-center align-center">
-          <p><u className="pr-1 text-aurora-900">@margareten</u>joined <a className="pl-1 font-semibold">p.ara summer closing 2025</a>.</p>
-        </div>
-        </div>
-        <small className="mt-1 dark:text-white">view all</small>
+                <div className="flex items-start gap-3 pb-4 border-b dark:border-zinc-800">
+                  <UserIcon className="h-8 w-8" />
+                    {/* <AvatarImage src="/placeholder.svg?height=32&width=32" alt="@mstreue" />
+                    <AvatarFallback>MS</AvatarFallback>
+                  </Avatar> */}
+                  <div className="space-y-1">
+                    <p className="text-sm">
+                      <Link href="#" className="font-medium text-rose-600 hover:underline">
+                        @mstreue
+                      </Link>
+                      <span className="text-zinc-500 dark:text-zinc-400"> posted 3 new </span>
+                      <Link href="#" className="font-medium hover:underline">
+                        Happenings
+                      </Link>
+                    </p>
+                    <time className="text-xs text-zinc-500 dark:text-zinc-400">3 hours ago</time>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 pb-4 border-b dark:border-zinc-800">
+                <UserIcon className="h-8 w-8" />
+                    {/* <AvatarImage src="/placeholder.svg?height=32&width=32" alt="@mstreue" />
+                    <AvatarFallback>MS</AvatarFallback>
+                  </Avatar> */}
+                  <div className="space-y-1">
+                    <p className="text-sm">
+                      <span className="text-zinc-500 dark:text-zinc-400">It's </span>
+                      <Link href="#" className="font-medium text-rose-600 hover:underline">
+                        @shenaya_s
+                      </Link>
+                      <span className="text-zinc-500 dark:text-zinc-400"> Birthday today!</span>
+                    </p>
+                    <time className="text-xs text-zinc-500 dark:text-zinc-400">Today</time>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 pb-4 border-b dark:border-zinc-800">
+                <UserIcon className="h-8 w-8" />
+                    {/* <AvatarImage src="/placeholder.svg?height=32&width=32" alt="@mstreue" />
+                    <AvatarFallback>MS</AvatarFallback>
+                  </Avatar> */}
+                  <div className="space-y-1">
+                    <p className="text-sm">
+                      <Link href="#" className="font-medium text-rose-600 hover:underline">
+                        @bokcu
+                      </Link>
+                      <span className="text-zinc-500 dark:text-zinc-400"> posted in </span>
+                      <Link href="#" className="font-medium hover:underline">
+                        p.ara summer closing 2025
+                      </Link>
+                    </p>
+                    <time className="text-xs text-zinc-500 dark:text-zinc-400">Yesterday</time>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                <UserIcon className="h-8 w-8" />
+                    {/* <AvatarImage src="/placeholder.svg?height=32&width=32" alt="@mstreue" />
+                    <AvatarFallback>MS</AvatarFallback>
+                  </Avatar> */}
+                  <div className="space-y-1">
+                    <p className="text-sm">
+                      <Link href="#" className="font-medium text-rose-600 hover:underline">
+                        @margareten
+                      </Link>
+                      <span className="text-zinc-500 dark:text-zinc-400"> joined </span>
+                      <Link href="#" className="font-medium hover:underline">
+                        p.ara summer closing 2025
+                      </Link>
+                    </p>
+                    <time className="text-xs text-zinc-500 dark:text-zinc-400">2 days ago</time>
+                  </div>
+                </div>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="w-full text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-50"
+              >
+                View all activity
+              </Button>
 
       </BentoBox>
       )}

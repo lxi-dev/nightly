@@ -25,7 +25,7 @@ export default async function Page({ params } : {params: Promise<EventPageProps>
 
         <main className={`${!data ? 'blur-sm' : ''}`}>
             { !data && <div>Happening nicht gefunden</div>}
-            <div className="md:ml-12 md:mr-12 lg:mr-36 lg:ml-36 xl:mr-72 xl:ml-72 2xl:ml-128 2xl:mr-128">
+            <div>
 
             <EventPage event={data} />
             {/*<HappeningView data={data} session={session} posts={posts}/> */}

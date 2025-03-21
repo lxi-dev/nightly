@@ -11,9 +11,9 @@ export default async function Page() {
   return (
         <HydrateClient>
             <main className='min-h-screen'>
-            <section className="md:ml-12 md:mr-12 lg:mr-36 lg:ml-36 xl:mr-72 xl:mb-72 2xl:ml-128 2xl:mr-128 pt-4">
+            <section className="pt-4">
         {/* Location Alert */}
-        <div className="mb-6 flex items-center justify-between rounded-lg bg-gradient-to-r from-violet-50 via-fuchsia-50 to-violet-50 p-3">
+        <div className="mb-6 flex items-center justify-between rounded-lg bg-gradient-to-r from-violet-50 via-fuchsia-50 to-violet-50 bg-gradient-to-r dark:from-violet-800 dark:via-fuchsia-500 dark:to-violet-500 p-3">
           <div className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white">
               <Compass className="h-4 w-4" />

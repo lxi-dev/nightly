@@ -6,31 +6,6 @@ import { AurorasBackground } from "../backgrounds/auroras";
 import LogoCubicle from "../elements/logo/logo-cubicle";
 
 export const Header = async () => {
-
-// Animated background dots
-// function AnimatedDots() {
-//     return (
-//       <div className="absolute inset-0">
-//         {Array.from({ length: 50 }).map((_, i) => (
-//           <div
-//             key={i}
-//             className="absolute rounded-full bg-primary/20"
-//             style={{
-//               width: `${Math.random() * 8 + 2}px`,
-//               height: `${Math.random() * 8 + 2}px`,
-//               top: `${Math.random() * 100}%`,
-//               left: `${Math.random() * 100}%`,
-//               animation: `float ${Math.random() * 10 + 10}s linear infinite`,
-//               animationDelay: `${Math.random() * 5}s`,
-//               opacity: Math.random() * 0.5 + 0.2,
-//             }}
-//           />
-//         ))}
-//       </div>
-//     )
-//   }
-  
-
   return (
     <nav>
         <header className="relative border-b sticky top-0 z-10 bg-background/95 backdrop-blur-sm overflow-hidden">
@@ -49,7 +24,7 @@ export const Header = async () => {
                 </span>
             </div>
             </a>
-            <div className="relative hidden md:block w-80">
+            <div className="relative hidden md:block">
                 <Search />
             </div>
         </div>
