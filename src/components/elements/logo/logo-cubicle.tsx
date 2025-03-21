@@ -1,27 +1,25 @@
 /* eslint-disable */
 
 'use client';
+import { Sparkles } from "lucide-react";
 import { Major_Mono_Display } from "next/font/google";
 import { redirect } from "next/navigation";
 import { StarsBackground } from "nglty/components/backgrounds/stars";
 
-const majormono = Major_Mono_Display({
-    weight: '400',
-    subsets: ['latin']
-});
 
 export default function LogoCubicle() {
   return (
     <div 
-      className="flex flex-col bg-black overflow-hidden w-10 h-10 border-slate-700 shadow-sm rounded-md relative" 
+      className="flex flex-col bg-gradient-to-r from-purple-500/30 via-violet-700/30 to-teal-500/30 overflow-hidden w-6 h-6 border-slate-700 shadow-sm rounded-md relative" 
       onClick={() => redirect('/')} 
     >
       <div className="absolute inset-0 z-0">
-        <StarsBackground starDensity={1}/>
+        <StarsBackground starDensity={0.05}/>
         </div>
-        <div className="flex grow flex-row w-6 justify-start space-x-2 pl-1 pb-.5 relative z-10">
-          <div className={`${majormono.className} flex flex-row items-center leading-none text-white tracking-tighter`}>
-            <p className="text-[32px] select-none">NY</p>
+        <div className="flex grow flex-row w-6 justify-start relative z-10">
+          <div className={`flex flex-row items-center leading-none text-white`}>
+            <p className="text-12 select-none"><Sparkles className="h-4 w-4 text-white ml-1" />
+            </p>
           </div>
       </div>
     </div>

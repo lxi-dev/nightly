@@ -42,12 +42,11 @@ export const Header = async () => {
         <div className="container relative z-10 flex items-center justify-between h-16 px-4 mx-auto">
           <div className="flex items-center gap-8">
             <a href="/">
-            <div className="font-semibold text-xl flex items-center">
+            <div className="font-semibold text-xl flex items-center space-x-2">
                 <LogoCubicle />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-violet-700">
-                    ghtly
+                    Nightly
                 </span>
-              {/* <Sparkles className="h-4 w-4 text-amber-500 ml-1" /> */}
             </div>
             </a>
             <div className="relative hidden md:block w-80">
