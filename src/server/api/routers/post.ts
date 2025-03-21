@@ -26,7 +26,7 @@ export const happeningRouter = createTRPCRouter({
             ),
             postsEnabled: z.boolean().optional().default(true),
             helpingHandsEnabled: z.boolean().optional().default(false),
-            maxParticipants: z.number().int().positive().optional(),
+            maxParticipants: z.number().int().optional(),
             tags: z.array(z.string()).optional(),
             coverImageUrl: z.string().url().optional(),
             externalLinks: z.array(z.string().url()).optional(),

@@ -215,7 +215,7 @@ export const UserHandleForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) =>
         <button
           type="submit"
           disabled={!handleAvailable || !data}
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:bg-gray-300"
+          className="bg-violet-700 text-white px-4 py-2 rounded-lg hover:bg-violet-700 disabled:bg-gray-300"
         >
           Next
         </button>
@@ -313,7 +313,7 @@ export const UserInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit, props 
         </div>
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+          className="bg-violet-700 text-white px-4 py-2 rounded-lg hover:bg-violet-700"
         >
           Next
         </button>

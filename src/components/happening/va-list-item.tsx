@@ -2,9 +2,9 @@
 'use client';
 import React from "react";
 import { redirect } from "next/navigation";
-import TimeNotification from "./notification-pills/time";
 import { EyeIcon, EyeSlashIcon, HomeIcon, MapPinIcon } from "@heroicons/react/24/outline";
 import dayjs from "dayjs";
+import { BentoBox } from "../elements/box";
 
 type VaListItemProps = {
   happeningId: string,
@@ -35,7 +35,8 @@ const VaListItem: React.FC<VaListItemProps> = ({ happeningId, happeningStatus, h
       }
 
 return(
-    <div className="w-full p-4 bg-gray-100 dark:bg-slate-900 dark:hover:bg-slate-700 dark:text-white rounded-md border-b-1 hover:shadow-md dark:border-white mb-2 flex items-center justify-between duration-50 cursor-pointer transition">
+  <BentoBox className="shadow-sm">
+    <div className="w-full p-4 flex items-center justify-between duration-50 cursor-pointer transition">
     <div 
       className="flex flex-row text-left w-[70%]"
       onClick={handleClick(happeningId ?? '')}
@@ -67,6 +68,7 @@ return(
       </div>
     </div>
   </div>
+  </BentoBox>
 );
 }
 

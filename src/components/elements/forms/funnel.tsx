@@ -13,7 +13,7 @@
 //       onClick={() => onClick(stepIndex)}
 //       className={`cursor-pointer py-2 px-4 rounded ${
 //         stepIndex === currentStep
-//           ? "bg-blue-500 text-white"
+//           ? "bg-violet-700 text-white"
 //           : "bg-gray-400 text-gray-700 hover:bg-gray-200 hidden md:flex"
 //       }`}
 //     >
@@ -87,8 +87,8 @@ const FunnelStep: React.FC<{
       onClick={() => onClick(stepIndex)}
       className={`cursor-pointer py-2 px-4 rounded ${
         stepIndex === currentStep
-          ? "bg-blue-500 text-white"
-          : "bg-gray-400 text-gray-700 hover:bg-gray-200 hidden md:flex"
+        ? "bg-violet-100 text-violet-700 font-medium"
+        : "text-gray-600 hover:bg-gray-100"
       }`}
     >
       {label}
@@ -130,7 +130,7 @@ export const Funnel = <T,>({
 
   return (
     <div className="flex w-full h-full flex-col md:flex-row">
-      <div className="w-38 flex-none md:h-full rounded-2xl bg-gray-100 dark:bg-slate-900 border border-gray-300 dark:border-slate-800 p-4 gap-6 shadow-lg mr-2 ml-2 md:mr-4 mb-4 mt-2 md:mt-6">
+      <div className="w-38 flex-none md:h-full md:border-r border-gray-300 dark:border-slate-800 p-4 gap-6 mr-2 ml-2 md:mr-4 mb-4 mt-2 md:mt-6">
         <div className="flex-row space-y-5">
           {steps.map((step, index) => (
             <FunnelStep

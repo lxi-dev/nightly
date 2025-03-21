@@ -1,10 +1,9 @@
 'use client';
 
-import { CheckIcon, HeartIcon, MapPinIcon, UsersIcon } from "lucide-react";
 import { motion } from "motion/react";
 import { api } from "nglty/trpc/react";
-import { BentoBox } from "../elements/box";
 import { redirect } from "next/navigation";
+import PlaceTile from "./place-tile";
 
 export const PlaceList = () => {
     const { data: places, isLoading } = api.places.getPlaces.useQuery({city: 'Bremen'});
@@ -13,17 +12,19 @@ export const PlaceList = () => {
   
     return (
       <main>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {places?.map((place) => (
         <motion.div
+
         key={place.id}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2 }}
       >
         <div 
-          onClick={() => redirect(`places/p/${place.id}`)}
-          className="flex flex-col md:flex-row gap-4 transition-shadow bg-white dark:bg-gray-800 p-4 border-b border-gray-400 mb-4 ">
-          <BentoBox className="relative w-full md:w-1/3 h-48">
+          onClick={() => redirect(`places/p/${place.id}`)}>
+            <PlaceTile place={place} />
+          {/* <BentoBox className="relative w-full md:w-1/3 h-48">
             <img
               src={place.picture}
               alt={place.name}
@@ -63,10 +64,11 @@ export const PlaceList = () => {
               <p className="text-sm text-gray-700 dark:text-gray-300 line-clamp-3 mb-4 mt-2">
                 {place.description === "" ? "No description provided." : place.description}
               </p>
-            </div>
+            </div> */}
           </div>
       </motion.div>
         ))}
+        </div>
       </main>
     );
   };

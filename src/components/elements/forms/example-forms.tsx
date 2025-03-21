@@ -43,7 +43,7 @@ export const PersonalInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) 
         </div>
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+          className="bg-violet-700 text-white px-4 py-2 rounded-lg hover:bg-violet-700"
         >
           Next
         </button>
@@ -90,7 +90,7 @@ export const PaymentInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) =
         </div>
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+          className="bg-violet-700 text-white px-4 py-2 rounded-lg hover:bg-violet-700"
         >
           Next
         </button>

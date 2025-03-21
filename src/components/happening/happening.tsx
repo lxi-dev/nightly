@@ -12,6 +12,7 @@ import type { Session } from "next-auth";
 import { api } from "nglty/trpc/react";
 import { UserProfileIcon } from "../elements/user-icon";
 import { HappeningStats } from "./happening-stats";
+import { AurorasBackground } from "../backgrounds/auroras";
 
 export type PostCreate = {
   text: string,
@@ -69,6 +70,13 @@ export const HappeningView = ({ data, session, posts } : { data: Happening, sess
       {/* <div className={`relative z-10 grid`}> */}
   return (
     <main>
+            <div className="min-w-screen min-h-46 bg-violet-700">
+        { data.coverImageUrl ? (<img className="min-w-screen min-h-46" src={data.coverImageUrl ?? ''} />) : (
+          <div className="absolute min-w-screen min-h-46">
+          <AurorasBackground /></div>)}
+        
+
+      </div>
     <div className="relative flex flex-col h-full w-auto m-4">
       <div className={`flex flex-row w-full h-32 rounded-md justify-between items-end bg-${data.color} shadow-lg pb-4 lg:pl-6 lg:pr-6`}>
         <div className="flex flex-col justify-start items-start">
@@ -93,7 +101,7 @@ export const HappeningView = ({ data, session, posts } : { data: Happening, sess
           </div>
         </div>
       <div className="flex flex-row justify-start items-center gap-10 border-t border-black/10 pl-2 pt-4">
-        <p className="text-slate-500 text-1xl">created {timeFrom} </p>
+      <p className="text-slate-500 text-1xl">created {timeFrom} </p>
         <CalendarDaysIcon className="w-4 h-4 text-slate-500"/>
         <p className="text-slate-500 text-1xl">happening {timeTo} </p>
       </div>
@@ -105,7 +113,7 @@ export const HappeningView = ({ data, session, posts } : { data: Happening, sess
           <div className="w-full dark:text-white" dangerouslySetInnerHTML={{__html:data.text ?? ''}}></div>
         </BentoBox>
         <div className="flex flex-col gap-3">
-          <HappeningStats active={!owner} id={data.id} userId={session?.user.id}/>
+          <HappeningStats active={!owner} id={data.id}/>
           { data.type === 'private' &&
           
         <BentoBox colSpan="1" rowSpan="1" className="min-h-96 p-6">

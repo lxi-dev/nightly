@@ -86,7 +86,7 @@ const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           type="button"
-          className="flex items-center justify-end gap-2 p-2 border bg-blue-600 text-white border-blue-700 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
+          className="flex items-center justify-end gap-2 p-2 border bg-violet-700 text-white border-violet-700 rounded-lg hover:bg-violet-700 focus:outline-none focus:ring focus:ring-blue-300"
         >
           <motion.span
             initial={{ x: 0 }}
@@ -109,7 +109,7 @@ const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           type="button"
-          className="flex items-center justify-end gap-2 p-2 border bg-blue-600 text-white border-blue-700 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
+          className="flex items-center justify-end gap-2 p-2 border bg-violet-700 text-white border-violet-700 rounded-lg hover:bg-violet-700 focus:outline-none focus:ring focus:ring-blue-300"
         >
           <motion.span
             initial={{ x: 0 }}
@@ -130,7 +130,7 @@ const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           type="button"
-          className="flex items-center justify-end gap-2 p-2 border bg-blue-600 text-white border-blue-700 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
+          className="flex items-center justify-end gap-2 p-2 border bg-violet-700 text-white border-violet-700 rounded-lg hover:bg-violet-700 focus:outline-none focus:ring focus:ring-blue-300"
         >
           <motion.span
             initial={{ x: 0 }}
@@ -151,7 +151,7 @@ const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           type="button"
-          className="flex items-center justify-end gap-2 p-2 border bg-blue-600 text-white border-blue-700 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
+          className="flex items-center justify-end gap-2 p-2 border bg-violet-700 text-white border-violet-700 rounded-lg hover:bg-violet-700 focus:outline-none focus:ring focus:ring-blue-300"
         >
           <motion.span
             initial={{ x: 0 }}
@@ -225,7 +225,7 @@ const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsExpanded(!isExpanded)}
-        className="z-20 absolute bottom-0 text-center p-2 mt-4 text-sm text-white bg-blue-600 rounded-full shadow-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
+        className="z-20 absolute bottom-0 text-center p-2 mt-4 text-sm text-white bg-violet-700 rounded-full shadow-md hover:bg-violet-700 focus:outline-none focus:ring focus:ring-blue-300"
       >
         {isExpanded ? "Show Less" : "Show More"}
       </motion.button>
@@ -277,7 +277,7 @@ const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
         <button
           onClick={handleFollow}
           className={`mt-4 px-4 py-2 rounded-lg transition ${
-            following ? "bg-green-500 hover:bg-green-600 text-white" : "bg-blue-500 hover:bg-blue-600 text-white"
+            following ? "bg-green-500 hover:bg-green-600 text-white" : "bg-violet-700 hover:bg-violet-700 text-white"
           }`}
         >
           {following ? "Following" : "Follow this place"}

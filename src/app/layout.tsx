@@ -6,6 +6,7 @@ import { type Metadata } from "next";
 import { TRPCReactProvider } from "nglty/trpc/react";
 import { LoadingProvider } from "nglty/contexts/loadingContext";
 import { Header } from "nglty/components/general/header";
+import { auth } from "nglty/server/auth";
 
 export const metadata: Metadata = {
   title: "NGTLY",
@@ -13,9 +14,11 @@ export const metadata: Metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const session = await auth();
+  
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
       <head>
@@ -23,7 +26,7 @@ export default function RootLayout({
       </head>
       <body className="dark:bg-aurora">
           <TRPCReactProvider>
-            <Header />
+            {session?.user && <Header />}
         <LoadingProvider>
           {children}
         </LoadingProvider>

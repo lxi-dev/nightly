@@ -64,7 +64,7 @@ const TripleCheckbox: React.FC<CheckboxHeartHouseProps> = ({ name, value = 'publ
             exit={{ scale: 0, rotate: 45, color: "#60a5fa" }}
             transition={{ duration: 0.3 }}
           >
-            <MdOutlinePublic className="text-blue-500 w-12 h-12" />
+            <MdOutlinePublic className="text-violet-700 w-12 h-12" />
           </motion.div>
         ) : checked === 'placebound' ? (
           <motion.div
@@ -190,7 +190,7 @@ export const BasicDetailsForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) 
           onChange={handleChange}
         />
       </div>
-      <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+      <button type="submit" className="bg-violet-700 text-white px-4 py-2 rounded">
         Next
       </button>
     </form>
@@ -201,7 +201,7 @@ export const TypeColorForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
     const [data, setData] = useState<Partial<HappeningCreate>>({
       color: "aurora-900",
       tags: [],
-      coverImageUrl: "",
+      coverImageUrl: undefined,
     });
   
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -231,14 +231,13 @@ export const TypeColorForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
           />
         </div>
         <div>
-          <TextInput
-            label="Tags (comma-separated)"
+          <CSVInput
+            label="Tags"
             name="tags"
-            value={data.tags ? data.tags.join(",") : ''}
+            value={data.tags!.join(",")}
             onChange={(e) =>
-              setData((prev) => ({ ...prev, tags: e.target.value.split(",") }))
-            }
-          />
+              setData((prev) => ({ ...prev, tags: e.split(",") }))
+            } />
         </div>
         <div>
           <DropdownInput
@@ -249,7 +248,7 @@ export const TypeColorForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
             options={colorOptions}
           />
         </div>
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+        <button type="submit" className="bg-violet-700 text-white px-4 py-2 rounded">
           Next
         </button>
       </form>
@@ -277,7 +276,6 @@ export const TypeColorForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
     return (
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label>Date of Happening</label>
           <DateInput
             label="Date of Happening"
             name="dateHappening"
@@ -292,7 +290,7 @@ export const TypeColorForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
         </div>
         <div>
           <TextAreaInput
-            label="description"
+            label="Description"
             name="text"
             value={data.text!}
             onChange={handleChange}  
@@ -325,7 +323,7 @@ export const TypeColorForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
             />
           </div>
         )}
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+        <button type="submit" className="bg-violet-700 text-white px-4 py-2 rounded">
           Next
         </button>
       </form>
@@ -395,8 +393,8 @@ const HappeningFunnel = () => {
   ];
 
   const createHappening = api.happening.createHappening.useMutation({
-    onSuccess: async () => {
-      console.log("mutation");
+    onSuccess: async (data) => {
+      redirect(`h/${data.id}`);
     },
   });
 
@@ -441,13 +439,11 @@ const HappeningFunnel = () => {
           dateHappening: commonPayload.dateHappening?.toString(),
           privacyLevel: commonPayload.privacyLevel === 'open' ? 'open' : commonPayload.type === 'invite-only' ? 'invite-only' : 'rsvp-required'
       });
+      redirect(`/h/${happening.id}`);
   } catch (error) {
       console.error('Error creating happening:', error);
   } finally {
-    if (happening) {
-      hideLoading();
-      redirect(`h/${happening.id}`);
-    }
+    hideLoading();
   }
   };
 

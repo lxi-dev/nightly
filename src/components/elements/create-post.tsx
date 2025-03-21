@@ -79,7 +79,7 @@ export const CreatePostComponent = ({
           whileTap={{ scale: 0.9 }}
           whileHover={{ scale: 1.1 }}
           onClick={() => submitPost()}
-          className="absolute right-2 h-8 w-8 flex justify-center items-center bg-blue-500 rounded-full text-white hover:bg-blue-600 shadow-lg transition-all ease-in-out duration-200"
+          className="absolute right-2 h-8 w-8 flex justify-center items-center bg-violet-700 rounded-full text-white hover:bg-violet-700 shadow-lg transition-all ease-in-out duration-200"
           disabled={pending}
         >
           <GoCommentDiscussion className="w-5 h-5" />

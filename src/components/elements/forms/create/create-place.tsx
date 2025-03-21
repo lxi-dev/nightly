@@ -65,7 +65,7 @@ export const PlaceInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
         </div>
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+          className="bg-violet-700 text-white px-4 py-2 rounded-lg hover:bg-violet-700"
         >
           Next
         </button>
@@ -103,7 +103,7 @@ import { useLoading } from "nglty/contexts/loadingContext";
       <div className="flex w-full">
         <motion.div
           className={`flex w-full items-center bg-white rounded-2xl p-4 transition-all duration-300 ${
-            isFocused ? "ring-2 ring-blue-500" : "ring-1 ring-gray-300"
+            isFocused ? "ring-2 ring-violet-700" : "ring-1 ring-gray-300"
           }`}
         >
           <motion.div
@@ -170,7 +170,7 @@ import { useLoading } from "nglty/contexts/loadingContext";
               exit={{ scale: 0, rotate: -45, color: "#60a5fa" }}
               transition={{ duration: 0.3 }}
             >
-              <HomeIcon className="text-blue-500 w-12 h-12" />
+              <HomeIcon className="text-violet-700 w-12 h-12" />
             </motion.div>
           )}
         </motion.div>
@@ -251,7 +251,7 @@ export const LocationForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
           }
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+          className="bg-violet-700 text-white px-4 py-2 rounded-lg hover:bg-violet-700"
         >
           Next
         </button>
@@ -333,12 +333,12 @@ export const LocationForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
               <CheckCircle
                 className={`w-6 h-6 ${
                   entry.hours.some((slot) => slot.from && slot.to)
-                    ? "text-blue-500"
+                    ? "text-violet-700"
                     : "text-gray-400"
                 }`}
               />
               <select
-                className="p-2 border rounded-lg outline-none focus:ring focus:ring-blue-500 text-gray-700"
+                className="p-2 border rounded-lg outline-none focus:ring focus:ring-violet-700 text-gray-700"
                 value={entry.day}
                 onChange={(e) => handleDayChange(index, e.target.value)}
               >
@@ -367,7 +367,7 @@ export const LocationForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
                   name={`${name}-${index}-from-${hourIndex}`}
                   value={slot.from}
                   onChange={(e) => handleInputChange(index, hourIndex, "from", e.target.value)}
-                  className="flex-1 p-2 border rounded-lg outline-none focus:ring focus:ring-blue-500 text-gray-700"
+                  className="flex-1 p-2 border rounded-lg outline-none focus:ring focus:ring-violet-700 text-gray-700"
                 />
                 <span className="text-gray-500">to</span>
                 <input
@@ -375,7 +375,7 @@ export const LocationForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
                   name={`${name}-${index}-to-${hourIndex}`}
                   value={slot.to}
                   onChange={(e) => handleInputChange(index, hourIndex, "to", e.target.value)}
-                  className="flex-1 p-2 border rounded-lg outline-none focus:ring focus:ring-blue-500 text-gray-700"
+                  className="flex-1 p-2 border rounded-lg outline-none focus:ring focus:ring-violet-700 text-gray-700"
                 />
               </div>
             ))}
@@ -383,7 +383,7 @@ export const LocationForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
             <button
               type="button"
               onClick={() => addTimeSlot(index)}
-              className="mt-2 text-blue-500 text-sm hover:underline"
+              className="mt-2 text-violet-700 text-sm hover:underline"
             >
               + Add Time Slot
             </button>
@@ -393,7 +393,7 @@ export const LocationForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
         <button
           type="button"
           onClick={addDay}
-          className="flex items-center justify-center bg-white rounded-2xl shadow-lg p-4 min-w-[250px] text-blue-500 text-sm hover:underline"
+          className="flex items-center justify-center bg-white rounded-2xl shadow-lg p-4 min-w-[250px] text-violet-700 text-sm hover:underline"
         >
           <Plus className="w-6 h-6 mr-2" /> Add Day
         </button>
@@ -425,7 +425,7 @@ export const OpeningHoursFormInfoForm: React.FC<FormProps<FunnelData>> = ({ onSu
         </div>
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+          className="bg-violet-700 text-white px-4 py-2 rounded-lg hover:bg-violet-700"
         >
           Next
         </button>

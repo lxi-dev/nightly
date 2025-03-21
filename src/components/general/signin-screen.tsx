@@ -55,7 +55,7 @@ export function SignInScreen() {
       </div>
       <div className="absolute bottom-0 w-full h-24 flex flex-col items-center justify-center">
   <span className="text-gray-700 mb-2">Click the button below</span>
-  <button className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-600 text-white shadow-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-300">
+  <button className="flex items-center justify-center w-12 h-12 rounded-full bg-violet-700 text-white shadow-lg hover:bg-violet-700 focus:ring-2 focus:ring-blue-300">
     testi
   </button>
 </div>

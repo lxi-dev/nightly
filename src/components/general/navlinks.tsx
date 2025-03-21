@@ -1,7 +1,6 @@
 'use client';
 
 import { HomeIcon,UserGroupIcon, TableCellsIcon, UserIcon } from "@heroicons/react/24/outline";
-import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -24,12 +23,7 @@ export const PageNavLinks = () => {
                     <Link
                         key={link.name}
                         href={link.href}
-                        className={clsx(
-                        "flex flex-wrap items-center justify-center flex flex-col bg-white dark:bg-gray-700 overflow-hidden w-10 h-10 border-slate-700 shadow-sm rounded-md dark:hover:bg-aurora-600 hover:bg-violet-300 pt-3 pb-3 text-sm font-medium dark:text-white dark:hover:text-black hover:text-white",
-                        {
-                            'bg-gray-200 dark:bg-aurora-200 text-black dark:text-white shadow-sm': pathname === link.href,
-                        },
-                        )}>
+                        className={`"flex flex-wrap items-center justify-center flex flex-col overflow-hidden w-10 h-10 border-slate-700 shadow-sm rounded-md hover:bg-violet-300 pt-3 pb-3 text-sm font-medium dark:text-white dark:hover:text-black hover:text-white ${pathname.includes(link.href) ? 'bg-violet-300 dark:bg-aurora-200 text-black dark:text-white shadow-sm' : 'bg-white dark:bg-gray-700 '}`}>
                         <LinkIcon className="w-6" />
                     </Link>
                     );

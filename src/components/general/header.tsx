@@ -1,30 +1,64 @@
-import LogoCubicle from "../elements/logo/logo-cubicle";
+// import { Sparkles } from "lucide-react";
+// import LogoCubicle from "../elements/logo/logo-cubicle";
 import Search from "../elements/search";
 import { PageNavLinks } from "./navlinks";
+import { AurorasBackground } from "../backgrounds/auroras";
+import LogoCubicle from "../elements/logo/logo-cubicle";
 
 export const Header = async () => {
 
+// Animated background dots
+// function AnimatedDots() {
+//     return (
+//       <div className="absolute inset-0">
+//         {Array.from({ length: 50 }).map((_, i) => (
+//           <div
+//             key={i}
+//             className="absolute rounded-full bg-primary/20"
+//             style={{
+//               width: `${Math.random() * 8 + 2}px`,
+//               height: `${Math.random() * 8 + 2}px`,
+//               top: `${Math.random() * 100}%`,
+//               left: `${Math.random() * 100}%`,
+//               animation: `float ${Math.random() * 10 + 10}s linear infinite`,
+//               animationDelay: `${Math.random() * 5}s`,
+//               opacity: Math.random() * 0.5 + 0.2,
+//             }}
+//           />
+//         ))}
+//       </div>
+//     )
+//   }
+  
+
   return (
     <nav>
-    <div className="flex flex-row items-center justify-between gap-4 pt-2 pb-2 bg-gray-200 dark:bg-gray-800">
-        <div id="logo" className="pl-2">
-            <LogoCubicle />
+        <header className="relative border-b sticky top-0 z-10 bg-background/95 backdrop-blur-sm overflow-hidden">
+        <div className="absolute inset-0 z-0 opacity-10">
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/30 via-violet-700/30 to-teal-500/30"> </div>
+          <AurorasBackground />
         </div>
-        <div id="search" className="w-72">
 
-            <Search />
+        <div className="container relative z-10 flex items-center justify-between h-16 px-4 mx-auto">
+          <div className="flex items-center gap-8">
+            <a href="/">
+            <div className="font-semibold text-xl flex items-center">
+                <LogoCubicle />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-violet-700">
+                    ghtly
+                </span>
+              {/* <Sparkles className="h-4 w-4 text-amber-500 ml-1" /> */}
+            </div>
+            </a>
+            <div className="relative hidden md:block w-80">
+                <Search />
+            </div>
         </div>
-        <div id="menu" className="pr-2">
+        <div className="flex items-center">
             <PageNavLinks />
-        
-            {/* <p className="text-center text-2xl text-white">
-                {session && <span>Logged in as {session.user?.name}</span>}
-            </p>
-*/}
         </div>
-
-    </div>
-    <div className="flex-grow h-px bg-gradient-to-r from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-100"></div>
-    </nav>
+        </div>
+        </header>
+      </nav>
   );
 };
