@@ -38,6 +38,7 @@ export type HappeningCreate = {
   published: boolean;
   name: string;
   venue: string;
+  venueId?: string;
   color: string;
   text: string;
   dateHappening?: Date;

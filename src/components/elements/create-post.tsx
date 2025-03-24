@@ -1,10 +1,12 @@
-import { GoCommentDiscussion } from "react-icons/go";
 import { useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { UserProfileIcon } from "./user-icon";
 import { api } from "nglty/trpc/react";
 import type { Session } from "next-auth";
 import type { Place } from "@prisma/client";
+import { ImageIcon, MessageSquare } from "lucide-react";
+import { Button } from "../ui/button";
+import { useLoading } from "nglty/contexts/loadingContext";
 
 type CreatePostData = {
   place?: Place;
@@ -20,8 +22,9 @@ export const CreatePostComponent = ({
   session: Session | null;
   data: CreatePostData;
 }) => {
-  const [pending, setPending] = useState(false);
-  const [newPost, setNewPost] = useState<string>("");
+  const [isComposing, setIsComposing] = useState(false)
+  const {showLoading, hideLoading} = useLoading();
+  const [postText, setPostText] = useState<string>("");
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   const createPlacePost = api.places.postAsOwner.useMutation({
@@ -30,63 +33,85 @@ export const CreatePostComponent = ({
     },
   });
 
-  const adjustTextareaHeight = () => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight - 48}px`;
-    }
-  };
-
   const submitPost = async () => {
     if (type === "place") {
       try {
-        setPending(true);
+        showLoading();
         if (!data.place?.id) return;
         const post = await createPlacePost.mutateAsync({
           placeId: data.place.id,
-          text: newPost ?? "",
+          text: postText ?? "",
         });
 
         console.log("Places post:", post);
-        setNewPost("");
+        setPostText("");
       } catch (error) {
         console.error("Error creating post for Place:", error);
       }
-      setPending(false);
+      hideLoading();
     }
   };
 
   return (
-    <section className="flex flex-row w-full mt-2 mb-2">
-      <div className="flex-none">
-        <UserProfileIcon src={data.place?.picture ? data.place.picture : session?.user.image} />
-        <small>{session?.user.handle}</small>
-      </div>
-      <div className="flex-grow ml-2 relative align-center">
-      <div className="relative bg-gray-200 rounded-md flex items-center pt-4">
-        <textarea
-          ref={textareaRef}
-          placeholder="Write something..."
-          value={newPost}
-          onChange={(e) => {
-            setNewPost(e.target.value);
-            adjustTextareaHeight();
-          }}
-          onInput={adjustTextareaHeight}
-          className="dark:text-white text-black w-full bg-transparent pl-4 pr-12 rounded-md transition-all ease-in-out duration-200 resize-none overflow-hidden focus:outline-none"
-          />
-        <motion.button
-          whileTap={{ scale: 0.9 }}
-          whileHover={{ scale: 1.1 }}
-          onClick={() => submitPost()}
-          className="absolute right-2 h-8 w-8 flex justify-center items-center bg-violet-700 rounded-full text-white hover:bg-violet-700 shadow-lg transition-all ease-in-out duration-200"
-          disabled={pending}
-        >
-          <GoCommentDiscussion className="w-5 h-5" />
-        </motion.button>
-      </div>
-      </div>
+      <div className="mb-8 shadow-lg bg-white dark:bg-gray-800 overflow-hidden">
+            <div className="p-0">
+              <div className="flex items-start p-4 gap-3">
+              <UserProfileIcon src={data.place?.picture ? data.place.picture : session?.user.image} />
 
-    </section>
+                <div className="flex-1">
+                  <textarea
+                    ref={textareaRef}
+                    placeholder={isComposing ? "What's on your mind?" : "Write something..."}
+                    value={postText}
+                    onChange={(e) => setPostText(e.target.value)}
+                    onFocus={() => setIsComposing(true)}
+                    className={`resize-none w-full border-0 focus:ring-0 p-2 text-base placeholder:text-gray-400 transition-all duration-300 ${
+                      isComposing ? "min-h-[120px]" : "min-h-[40px]"
+                    }`}
+                  />
+
+                  <AnimatePresence>
+                    {isComposing && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="flex items-center justify-between pt-2 pb-1 px-2"
+                      >
+                        <div className="flex gap-2">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="rounded-full h-9 w-9 text-violet-600 hover:bg-violet-100"
+                          >
+                            <ImageIcon className="h-5 w-5" />
+                            <span className="sr-only">Add image</span>
+                          </Button>
+                        </div>
+
+                        <Button
+                          onClick={submitPost}
+                          disabled={!postText.trim()}
+                          className="bg-violet-600 hover:bg-violet-700 text-white rounded-full px-4 transition-all duration-200 hover:shadow-md disabled:opacity-50"
+                        >
+                          Post
+                        </Button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {!isComposing && (
+                  <Button
+                    size="icon"
+                    className="rounded-full bg-violet-100 hover:bg-violet-200 text-violet-600 h-10 w-10 transition-all duration-200 hover:shadow-md"
+                  >
+                    <MessageSquare className="h-5 w-5" />
+                    <span className="sr-only">Quick post</span>
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
   );
 };

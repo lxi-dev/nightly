@@ -5,8 +5,9 @@ interface TextInputProps {
   name: string;
   value: string;
   defaultValue?: string;
+  min?: number;
+  max?: number;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  placeholder? : string;
   required?: boolean;
   disabled?: boolean;
 }
@@ -21,13 +22,14 @@ interface TextInputProps {
  * @param {boolean} required - Whether the input is required.
  * @param {boolean} disabled - Weather the input is disabled.
  */
-const TextInput: React.FC<TextInputProps> = ({
+const TimeInput: React.FC<TextInputProps> = ({
   label,
   name,
   value,
-  placeholder,
   defaultValue = '',
   onChange,
+  min,
+  max,
   required = false,
   disabled = false
 }) => {
@@ -37,11 +39,12 @@ const TextInput: React.FC<TextInputProps> = ({
         {label}
       </label>
       <input
-        type="text"
+        type="time"
         id={name}
+        min={min}
+        max={max}
         name={name}
         value={value}
-        placeholder={placeholder ?? ''}
         defaultValue={defaultValue}
         onChange={onChange}
         className="flex-grow block w-full rounded-md dark:bg-aurora dark:border-gray-700 dark:text-white border-gray-300 border lg:border-2 p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -52,4 +55,4 @@ const TextInput: React.FC<TextInputProps> = ({
   );
 };
 
-export default TextInput;
+export default TimeInput;

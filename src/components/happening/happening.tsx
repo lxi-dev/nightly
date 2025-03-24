@@ -13,6 +13,7 @@ import { api } from "nglty/trpc/react";
 import { UserProfileIcon } from "../elements/user-icon";
 import { HappeningStats } from "./happening-stats";
 import { AurorasBackground } from "../backgrounds/auroras";
+import { HelpingHand } from "lucide-react";
 
 export type PostCreate = {
   text: string,
@@ -193,8 +194,9 @@ export const HappeningView = ({ data, session, posts } : { data: Happening, sess
     }
       </div>
       <div className="pt-8 pl-12 pr-12">
-        <h2 className="text-black/10 dark:text-slate-800 text-2xl">Helping Hands</h2>
+        <h2 className="text-black/10 dark:text-slate-800 text-2xl"><HelpingHand /> Helping Hands</h2>
         <div className="max-h-[40%] border-b border-black/10 overflow-scroll">
+          
           <TimeScaleColumns startTime={helpingHandsStartTime}/>
         </div>
       </div>

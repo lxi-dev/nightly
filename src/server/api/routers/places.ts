@@ -145,4 +145,15 @@ export const placesRouter = createTRPCRouter({
       });
       return post;
     }),
+
+    getPosts: protectedProcedure
+    .input(z.object({ placeId: z.string() }))
+    .query(async ({ input, ctx }) => {
+      const posts = await ctx.db.post.findMany({
+        where: { placeId: input.placeId },
+        orderBy: { createdAt: "asc" },
+      });
+  
+      return posts;
+    }),
 });

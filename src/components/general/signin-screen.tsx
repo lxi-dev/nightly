@@ -2,28 +2,14 @@
 
 import { AurorasBackground } from "nglty/components/backgrounds/auroras";
 import { StarsBackground } from "nglty/components/backgrounds/stars";
-import Logo from "nglty/components/elements/logo/logo";
 import SocialMediaLogin from "../../app/login/_components/social-media-login";
 import { Seperator } from "../elements/seperator";
-
-// import { useState } from "react";
-
-// import { api } from "nglty/trpc/react";
+import LogoCubicle from "../elements/logo/logo-cubicle";
 
 export function SignInScreen() {
-  // const [latestPost] = api.post.getLatest.useSuspenseQuery();
-
-  // const utils = api.useUtils();
-  // const [name, setName] = useState("");
-  // const createPost = api.post.create.useMutation({
-  //   onSuccess: async () => {
-  //     await utils.post.invalidate();
-  //     setName("");
-  //   },
-  // });
 
   return (
-    <div className="flex h-screen flex-col-reverse md:flex-row">
+    <div className="flex h-screen flex-col-reverse md:p-24">
       <div className="w-full h-1/2 md:h-full dark:bg-black shadow-lg dark:text-white flex justify-center flex-col items-center p-8 ">
         {/* <LoginForm /> */}
         <Seperator text="Login"></Seperator>
@@ -46,19 +32,16 @@ export function SignInScreen() {
         {/* Foreground Content */}
         <div className="relative z-10 text-center">
           <div className="flex justify-center flex-col items-center">
-          <h1 className="text-4xl font-bold mb-4 text-white">
-            <Logo />
-          </h1>
+          <div className="font-semibold text-xl flex items-center space-x-2">
+                <LogoCubicle />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-violet-400">
+                    Nightly
+                </span>
+            </div>
           <p className="text-lg text-gray-300">Explore the universe with us</p>
         </div>
         </div>
       </div>
-      <div className="absolute bottom-0 w-full h-24 flex flex-col items-center justify-center">
-  <span className="text-gray-700 mb-2">Click the button below</span>
-  <button className="flex items-center justify-center w-12 h-12 rounded-full bg-violet-700 text-white shadow-lg hover:bg-violet-700 focus:ring-2 focus:ring-blue-300">
-    testi
-  </button>
-</div>
 </div>
   );
 }

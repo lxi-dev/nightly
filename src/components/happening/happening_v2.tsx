@@ -1,26 +1,29 @@
 'use client';
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 // import { api } from "nglty/trpc/react";
-import type { Happening } from "@prisma/client";
+import type { Happening, Post } from "@prisma/client";
 import { DateSmallSquare } from "../elements/date-small";
 import dayjs from "dayjs";
 import RelativeTime from "dayjs/plugin/relativeTime";
-import { CalendarDaysIcon } from "lucide-react";
+import { CalendarDaysIcon, HelpingHand } from "lucide-react";
 import { HappeningStats } from "./happening-stats";
+import { HelpingHands } from "../helpinghands/helping-hands";
+import { Tab, TabContent, Tabs } from "../ui/tabs";
+import { CreatePostComponent } from "../elements/create-post";
+import { PostComponent } from "../elements/post";
+import GenericNotification from "../elements/notification-pills/generic";
 
 
-const EventPage: React.FC<{ event: Happening }> = ({ event }) => {
+const EventPage: React.FC<{ event: Happening, posts?: Post[], userId?: string }> = ({ event, posts, userId }) => {
 //   const utils = api.useContext();
   dayjs.extend(RelativeTime);
+  const [owner, setOwner] = useState(false);
 
-//   const followMutation = api.happening.follow.useMutation({
-//     onSuccess: () => utils.happening.invalidate(),
-//   });
-
-//   const handleFollow = () => {
-//     followMutation.mutate({ happeningId: event.id, userId:  });
-//   };
+  useEffect(() => {
+    if(!userId) return;
+    setOwner(event.creatorId === userId);
+  }, [userId])
 
   return (
     <div className={`min-h-screen w-full dark:text-white text-gray-900"}`}>
@@ -44,6 +47,9 @@ const EventPage: React.FC<{ event: Happening }> = ({ event }) => {
                 <h1 className="text-2xl font-bold mb-2">
                     {event.name}
                 </h1>
+                <section>
+
+        </section>      
                 <div className="flex flex-row w-full justify-between gap-4">
 
                     {event.dateHappening && (
@@ -62,22 +68,20 @@ const EventPage: React.FC<{ event: Happening }> = ({ event }) => {
                     )}
                 </div>
             </div>
+              {event.helpingHandsEnabled && <span>participate</span>}
                 <HappeningStats id={event.id} active={true} />
-          {/*<div className="flex items-center justify-between mt-4">
-             <span>{event.} Followers</span> */}
-            {/* <button onClick={handleFollow} disabled={followMutation.isLoading}>
-              {event.isFollowing ? "Unfollow" : "Follow"}
-            </button> 
-          </div> */}
         </motion.div>
-      <div className="flex flex-row justify-center items-center gap-10 pl-2 pt-4">
-      <p className="text-slate-500 text-1xl">created {dayjs(event.createdAt).fromNow()} </p>
-        <CalendarDaysIcon className="w-4 h-4 text-slate-500"/>
-        <p className="text-slate-500 text-1xl">happening {dayjs(event.dateHappening).fromNow()} </p>
-      </div>
-        </div>
-      <div className="mt-24 px-4">
-        <section className="mb-8">
+        </div>    
+      <div className="mt-24">
+        <div className="flex flex-wrap gap-2">
+            {event.tags.map((tag) => (
+              <GenericNotification text={tag}/>
+            ))}
+          </div>
+        <Tabs>
+          <Tab id={'info'} label={'Information'}>
+            <TabContent>
+            <section className="mb-8">
           <h2 className="text-xl font-semibold mb-4">Description</h2>
           <p>{event.text ?? "No description available."}</p>
         </section>
@@ -98,24 +102,45 @@ const EventPage: React.FC<{ event: Happening }> = ({ event }) => {
             )}
           </ul>
         </section>
+            </TabContent>
+          </Tab>
+          <Tab id={'posts'} label={'Posts'}>
+            <TabContent>
+              <section className="flex flex-col">
+                <CreatePostComponent type={"happening"} session={null} data={{happeningId: event.id}} />
+              { !posts && <h2 className="text-2xl text-black dark:text-white">There are no Posts yet.</h2>}
+              </section>
+              <div className="flex flex-col space-y-4">
+        { posts?.slice().reverse().map((item, index) => (
+              <PostComponent key={index} post={item} />)
+        )}
+            </div>
+            <section className="mb-8">
+              <h2 className="text-xl font-semibold mb-4">Posts</h2>
+              {event.postsEnabled ? (
+                <p>Posts feed will be displayed here.</p>
+              ) : (
+                <p>Posts are disabled for this event.</p>
+              )}
+            </section>
+            </TabContent>
+          </Tab>
+          {event.helpingHandsEnabled &&
+          
+          <Tab id="helping" label="Helping Hands">
+            <TabContent>
+            <h2 className="text-black/10 dark:text-slate-800 text-2xl"><HelpingHand /> Helping Hands</h2>
+            <HelpingHands happeningId={event.id} owner={owner}/>
 
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-4">Tags</h2>
-          <div className="flex flex-wrap gap-2">
-            {event.tags.map((tag, index) => (
-              <span key={index} className="bg-gray-200 text-gray-800">{tag}</span>
-            ))}
-          </div>
-        </section>
-
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-4">Posts</h2>
-          {event.postsEnabled ? (
-            <p>Posts feed will be displayed here.</p>
-          ) : (
-            <p>Posts are disabled for this event.</p>
-          )}
-        </section>
+            </TabContent>
+          </Tab>
+          }
+        </Tabs>
+      </div>
+      <div className="flex flex-row justify-center items-center gap-10 pl-2 pt-4">
+      <p className="text-slate-500 text-1xl">created {dayjs(event.createdAt).fromNow()} </p>
+        <CalendarDaysIcon className="w-4 h-4 text-slate-500"/>
+        <p className="text-slate-500 text-1xl">happening {dayjs(event.dateHappening).fromNow()} </p>
       </div>
     </div>
   );

@@ -14,11 +14,13 @@ import { useLoading } from "nglty/contexts/loadingContext";
 import TextInput from "../fields/text";
 import NumberInput from "../fields/number";
 import DropdownInput from "../fields/dropdown";
-import DateInput from "../fields/date-picker";
 import TextAreaInput from "../fields/text-area";
 import CSVInput from "../fields/csv";
 import ToggleInput from "../fields/toggle";
 import { redirect } from "next/navigation";
+import { Calendar } from "nglty/components/ui/calendar";
+import { bentoClass } from "../../box";
+import { ImageUpload } from "../fields/image-upload";
 
 type CheckboxHeartHouseProps = {
   name: string;
@@ -101,6 +103,7 @@ export const BasicDetailsForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) 
         venue: "",
         maxParticipants: 0,
       });
+
     const [place, setPlace] = useState<Place | undefined>(undefined);
     const { showLoading, hideLoading } = useLoading();
     const [queryParams, setQueryParams] = useState<Record<string, string> | null>(null);
@@ -137,7 +140,7 @@ export const BasicDetailsForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) 
         console.log(place);
         if(!place) return;
         setPlace(place);
-        setData((prev) => ({...prev, "venue": place.name})); 
+        setData((prev) => ({...prev, "venue": place.name, "venueId": place.id, "type": 'placebound'}));
     }
     hideLoading();
 
@@ -208,6 +211,11 @@ export const TypeColorForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
       const { name, value } = e.target;
       setData((prev) => ({ ...prev, [name]: value }));
     };
+
+    const setImageUrl = (e : string | null) => {
+      if(!e) return;
+      setData((prev) => ({...prev, "coverImageUrl" : e}))
+    }
   
     const handleSubmit = (e: React.FormEvent) => {
       e.preventDefault();
@@ -215,20 +223,27 @@ export const TypeColorForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
     };
 
     const colorOptions = [
-      { value: 'aurora', label: 'Black' },
-      { value: 'red', label: 'aurora-900' },
-      { value: 'green', label: 'aurora-400' },
+      { value: 'education', label: 'Education' },
+      { value: 'concert', label: 'Concert' },
+      { value: 'club', label: 'Club' },
+      { value: 'social', label: 'Quiz' },
+      { value: 'sports', label: 'Sports'},
+      { value: 'tech', label: 'Technology'},
+      { value: 'art', label: 'Art'},
+      { value: 'business', label: 'Business'}
     ];
   
     return (
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <TextInput
-            label="Cover Image URL"
-            name="coverImageUrl"
-            value={data.coverImageUrl!}
-            onChange={handleChange}
-          />
+        <ImageUpload
+              id="cover"
+              label="Cover Image"
+              description="Drag and drop an image, or click to browse"
+              value={data.coverImageUrl ?? undefined}
+              onChange={setImageUrl}
+              maxSizeMB={5}
+            />
         </div>
         <div>
           <CSVInput
@@ -241,7 +256,7 @@ export const TypeColorForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
         </div>
         <div>
           <DropdownInput
-            label="Color"
+            label="Event Type"
             name="color"
             value={data.color!}
             onChange={handleChange}
@@ -275,19 +290,25 @@ export const TypeColorForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
   
     return (
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <DateInput
-            label="Date of Happening"
-            name="dateHappening"
-            value={data.dateHappening!.toISOString().split("T")[0]!}
-            onChange={(e) =>
-              setData((prev) => ({
-                ...prev,
-                dateHappening: new Date(e.target.value),
-              }))
-            }
-          />
-        </div>
+        <div className="w-full">
+          <div className="flex gap-6 justify-between  flex-col md:flex-row">
+            <Calendar
+              mode="single"
+              selected={data.dateHappening}
+              onSelect={(e) =>
+                setData((prev) => ({
+                  ...prev,
+                  dateHappening: e,
+                }))}
+              className={`${bentoClass} shadow-none`}
+              />
+            <div className="w-full">
+              <TextInput label={'Start Time'} name={""} value={""} onChange={(e) => {console.log(e)}} />
+              <TextInput label={'End Time'} name={""} value={""} onChange={(e) => {console.log(e)}} />
+
+            </div>
+            </div>
+      </div>
         <div>
           <TextAreaInput
             label="Description"
@@ -392,13 +413,10 @@ const HappeningFunnel = () => {
     { label: "Summary", Component: SummaryForm },
   ];
 
-  const createHappening = api.happening.createHappening.useMutation({
-    onSuccess: async (data) => {
-      redirect(`h/${data.id}`);
-    },
-  });
+  const createHappening = api.happening.createHappening.useMutation({});
 
   const handleComplete = async (data: FunnelData[]) => {
+    console.log('handleComplete');
     const [generalInfoEntry, typeColorEntry, dateTextEntry, configEntry] = data.map(item => item?.data);
     const generalInfoData = generalInfoEntry as Partial<HappeningCreate>;
     const typeColorData = typeColorEntry as Partial<HappeningCreate>;
@@ -437,13 +455,16 @@ const HappeningFunnel = () => {
           ...commonPayload,
           type: commonPayload.type === 'public' ? 'public' : commonPayload.type === 'private' ? 'private' : 'placebound',
           dateHappening: commonPayload.dateHappening?.toString(),
-          privacyLevel: commonPayload.privacyLevel === 'open' ? 'open' : commonPayload.type === 'invite-only' ? 'invite-only' : 'rsvp-required'
-      });
-      redirect(`/h/${happening.id}`);
-  } catch (error) {
+          privacyLevel: commonPayload.privacyLevel === 'open' ? 'open' : commonPayload.type === 'invite-only' ? 'invite-only' : 'rsvp-required',
+          venueId: generalInfoData.venueId ?? undefined
+        });
+    } catch (error) {
       console.error('Error creating happening:', error);
-  } finally {
-    hideLoading();
+    } finally {
+      if(happening) {
+        hideLoading();
+        redirect(`h/${happening.id}`);
+      }
   }
   };
 

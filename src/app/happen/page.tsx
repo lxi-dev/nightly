@@ -27,7 +27,7 @@ const session = await auth();
                     </div>
                 </div>
             </div>
-            {session?.user.id && <HappeningsComponent />}
+            {session?.user.id && <HappeningsComponent/>}
         </section>
         </main>
     </HydrateClient>

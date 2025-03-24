@@ -10,6 +10,7 @@ export const happeningRouter = createTRPCRouter({
             published: z.boolean(),
             name: z.string().min(1, "Name is required"),
             venue: z.string().optional(),
+            venueId: z.string().optional(),
             color: z.string(),
             text: z.string().optional(),
             createdAt: z.preprocess(
@@ -203,10 +204,7 @@ getByVenue: protectedProcedure
   .input(z.object({ venue: z.string() }))
   .query(async ({ input, ctx }) => {
     const happenings = await ctx.db.happening.findMany({
-      where: { venue: input.venue },
-      include: {
-        createdBy: true,
-      },
+      where: { venueId: input.venue },
     });
 
     return happenings;
@@ -240,6 +238,15 @@ getByVenue: protectedProcedure
 
     return happenings;
   }),
+
+  // Delete a place
+  deleteHappening: protectedProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.happening.delete({ where: { id: input } });
+      return { success: true };
+    }),
+
 
 getByType: protectedProcedure
   .input(z.object({ type: z.string() }))

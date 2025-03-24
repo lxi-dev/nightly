@@ -23,6 +23,11 @@ export const PlaceInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
         setData((prev) => ({ ...prev, description: e.target.value }));
       }
     };
+
+    const setImageUrl = (e: string | null) => {
+      if(!e) return;
+      setData((prev) => ({...prev , "image": e }));
+    }
   
     const handleSubmit = (e: React.FormEvent) => {
       e.preventDefault();
@@ -44,14 +49,14 @@ export const PlaceInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
         </div>
         <div>
           <label className="block font-semibold dark:text-slate-700 mb-2">Image</label>
-          <small>Paste the URL of an uploaded image here</small>
-          <input
-            type="text"
-            name="image"
-            value={data.image}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-2xl h-12 p-3"
-          />
+          <ImageUpload
+              id="cover"
+              label="Cover Image"
+              description="Drag and drop an image, or click to browse"
+              value={data.image ?? undefined}
+              onChange={setImageUrl}
+              maxSizeMB={5}
+            />
         </div>
         <div>
           <label className="block font-semibold dark:text-slate-700 mb-2">Description</label>
@@ -76,6 +81,7 @@ export const PlaceInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
 import { api } from "nglty/trpc/react";
 import { redirect } from "next/navigation";
 import { useLoading } from "nglty/contexts/loadingContext";
+import { ImageUpload } from "../fields/image-upload";
   
   type AnimatedTextInputProps = {
     name: string;
@@ -491,7 +497,6 @@ export const OpeningHoursFormInfoForm: React.FC<FormProps<FunnelData>> = ({ onSu
             openingHours: convertOpeningHours(openingHours),
           });
         }
-        console.log(place);
       } catch (error) {
         console.error("Error completing the funnel:", error);
       } finally {
