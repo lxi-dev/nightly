@@ -5,13 +5,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const links = [
-    { name: 'Places', href: '/places', icon: HomeIcon },
-    { name: 'Kollektiv', href: '/profile', icon: UserGroupIcon },
-    { name: 'Schichtplan', href: '/happen', icon: TableCellsIcon },
+    { name: 'Places', href: '/places', icon: HomeIcon, admin: false },
+    { name: 'Admin', href: '/profile', icon: UserGroupIcon, admin: true },
+    { name: 'Happenings', href: '/happen', icon: TableCellsIcon, admin: false },
 ];
 
-
-export const PageNavLinks = () => {
+export const PageNavLinks = ({role}: {role: string}) => {
     const pathname = usePathname()
 
     return (
@@ -19,6 +18,7 @@ export const PageNavLinks = () => {
             <div className="flex flex-row items-center justify-between gap-4">
                 {links.map((link) => {
                     const LinkIcon = link.icon;
+                    if (link.admin && role !== 'admin') return;
                     return (
                     <Link
                         key={link.name}
@@ -36,4 +36,4 @@ export const PageNavLinks = () => {
             </div>
         </main>
     );
-};
+}

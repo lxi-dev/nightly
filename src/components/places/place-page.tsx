@@ -8,6 +8,7 @@ import VenueDetails from "./location-card";
 import { Tab, TabContent, Tabs } from "../ui/tabs";
 import { PostComponent } from "../elements/post";
 import { HappeningsList } from "../happening/happenings-list";
+import { ApplyToPlaceButton } from "./apply-button";
 
 const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
   const { data: places, isLoading, isError } = api.places.getPlaces.useQuery(
@@ -102,6 +103,7 @@ const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
         />
         <div className="flex w-full justify-between items-center">
           <h1 className="text-2xl font-bold mb-2">{place.name}</h1>
+          <div>
           { !owner && <button
           onClick={handleFollow}
           className={`px-4 py-2 rounded-lg transition ${
@@ -110,6 +112,8 @@ const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
         >
           {following ? "Following" : "Follow this place"}
         </button>}
+        { (!owner && place.applicationsEnabled) &&<ApplyToPlaceButton placeId={place.id} />}
+          </div>
         </div>
 
         <Tabs defaultActiveTab="info">

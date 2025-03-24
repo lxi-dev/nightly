@@ -1,0 +1,42 @@
+export const colorOptions = [
+    { value: 'education', label: 'Education' },
+    { value: 'concert', label: 'Concert' },
+    { value: 'club', label: 'Club' },
+    { value: 'social', label: 'Quiz' },
+    { value: 'sports', label: 'Sports'},
+    { value: 'tech', label: 'Technology'},
+    { value: 'art', label: 'Art'},
+    { value: 'business', label: 'Business'}
+];
+
+export const categoryOptions = [
+    { label: 'Bar', value: 'bar' },
+    { label: 'Club', value: 'club' },
+    { label: 'Restaurant', value: 'restaurant' },
+    { label: 'Cafe', value: 'cafe' },
+    { label: 'Park', value: 'park' },
+    { label: 'Museum', value: 'museum' },
+    { label: 'Library', value: 'library' },
+    { label: 'Shopping Mall', value: 'shopping_mall' },
+    { label: 'Stadium', value: 'stadium' },
+    { label: 'Concert Hall', value: 'concert_hall' },
+    { label: 'Theater', value: 'theater' },
+    { label: 'Gallery', value: 'gallery' },
+    { label: 'Beach', value: 'beach' },
+    { label: 'Amusement Park', value: 'amusement_park' },
+    { label: 'Zoo', value: 'zoo' },
+    { label: 'Aquarium', value: 'aquarium' },
+    { label: 'Market', value: 'market' },
+    { label: 'Gym', value: 'gym' },
+    { label: 'Spa', value: 'spa' },
+    { label: 'Hotel', value: 'hotel' },
+    { label: 'Airport', value: 'airport' },
+    { label: 'Train Station', value: 'train_station' },
+    { label: 'Bus Station', value: 'bus_station' },
+    { label: 'Event Hall', value: 'event_hall' },
+    { label: 'Church', value: 'church' },
+    { label: 'Mosque', value: 'mosque' },
+    { label: 'Temple', value: 'temple' },
+    { label: 'Night Market', value: 'night_market' },
+    { label: 'Exhibition Center', value: 'exhibition_center' }
+];

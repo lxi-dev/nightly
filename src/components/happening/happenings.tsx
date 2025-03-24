@@ -9,13 +9,18 @@ export const HappeningsComponent: React.FC = () => {
   const { data: nextMonthHappenings } = api.happening.getByDate.useQuery({
     range: "1_month",
   });
+  const { data: followingHappenings } = api.happening.getFollowedHappenings.useQuery();
   return (
     <div className="h-full w-full gap-4">
       <Tabs defaultActiveTab="upcoming">
         <Tab id="upcoming" label="Upcoming">
           <TabContent>
-      <HappeningsList happenings={nextMonthHappenings}/>
-  
+          <HappeningsList happenings={nextMonthHappenings}/>
+            </TabContent>
+            </Tab>
+            <Tab id="going" label="Going">
+          <TabContent>
+          <HappeningsList happenings={followingHappenings}/>
             </TabContent>
             </Tab>
             <Tab id="public" label="Public">

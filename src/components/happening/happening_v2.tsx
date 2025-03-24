@@ -1,21 +1,26 @@
 'use client';
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-// import { api } from "nglty/trpc/react";
 import type { Happening, Post } from "@prisma/client";
 import { DateSmallSquare } from "../elements/date-small";
 import dayjs from "dayjs";
 import RelativeTime from "dayjs/plugin/relativeTime";
-import { CalendarDaysIcon, HelpingHand } from "lucide-react";
-import { HappeningStats } from "./happening-stats";
+import { CalendarDaysIcon } from "lucide-react";
 import { HelpingHands } from "../helpinghands/helping-hands";
 import { Tab, TabContent, Tabs } from "../ui/tabs";
 import { CreatePostComponent } from "../elements/create-post";
 import { PostComponent } from "../elements/post";
 import GenericNotification from "../elements/notification-pills/generic";
+import { HappeningActions } from "./happening-actions";
+import { api } from "nglty/trpc/react";
 
+type FollowersProp = {
+  followers: number;
+  pending: number;
+  isFollowing: boolean;
+}
 
-const EventPage: React.FC<{ event: Happening, posts?: Post[], userId?: string }> = ({ event, posts, userId }) => {
+const EventPage: React.FC<{ event: Happening, posts?: Post[], userId?: string, followers: FollowersProp }> = ({ event, posts, userId, followers }) => {
 //   const utils = api.useContext();
   dayjs.extend(RelativeTime);
   const [owner, setOwner] = useState(false);
@@ -24,6 +29,25 @@ const EventPage: React.FC<{ event: Happening, posts?: Post[], userId?: string }>
     if(!userId) return;
     setOwner(event.creatorId === userId);
   }, [userId])
+
+  const follow = api.happening.follow.useMutation({
+    onSuccess: async () => {
+      console.log("mutation");
+    },
+  });
+
+  const handleFollow = async () => {
+    try {
+      if (!userId) return;
+        await follow.mutateAsync({
+          userId: userId,
+          status: 'going',
+          happeningId: event.id
+        });
+    } catch(error) {
+      console.error(error);
+    }
+  }
 
   return (
     <div className={`min-h-screen w-full dark:text-white text-gray-900"}`}>
@@ -46,38 +70,39 @@ const EventPage: React.FC<{ event: Happening, posts?: Post[], userId?: string }>
             <div className="flex flex-col">
                 <h1 className="text-2xl font-bold mb-2">
                     {event.name}
-                </h1>
-                <section>
-
-        </section>      
+                </h1>   
                 <div className="flex flex-row w-full justify-between gap-4">
-
                     {event.dateHappening && (
                         <DateSmallSquare date={event.dateHappening} />
                     )}
                     {event.venue && 
                     <div className="flex flex-col">
-                    <p className="text-sm mb-2">Venue:</p>
-                    <p> {event.venue || "Not specified"}</p>
-
+                      <p className="text-sm mb-2">Venue:</p>
+                      <p> {event.venue || "Not specified"}</p>
                     </div>}
-                    {event.isRecurring && event.recurrencePattern && (
-                    
-                    
-                        <p className="text-sm mb-2">Recurrence: {event.recurrencePattern}</p>
+                    {event.isRecurring && event.recurrencePattern && (             
+                      <p className="text-sm mb-2">Recurrence: {event.recurrencePattern}</p>
                     )}
                 </div>
             </div>
-              {event.helpingHandsEnabled && <span>participate</span>}
-                <HappeningStats id={event.id} active={true} />
+            <div>
+              <HappeningActions 
+                owner={owner} 
+                followers={followers.followers} 
+                pending={followers.pending}
+                isFollowing={followers.isFollowing} 
+                onFollow={handleFollow} 
+                participateEnabled={event.helpingHandsEnabled}
+              />
+            </div>
         </motion.div>
-        </div>    
-      <div className="mt-24">
         <div className="flex flex-wrap gap-2">
             {event.tags.map((tag) => (
               <GenericNotification text={tag}/>
             ))}
           </div>
+        </div>    
+      <div className="mt-24">
         <Tabs>
           <Tab id={'info'} label={'Information'}>
             <TabContent>
@@ -115,21 +140,12 @@ const EventPage: React.FC<{ event: Happening, posts?: Post[], userId?: string }>
               <PostComponent key={index} post={item} />)
         )}
             </div>
-            <section className="mb-8">
-              <h2 className="text-xl font-semibold mb-4">Posts</h2>
-              {event.postsEnabled ? (
-                <p>Posts feed will be displayed here.</p>
-              ) : (
-                <p>Posts are disabled for this event.</p>
-              )}
-            </section>
             </TabContent>
           </Tab>
           {event.helpingHandsEnabled &&
           
           <Tab id="helping" label="Helping Hands">
             <TabContent>
-            <h2 className="text-black/10 dark:text-slate-800 text-2xl"><HelpingHand /> Helping Hands</h2>
             <HelpingHands happeningId={event.id} owner={owner}/>
 
             </TabContent>

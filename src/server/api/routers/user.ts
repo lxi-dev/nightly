@@ -21,14 +21,6 @@ export const userRouter = createTRPCRouter({
 
       return {image: user.image, name: user.name};
     }),
-/**
- *         name: infoData.name,
-        picture: infoData.image === "" ? defaultPictureUrl : infoData.image!,
-        bio: infoData.bio,
-        age: infoData?.age,
-        handle: handleData.handle,
-        tos: true
- */
     updateProfile: protectedProcedure
         .input(
             z.object({

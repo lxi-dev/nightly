@@ -36,7 +36,7 @@ export function ShiftScheduler({owner} : {owner: boolean}) {
   return (
     <div className="space-y-8">
         {owner && <div>
-      <BentoBox  className="p-4">
+      <BentoBox className="p-4 shadow-none mb-4">
         <div>
           <h3>Set Shift Period</h3>
           <h5>Define the overall start and end time for your shifts</h5>

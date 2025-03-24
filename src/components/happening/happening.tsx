@@ -1,3 +1,4 @@
+/*
 'use client';
 import type { Happening, Post } from "@prisma/client";
 import RelativeTime from "dayjs/plugin/relativeTime";
@@ -11,9 +12,7 @@ import TimeScaleColumns from "./helping-hands";
 import type { Session } from "next-auth";
 import { api } from "nglty/trpc/react";
 import { UserProfileIcon } from "../elements/user-icon";
-import { HappeningStats } from "./happening-stats";
 import { AurorasBackground } from "../backgrounds/auroras";
-import { HelpingHand } from "lucide-react";
 
 export type PostCreate = {
   text: string,
@@ -68,7 +67,7 @@ export const HappeningView = ({ data, session, posts } : { data: Happening, sess
     
     const items = [1, 2, 3, 4, 5]; // Example array
       const helpingHandsStartTime = new Date();
-      {/* <div className={`relative z-10 grid`}> */}
+      {/* <div className={`relative z-10 grid`}> 
   return (
     <main>
             <div className="min-w-screen min-h-46 bg-violet-700">
@@ -84,7 +83,7 @@ export const HappeningView = ({ data, session, posts } : { data: Happening, sess
           <h5 className="dark:text-white/50 text-black/50">created by:{data?.creatorId.toString()}</h5>
           <h1 className={'flex text-md text-3xl text-white dark:text-white'}>{data?.name}</h1>
         </div>
-        {/* Right Side */}
+        {/* Right Side 
         <div className="flex flex-col justify-between items-end">
           <div className="absolute dark:text-black/30 text-white/30 overflow-hidden -translate-y-20">
             { data.type === 'placebound' && <HomeIcon className="w-[128px] h-[128px]"/>}
@@ -135,7 +134,7 @@ export const HappeningView = ({ data, session, posts } : { data: Happening, sess
         </div>
       </div>
 
-      {/** Feed */}
+      {/** Feed 
       <div className="pt-8 m-4">
         <h2 className="text-slate-600 dark:text-slate-100 text-2xl mb-1">Feed</h2>
         <p className="text-slate-500 text-sm">Got something to say? Contribute to the discussion in a <u>nice Way</u>.</p>
@@ -194,15 +193,15 @@ export const HappeningView = ({ data, session, posts } : { data: Happening, sess
     }
       </div>
       <div className="pt-8 pl-12 pr-12">
-        <h2 className="text-black/10 dark:text-slate-800 text-2xl"><HelpingHand /> Helping Hands</h2>
         <div className="max-h-[40%] border-b border-black/10 overflow-scroll">
-          
+
           <TimeScaleColumns startTime={helpingHandsStartTime}/>
         </div>
       </div>
       <div className="absolute">
         <StarsBackground />
-      {/* </div> */}
+      {/* </div> 
     </div>
     </main>
   )}
+  */

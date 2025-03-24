@@ -3,14 +3,17 @@ import { ShiftScheduler } from "./Scheduler"
 import { BentoBox } from "../elements/box"
 import { SaveScheduleForm } from "./save-helping"
 import { ScheduleList } from "./schedule-list"
+import { HelpingHand } from "lucide-react"
 
 export const HelpingHands = ({happeningId, owner} : {happeningId: string, owner: boolean}) => {
 
     return (
         <ShiftSchedulerProvider>
-            <main className="container mx-auto py-8 px-4">
-                <h1 className="text-3xl font-bold mb-8">Shift Scheduler</h1>
-                
+            <main className="container mx-auto">
+                <div className="flex flex-row p-4 align-baseline">
+                    <HelpingHand />
+                    <h2 className="ml-4 text-black dark:text-white text-2xl flex flex-row"> Helping Hands</h2>
+                </div>
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div className="lg:col-span-2">
                         <ShiftScheduler owner={owner}/>

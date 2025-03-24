@@ -21,6 +21,7 @@ import { redirect } from "next/navigation";
 import { Calendar } from "nglty/components/ui/calendar";
 import { bentoClass } from "../../box";
 import { ImageUpload } from "../fields/image-upload";
+import { colorOptions } from "nglty/lib/defaults";
 
 type CheckboxHeartHouseProps = {
   name: string;
@@ -222,16 +223,7 @@ export const TypeColorForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
       onSubmit({ type: "happeningTypeColor", data });
     };
 
-    const colorOptions = [
-      { value: 'education', label: 'Education' },
-      { value: 'concert', label: 'Concert' },
-      { value: 'club', label: 'Club' },
-      { value: 'social', label: 'Quiz' },
-      { value: 'sports', label: 'Sports'},
-      { value: 'tech', label: 'Technology'},
-      { value: 'art', label: 'Art'},
-      { value: 'business', label: 'Business'}
-    ];
+
   
     return (
       <form onSubmit={handleSubmit} className="space-y-4">

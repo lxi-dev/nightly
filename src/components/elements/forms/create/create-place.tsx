@@ -1,19 +1,25 @@
 'use client';
 
-import type { FormProps, FunnelData, AddressDetails, Step, PlaceInfo, OpeningHoursInfo, OpeningHourDay } from "nglty/models/funnel";
+import type { FormProps, FunnelData, AddressDetails, Step, OpeningHourDay, PlaceCreate } from "nglty/models/funnel";
 import { useState } from "react";
 import { Funnel } from "../funnel";
 import { Editor, EditorProvider } from "react-simple-wysiwyg";
 import { motion } from "motion/react";
-import { HeartIcon, HomeIcon } from "@heroicons/react/24/outline";
+import PickerInput from "../fields/picker";
+import TextInput from "../fields/text";
+import NumberInput from "../fields/number";
+import DropdownInput from "../fields/dropdown";
+import { categoryOptions } from "nglty/lib/defaults";
+import { CheckCircle, Trash2, Plus } from "lucide-react";
+import { redirect } from "next/navigation";
+import { useLoading } from "nglty/contexts/loadingContext";
+import { api } from "nglty/trpc/react";
+import CSVInput from "../fields/csv";
+import { ImageUpload } from "../fields/image-upload";
+import ToggleInput from "../fields/toggle";
 
-/*
-  name           String
-  picture        String    // URL for the image
-  description    String?
-*/
 export const PlaceInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
-    const [data, setData] = useState<PlaceInfo>({ name: "", description: "", image: "" });
+    const [data, setData] = useState<Partial<PlaceCreate>>({ name: "", description: "", picture: "", category: 'bar' });
   
     const handleChange = (e: React.ChangeEvent<HTMLInputElement> | { target: { value: string } }) => {
       if (e.target instanceof HTMLInputElement) {
@@ -28,6 +34,11 @@ export const PlaceInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
       if(!e) return;
       setData((prev) => ({...prev , "image": e }));
     }
+
+    const setCategory = (e: string | null) => {
+      if(!e) return;
+      setData((prev) => ({...prev, 'category': e}))
+    }
   
     const handleSubmit = (e: React.FormEvent) => {
       e.preventDefault();
@@ -37,23 +48,22 @@ export const PlaceInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
     return (
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block font-semibold dark:text-slate-700 mb-2">Name</label>
-          <input
-            type="text"
-            name="name"
-            value={data.name}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-2xl h-12 p-3"
-            required
-          />
+          <TextInput label={'Name'} name={'name'} value={data.name!} onChange={handleChange} required/>
         </div>
         <div>
-          <label className="block font-semibold dark:text-slate-700 mb-2">Image</label>
+          <DropdownInput 
+            label={'Category'} 
+            name={'category'} 
+            value={data.category!} 
+            options={categoryOptions} 
+            onChange={(e) => setCategory(e.target.value)} />
+        </div>
+        <div>
           <ImageUpload
               id="cover"
               label="Cover Image"
               description="Drag and drop an image, or click to browse"
-              value={data.image ?? undefined}
+              value={data.picture ?? undefined}
               onChange={setImageUrl}
               maxSizeMB={5}
             />
@@ -77,118 +87,7 @@ export const PlaceInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
       </form>
     );
   };
-  import { Search, Check, CheckCircle, Plus, Trash2 } from "lucide-react";
-import { api } from "nglty/trpc/react";
-import { redirect } from "next/navigation";
-import { useLoading } from "nglty/contexts/loadingContext";
-import { ImageUpload } from "../fields/image-upload";
-  
-  type AnimatedTextInputProps = {
-    name: string;
-    value?: string;
-    placeholder?: string;
-    onChange?: (value: string) => void;
-  };
-  
-  const AnimatedTextInput: React.FC<AnimatedTextInputProps> = ({
-    name,
-    value = "",
-    placeholder = "Type something...",
-    onChange,
-  }) => {
-    const [inputValue, setInputValue] = useState(value);
-    const [isFocused, setIsFocused] = useState(false);
-  
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const newValue = e.target.value;
-      setInputValue(newValue);
-      if (onChange) onChange(newValue);
-    };
-  
-    return (
-      <div className="flex w-full">
-        <motion.div
-          className={`flex w-full items-center bg-white rounded-2xl p-4 transition-all duration-300 ${
-            isFocused ? "ring-2 ring-violet-700" : "ring-1 ring-gray-300"
-          }`}
-        >
-          <motion.div
-            initial={{ scale: 1, color: "#9ca3af" }}
-            animate={{ scale: isFocused || inputValue ? 1.2 : 1, color: isFocused ? "#3b82f6" : "#9ca3af" }}
-            transition={{ duration: 0.3 }}
-            className="mr-2"
-          >
-            {inputValue ? <Check className="text-green-500 w-6 h-6" /> : <Search className="text-gray-400 w-6 h-6" />}
-          </motion.div>
-          <input
-            type="text"
-            name={name}
-            value={inputValue}
-            placeholder={placeholder}
-            onChange={handleInputChange}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
-            className="w-full outline-none text-gray-700"
-          />
-        </motion.div>
-      </div>
-    );
-  };
-  
-  type CheckboxHeartHouseProps = {
-    name: string;
-    value?: boolean;
-    onChange?: (value: boolean) => void;
-  };
-  
-  const CheckboxHeartHouse: React.FC<CheckboxHeartHouseProps> = ({ name, value = false, onChange }) => {
-    const [checked, setChecked] = useState(value);
-  
-    const handleClick = () => {
-      const newValue = !checked;
-      setChecked(newValue);
-      if (onChange) onChange(newValue);
-    };
-  
-    return (
-      <div className="flex items-center justify-center h-full">
-        <motion.div
-          className="p-4 bg-white rounded-2xl shadow-lg cursor-pointer"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={handleClick}
-        >
-          {checked ? (
-            <motion.div
-              key="heart"
-              initial={{ scale: 0, rotate: -45, color: "#f87171" }}
-              animate={{ scale: 1, rotate: 0, color: "#ef4444" }}
-              exit={{ scale: 0, rotate: 45, color: "#f87171" }}
-              transition={{ duration: 0.3 }}
-            >
-              <HeartIcon className="text-red-500 w-12 h-12" />
-            </motion.div>
-          ) : (
-            <motion.div
-              key="house"
-              initial={{ scale: 0, rotate: 45, color: "#60a5fa" }}
-              animate={{ scale: 1, rotate: 0, color: "#3b82f6" }}
-              exit={{ scale: 0, rotate: -45, color: "#60a5fa" }}
-              transition={{ duration: 0.3 }}
-            >
-              <HomeIcon className="text-violet-700 w-12 h-12" />
-            </motion.div>
-          )}
-        </motion.div>
-        <input type="checkbox" name={name} value={String(checked)} hidden readOnly />
-      </div>
-    );
-  };
-  
-/*
-geoCoordinate  GeoCoordinate?
-heartPlace     Boolean   // Indicates if this is a "place in my heart"
-*/
+
 export const LocationForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
     const [data, setData] = useState<AddressDetails>({ heartplace: true, address: "", city: "" });
   
@@ -213,48 +112,30 @@ export const LocationForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
       <form onSubmit={handleSubmit} className="space-y-4">
           <h2 className="text-xl">Where is your place?</h2>
           <div className="mt-4 flex flex-col md:flex-row gap-6">
-          <CheckboxHeartHouse name="heartplace" value={data.heartplace} onChange={(e) => setHeartPlace(e)}></CheckboxHeartHouse>
+          {/* <CheckboxHeartHouse name="heartplace" value={data.heartplace} onChange={(e) => setHeartPlace(e)}></CheckboxHeartHouse> */}
+          <PickerInput options={[{id: '0', label: 'Heartplace', description:'For Groups without a House'},{id: '1', label: 'Local', description:'This is it, when you have an address!'}]} value={data.heartplace ? '0' : '1'} onChange={(e) => setHeartPlace(e === '0' ? true: false)} />
+          </div>
           <p>Your Place can either be a real place or a place in your heart. Real Places are better suited for any kind of business, where as a place in your heart better represents a common idea. </p>
           <small>Tap the icon to change what kind of place you want to own. This decision is irreversable</small>
-          </div>
+          
+          <div className="w-full flex flex-col gap-4 mt-5">
           { !data.heartplace &&
-          <div>
-          <div className="w-full">
-          <label className="block text-gray-700">Address</label>
-          <AnimatedTextInput
-            name="address"
-            value={data.address}
-            onChange={setAdress}
-          />
+            <TextInput
+              label="Address"
+              name="address"
+              value={data.address!}
+              onChange={(e) => setAdress(e.target.value)}
+            />
+          }
         </div>
-        <div className="flex flex-row gap-4 mt-5">
+        <div className="w-full flex flex-row gap-4">
           <div className="flex flex-col w-1/4">
-          <label className="block text-gray-700">Zipcode</label>
-          <input
-            type="number"
-            maxLength={5}
-            name="zip"
-            value={data.zip}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-2xl h-12 p-3"
-            required
-          />
+          <NumberInput label="Zipcode" name="zip" value={data.zip!} onChange={handleChange} />
           </div>
           <div className="flex flex-col w-3/4">
-          <label className="block text-gray-700">City</label>
-          <input
-            type="text"
-            name="city"
-            value={data.city}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-2xl h-12 p-3"
-            required
-          />
-          </div>
+          <TextInput label="City" name="city" value={data.city} onChange={handleChange} />
         </div>
-          
-          </div>
-          }
+        </div>
         <button
           type="submit"
           className="bg-violet-700 text-white px-4 py-2 rounded-lg hover:bg-violet-700"
@@ -410,12 +291,10 @@ export const LocationForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
   };
     
 export const OpeningHoursFormInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
-    const [data, setData] = useState<OpeningHoursInfo>({ openingHours: [] });
+    const [data, setData] = useState<Partial<PlaceCreate>>({ openingHours: [], tags: [], applicationsEnabled: false, visibility: 'public' });
   
-    const handleChange = (e: OpeningHourDay[]) => {
-      setData((prev) => ({ ...prev, openingHours: e }));
-    };
-  
+
+
     const handleSubmit = (e: React.FormEvent) => {
       e.preventDefault();
       onSubmit({ type: "openingHoursInfo", data });
@@ -425,8 +304,11 @@ export const OpeningHoursFormInfoForm: React.FC<FormProps<FunnelData>> = ({ onSu
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-gray-700">Opening Hours</label>
-          <OpeningHoursInput name="openingHours" onChange={(e) => handleChange(e)}/>
+          <OpeningHoursInput name="openingHours" onChange={(e) => setData((prev) => ({...prev, 'openingHours': e}))}/>
         </div>
+        <CSVInput label={'Tags'} name={'tags'} value={data.tags!.join(',')} onChange={(e) => setData((prev) => ({...prev, 'tags': e.split(',')}))} />
+        <ToggleInput label={'Visible'} name={'visibility'} value={data.visibility === 'public' ? true : false} onChange={(e) => setData((prev) => ({...prev, 'visibility': e ? 'public' : 'private'}))} />
+        <ToggleInput label={'Enable Applications'} name={'applicationsEnabled'} value={data.applicationsEnabled!} onChange={(e) => setData((prev) => ({...prev, 'applicationsEnabled': e}))} />
         <div>
         </div>
         <button
@@ -452,12 +334,12 @@ export const OpeningHoursFormInfoForm: React.FC<FormProps<FunnelData>> = ({ onSu
       { label: "Opening Hours?", Component: OpeningHoursFormInfoForm },
     ];
 
-    const convertOpeningHours = (data: OpeningHoursInfo): Record<string, string> | undefined => {
+    const convertOpeningHours = (data: OpeningHourDay[]): Record<string, string> | undefined => {
       const result: Record<string, string> = {};
       
-      if(!data.openingHours) return undefined;
+      if(!data) return undefined;
       
-      data.openingHours.forEach((dayInfo) => {
+      data.forEach((dayInfo) => {
         const hoursString = dayInfo.hours
         .map(({ from, to }) => `${from}-${to}`)
         .join(", ");
@@ -472,18 +354,20 @@ export const OpeningHoursFormInfoForm: React.FC<FormProps<FunnelData>> = ({ onSu
     const handleComplete = async (data: FunnelData[]) => {
       showLoading();
       const [placeDataEntry, locationDataEntry, openingHoursEntry] = data.map(item => item?.data);
-      const placeData = placeDataEntry as PlaceInfo;
-      const locationData = locationDataEntry as AddressDetails;
-      const openingHours = openingHoursEntry as OpeningHoursInfo;
+      const placeData = placeDataEntry as Partial<PlaceCreate>;
+      const locationData = locationDataEntry as Partial<PlaceCreate>;
+      const placeInfo = openingHoursEntry as Partial<PlaceCreate>;
 
       const defaultPictureUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLC0VtEAnU3BQVLsXVa8ytCHqYS0sn9fdYDA&s";
       const commonPayload = {
-        name: placeData.name,
-        picture: placeData.image === "" ? defaultPictureUrl : placeData.image!,
+        name: placeData.name!,
+        category: placeData.category!,
+        picture: placeData.picture === "" ? defaultPictureUrl : placeData.picture!,
         description: placeData.description,
         heartPlace: locationData?.heartplace,
+        tags: placeInfo.tags
       };
-    
+      const openingHours = placeInfo.openingHours;
       let place;
       try {
         if (!openingHours || locationData?.heartplace) {
@@ -493,7 +377,7 @@ export const OpeningHoursFormInfoForm: React.FC<FormProps<FunnelData>> = ({ onSu
             ...commonPayload,
             address: locationData?.address,
             city: locationData?.city,
-            zipcode: locationData?.zip?.toString() ?? "",
+            zipcode: locationData?.zipcode?.toString() ?? "",
             openingHours: convertOpeningHours(openingHours),
           });
         }

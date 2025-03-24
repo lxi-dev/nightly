@@ -12,6 +12,7 @@ import { Mona_Sans } from "next/font/google"
 
 const fontSans = Mona_Sans({
   subsets: ["latin"],
+  display: "swap",
   variable: "--font-sans",
 })
 
@@ -30,7 +31,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body>
-        <ThemeProvider attribute="class" defaultTheme="system" disableTransitionOnChange>
+        <ThemeProvider attribute="class" defaultTheme="light" disableTransitionOnChange>
           <div className="min-h-screen dark:bg-aurora">
             <TRPCReactProvider>
               {session?.user && <Header />}

@@ -1,3 +1,4 @@
+/*
 'use client';
 import { motion } from "framer-motion";
 import { api } from "nglty/trpc/react";
@@ -78,22 +79,6 @@ export const HappeningStats = ({ id, active }: { id: string, active: boolean }) 
     }
   };
 
-  useEffect(() => {
-    if (!userId) setDisabled(true);
-    if (userId) setDisabled(false);
-
-    const filteredGoing = data?.filter(x => x.status === 'going');
-    const filteredPending = data?.filter(x => x.status === 'tentative');
-
-    if (filteredGoing) setGoing(filteredGoing.length);
-    if (filteredPending) setPending(filteredPending.length);
-
-    const userInList = data?.filter(x => x.userId === userId);
-
-    if (!userInList?.length) return;
-    const userStatus = userInList[0]?.status ?? '';
-    setUserStatus(userStatus);
-  }, [data, userId]);
 
   const isGoing = userStatus === 'going';
   const isPending = userStatus === 'pending';
@@ -211,3 +196,4 @@ export const HappeningStats = ({ id, active }: { id: string, active: boolean }) 
     </motion.div>
   );
 };
+*/

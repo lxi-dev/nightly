@@ -2,6 +2,7 @@
 "use client"
 import type React from "react"
 import TimeInput from "./time"
+import { useEffect } from "react"
 
 interface TimeRangePickerProps {
   startTime: string
@@ -13,17 +14,25 @@ interface TimeRangePickerProps {
   onTimeChange: (start: string, end: string, startDay: number, endDay: number) => void
 }
 
-export function TimeRangePicker({
-  startTime,
-  endTime,
-  startDay,
-  endDay,
-//   positionId,
-//   slotId,
-  onTimeChange,
-}: TimeRangePickerProps) {
-//   const { startTime: periodStart, endTime: periodEnd, isOverallPeriodOvernight } = useShiftScheduler()
-
+interface TimeRangePickerProps {
+    startTime: string
+    endTime: string
+    startDay: number
+    endDay: number
+    positionId: string
+    slotId: string
+    onTimeChange: (start: string, end: string, startDay: number, endDay: number) => void
+  }
+  
+  export function TimeRangePicker({
+    startTime,
+    endTime,
+    startDay,
+    endDay,
+    onTimeChange,
+  }: TimeRangePickerProps) {
+    //const { startTime: periodStart, endTime: periodEnd } = useShiftScheduler()
+  
   // Helper to check if time1 is before time2
   const isTimeBefore = (time1: string, time2: string): boolean => {
     const [hours1, minutes1] = time1.split(":").map(Number)
@@ -34,20 +43,60 @@ export function TimeRangePicker({
     return false
   }
 
+  // Helper to check if a time is midnight (00:00)
+  const isMidnight = (time: string): boolean => time === "00:00"
+
+  // Validate and fix day settings on mount
+  useEffect(() => {
+    let newStartDay = startDay
+    let newEndDay = endDay
+    let needsUpdate = false
+
+    // Special handling for midnight
+    if (isMidnight(startTime) && startDay === 0 && endDay > 0) {
+      // If start is midnight on day 0 but end is on a later day,
+      // start should also be on day 1
+      newStartDay = 1
+      needsUpdate = true
+    }
+
+    // Only fix end day if it's before start time (indicating overnight)
+    // But not if start is midnight (special case)
+    if (isTimeBefore(endTime, startTime) && startDay === endDay && !isMidnight(startTime)) {
+      newEndDay = startDay + 1
+      needsUpdate = true
+    }
+
+    if (needsUpdate) {
+      onTimeChange(startTime, endTime, newStartDay, newEndDay)
+    }
+  }, [startTime, endTime, startDay, endDay, onTimeChange])
+
   const handleStartTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newStart = e.target.value
 
-    // Keep the same day context for start
-    const newStartDay = startDay
+    // Keep the same day for start
+    let newStartDay = startDay
 
-    // If end time is earlier than start time on the same day, it means end is on the next day
+    // Special handling for midnight
+    if (isMidnight(newStart) && endDay > 0) {
+      // If new start is midnight and end is on a later day,
+      // start should be on day 1
+      newStartDay = 1
+    }
+
+    // Ensure end day is consistent with start day
     let newEndDay = endDay
-    if (isTimeBefore(endTime, newStart) && startDay === endDay) {
-      newEndDay = startDay + 1
-    } else if (!isTimeBefore(endTime, newStart) && startDay !== endDay) {
-      // If end time is not earlier than start time but they're on different days,
-      // bring end time to the same day as start
-      newEndDay = startDay
+
+    // If end time is earlier than start time on the same day, move end to next day
+    // But not if start is midnight (special case)
+    if (isTimeBefore(endTime, newStart) && newStartDay === endDay && !isMidnight(newStart)) {
+      newEndDay = newStartDay + 1
+    }
+    // If end time is not earlier than start time but they're on different days,
+    // bring end time to the same day as start (unless it's a legitimate overnight shift)
+    else if (!isTimeBefore(endTime, newStart) && newStartDay !== endDay && !isMidnight(newStart)) {
+      newEndDay = newStartDay
     }
 
     onTimeChange(newStart, endTime, newStartDay, newEndDay)
@@ -56,18 +105,28 @@ export function TimeRangePicker({
   const handleEndTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newEnd = e.target.value
 
-    // If end time is earlier than start time on the same day, it means end is on the next day
+    // Keep the same day for end initially
     let newEndDay = endDay
-    if (isTimeBefore(newEnd, startTime) && startDay === endDay) {
+
+    // Special handling for midnight
+    if (isMidnight(newEnd)) {
+      // If new end is midnight, it should be on the next day
       newEndDay = startDay + 1
-    } else if (!isTimeBefore(newEnd, startTime) && startDay !== endDay) {
-      // If end time is not earlier than start time but they're on different days,
-      // bring end time to the same day as start
+    }
+    // If end time is earlier than start time on the same day, it means end is on the next day
+    // But not if start is midnight (special case)
+    else if (isTimeBefore(newEnd, startTime) && startDay === endDay && !isMidnight(startTime)) {
+      newEndDay = startDay + 1
+    }
+    // If end time is not earlier than start time but they're on different days,
+    // bring end time to the same day as start
+    else if (!isTimeBefore(newEnd, startTime) && startDay !== endDay && !isMidnight(startTime)) {
       newEndDay = startDay
     }
 
     onTimeChange(startTime, newEnd, startDay, newEndDay)
   }
+
 
   const getDayLabel = (day: number) => {
     if (day === 0) return "Day 1"

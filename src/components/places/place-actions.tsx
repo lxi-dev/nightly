@@ -70,6 +70,8 @@ const VenueActions: React.FC<VenueActionsProps> = ({ place }) => {
           type="button"
           className="flex items-center w-full justify-start gap-2 p-2 border bg-violet-700 text-white border-violet-700 rounded-lg hover:bg-violet-700 focus:outline-none focus:ring focus:ring-blue-300"
         >
+        <Link className="flex-row flex"
+          href={`${place.id}/applicants`}>
             <motion.div
               initial={{ scale: 1 }}
               whileHover={{ scale: 1.03 }}
@@ -84,6 +86,7 @@ const VenueActions: React.FC<VenueActionsProps> = ({ place }) => {
           >
             Collaborators
           </motion.span>
+        </Link>
         </motion.button>
         <motion.button
           whileHover={{ scale: 1.05 }}

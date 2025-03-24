@@ -50,7 +50,7 @@ export function SaveScheduleForm({ happeningId }: SaveScheduleFormProps) {
   
       // Get the current schedule data
       const scheduleData = getScheduleData()
-      
+      console.log(scheduleData);
       // Save using tRPC
       createSchedule.mutate({
         happeningId,

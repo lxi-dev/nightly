@@ -104,13 +104,31 @@ model Place {
   city           String?
   zipcode        String?
   heartPlace     Boolean   // Indicates if this is a "place in my heart"
+  verified       Boolean  @default(false)
   posts          Post[]    // One-to-many relationship with posts
   openingHours   Json?     // Optional, to store opening hours in a structured format (e.g., { "monday": "9:00-17:00" })
-  followers      User[]    @relation("PlaceFollowers") // Users who follow this place
-  creatorId      String    // User ID of the creator
-  creator        User      @relation(fields: [creatorId], references: [id])
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  followers       User[]          @relation("PlaceFollowers") // Users who follow this place
+  creatorId       String          // User ID of the creator
+  creator         User            @relation(fields: [creatorId], references: [id])
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  applicationsEnabled Boolean     @default(false)
+  applications    PlaceApplication[] // Applications for joining the place
+  category        String?         // Optional category (e.g., "Restaurant", "Park", "Museum")
+  tags            String[]        // Array of tags for flexible categorization and search
+  visibility      String          @default("public") // Visibility status: "public", "private", "restricted"
+}
+
+model PlaceApplication {
+  id          String   @id @default(cuid())
+  placeId     String
+  place       Place    @relation(fields: [placeId], references: [id])
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  message     String?  // Optional message from the user applying
+  status      String   @default("pending") // Status: "pending", "accepted", "declined"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model GeoCoordinate {
@@ -159,6 +177,7 @@ model User {
   emailVerified   DateTime?
   image           String?
   handle          String?      @unique
+  role            String       @default("user")
   age             String?
   location        String?
   bio             String?
@@ -169,6 +188,8 @@ model User {
 
   createdHappenings Happening[] @relation("HappeningCreator")
   invitedHappenings Happening[] @relation("HappeningInvitees")
+  applications    PlaceApplication[] // Applications for joining the place
+
   follows            HappeningFollow[]
   following       Place[]  @relation("PlaceFollowers") // Places the user follows
 

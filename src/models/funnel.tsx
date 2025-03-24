@@ -2,10 +2,10 @@ import type { User } from "next-auth";
 
 export type FunnelData = 
   | { type: "personalInfo"; data: PersonalInfo }
-  | { type: "addressDetails"; data: AddressDetails }
   | { type: "paymentInfo"; data: PaymentInfo }
-  | { type: "placeInfo"; data: PlaceInfo }
-  | { type: "openingHoursInfo", data: OpeningHoursInfo}
+  | { type: "addressDetails"; data: Partial<PlaceCreate> }
+  | { type: "placeInfo"; data: Partial<PlaceCreate> }
+  | { type: "openingHoursInfo", data: Partial<PlaceCreate>}
   | { type: "userAGBInfo", data: boolean }
   | { type: "userHandleInfo" , data: Handle}
   | { type: "userProfileInfo", data: UserProfileInfo}
@@ -57,6 +57,21 @@ export type HappeningCreate = {
   archived?: boolean; // Marks the event as archived
 };
 
+export type PlaceCreate = {
+  name: string;
+  picture?: string;
+  description?: string;
+  address?: string;
+  city: string;
+  zipcode?: number;
+  heartplace: boolean;
+  category?: string;
+  openingHours: OpeningHourDay[];
+  tags?: string[],
+  visibility?: string,
+  applicationsEnabled?: boolean,
+}
+
 export type UserProfileInfo = {
   name?: string;
   image?: string;
@@ -68,6 +83,7 @@ export type PlaceInfo = {
     name: string;
     description?: string;
     image?: string;
+    category?: string;
 }
 
 export type PersonalInfo = {

@@ -97,7 +97,10 @@ export function ShiftSchedulerProvider({ children }: { children: ReactNode }) {
           // If there's no previous slot, start at the beginning of the shift period
           if (!lastSlot) {
             const newEnd = calculateEndTime(startTime, 60) // Default 1 hour shift
-            const endDay = isTimeBefore(newEnd, startTime) ? 1 : 0
+
+            // Only set to overnight if the end time is earlier than start time
+            const isEndBeforeStart = isTimeBefore(newEnd, startTime)
+            const endDay = isEndBeforeStart ? 1 : 0
 
             return {
               ...position,
@@ -124,8 +127,7 @@ export function ShiftSchedulerProvider({ children }: { children: ReactNode }) {
           // Determine if the new end crosses to the next day
           let newEndDay = newStartDay
 
-          // If the new end time is earlier than the new start time and they're on the same day,
-          // it means we've crossed midnight
+          // If the new end time is earlier than the new start time, it means we've crossed midnight
           if (isTimeBefore(newEnd, newStart)) {
             newEndDay = newStartDay + 1
           }

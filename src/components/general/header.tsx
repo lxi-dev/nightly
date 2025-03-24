@@ -1,11 +1,15 @@
-// import { Sparkles } from "lucide-react";
-// import LogoCubicle from "../elements/logo/logo-cubicle";
 import Search from "../elements/search";
 import { PageNavLinks } from "./navlinks";
 import { AurorasBackground } from "../backgrounds/auroras";
 import LogoCubicle from "../elements/logo/logo-cubicle";
+import { auth } from "nglty/server/auth";
+import GenericNotification from "../elements/notification-pills/generic";
 
 export const Header = async () => {
+
+  const session = await auth();
+  const role = session?.user.role;
+
   return (
     <nav>
         <header className="relative border-b sticky top-0 z-10 bg-background/95 backdrop-blur-sm overflow-hidden">
@@ -22,6 +26,7 @@ export const Header = async () => {
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-violet-700">
                     Nightly
                 </span>
+                {role === 'admin' && <GenericNotification text="admin" />}
             </div>
             </a>
             <div className="relative hidden md:block">
@@ -29,7 +34,7 @@ export const Header = async () => {
             </div>
         </div>
         <div className="flex items-center">
-            <PageNavLinks />
+            <PageNavLinks role={role!}/>
         </div>
         </div>
         </header>

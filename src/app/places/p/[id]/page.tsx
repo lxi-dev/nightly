@@ -14,8 +14,7 @@ interface PlacePageProps {
 
 export default async function Page({ params } : {params: Promise<PlacePageProps>}) {
   const { id } = await params;
-  // const data = await api.happening.getById({id});
-  // const posts = await api.happening.getPostsByHappening({happeningId: id})
+
   const session = await auth();
 
   return (

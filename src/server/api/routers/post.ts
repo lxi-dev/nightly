@@ -164,16 +164,35 @@ export const happeningRouter = createTRPCRouter({
   }),
   
   getFollowing: protectedProcedure
-    .input(z.object({ happeningId: z.string() }))
-    .query(async ({ input, ctx }) => {
-      const followers = ctx.db.happeningFollow.findMany({
-        where: { happeningId: input.happeningId },
-        include: { user: true },
-      });
+  .input(
+    z.object({
+      happeningId: z.string(),
+    })
+  )
+  .query(async ({ input, ctx }) => {
+    const { happeningId } = input;
+    const userId = ctx.session.user.id; // Assuming user session is available
 
-  
-      return followers;
-    }),
+    // Fetch followers and their statuses
+    const followers = await ctx.db.happeningFollow.findMany({
+      where: { happeningId },
+      select: {
+        status: true,
+        userId: true,
+      },
+    });
+
+    // Calculate counts
+    const totalFollowers = followers.length;
+    const pendingCount = followers.filter((f) => f.status === "tentative").length;
+    const isFollowing = followers.some((f) => f.userId === userId);
+
+    return {
+      followers: totalFollowers,
+      pending: pendingCount,
+      isFollowing,
+    };
+  }),
 
 
   getPostsByHappening: protectedProcedure
@@ -284,5 +303,24 @@ search: protectedProcedure
     });
 
     return happenings;
+  }),
+
+  getFollowedHappenings: protectedProcedure
+  .query(async ({ ctx }) => {
+    const userId = ctx.session.user.id;
+
+    const followedHappenings = await ctx.db.happeningFollow.findMany({
+      where: { userId },
+      include: {
+        happening: {
+          include: {
+            createdBy: false, // Include creator details if needed
+          },
+        },
+      },
+    });
+
+    // Extract the happenings from the result
+    return followedHappenings.map((follow) => follow.happening);
   }),
 });
