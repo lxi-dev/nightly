@@ -5,8 +5,8 @@ import { api } from "nglty/trpc/react";
 import PlaceTile from "./place-tile";
 import { redirect } from "next/navigation";
 
-export const HeartPlaceList = () => {
-    const { data: places, isLoading } = api.places.getPlaces.useQuery({heartPlace: true});
+export const GroupList = () => {
+    const { data: places, isLoading } = api.places.getPlaces.useQuery({group: true});
   
     if (isLoading) return <p>Loading places...</p>;
   

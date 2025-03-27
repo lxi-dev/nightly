@@ -17,6 +17,7 @@ export function ShiftScheduler({owner} : {owner: boolean}) {
     startTime,
     endTime,
     positions,
+    highlighted,
     setStartTime,
     setEndTime,
     addPosition,
@@ -24,6 +25,7 @@ export function ShiftScheduler({owner} : {owner: boolean}) {
     addTimeSlot,
     updateTimeSlot,
     removeTimeSlot,
+    setHighlightTimeSlot,
   } = useShiftScheduler()
 
   const [newPositionName, setNewPositionName] = useState("")
@@ -31,6 +33,14 @@ export function ShiftScheduler({owner} : {owner: boolean}) {
   const handleAddPosition = () => {
     addPosition(newPositionName)
     setNewPositionName("")
+  }
+
+  const handleShiftClick = (e: {positionId: string, shiftId: string}) => {
+    const {positionId, shiftId} = e;
+    console.log('posi id: '+positionId);
+    console.log('shift id '+shiftId);
+    setHighlightTimeSlot(positionId, shiftId);
+
   }
 
   return (
@@ -118,6 +128,12 @@ export function ShiftScheduler({owner} : {owner: boolean}) {
         </div>
       </BentoBox>
     </div>}
+
+    { highlighted && 
+     <p className="text-xl">{JSON.stringify(highlighted)}</p>
+    }
+
+
       {positions.length > 0 && (
         <BentoBox className="p-4">
           <div>
@@ -125,7 +141,7 @@ export function ShiftScheduler({owner} : {owner: boolean}) {
             <h5>Visual overview of all scheduled shifts</h5>
           </div>
           <div>
-            <ShiftsPreview />
+            <ShiftsPreview onShiftClick={(e: {positionId: string, shiftId: string}) => handleShiftClick(e)}/>
           </div>
         </BentoBox>
       )}

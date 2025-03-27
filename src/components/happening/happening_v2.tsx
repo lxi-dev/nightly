@@ -71,7 +71,7 @@ const EventPage: React.FC<{ event: Happening, posts?: Post[], userId?: string, f
                 <h1 className="text-2xl font-bold mb-2">
                     {event.name}
                 </h1>   
-                <div className="flex flex-row w-full justify-between gap-4">
+                <div className="flex flex-col md:flex-row w-full justify-between gap-4">
                     {event.dateHappening && (
                         <DateSmallSquare date={event.dateHappening} />
                     )}
@@ -102,7 +102,7 @@ const EventPage: React.FC<{ event: Happening, posts?: Post[], userId?: string, f
             ))}
           </div>
         </div>    
-      <div className="mt-24">
+      <motion.div className="mt-48 sm:mt-34 md:mt-20">
         <Tabs>
           <Tab id={'info'} label={'Information'}>
             <TabContent>
@@ -152,7 +152,7 @@ const EventPage: React.FC<{ event: Happening, posts?: Post[], userId?: string, f
           </Tab>
           }
         </Tabs>
-      </div>
+      </motion.div>
       <div className="flex flex-row justify-center items-center gap-10 pl-2 pt-4">
       <p className="text-slate-500 text-1xl">created {dayjs(event.createdAt).fromNow()} </p>
         <CalendarDaysIcon className="w-4 h-4 text-slate-500"/>

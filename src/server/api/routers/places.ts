@@ -18,7 +18,7 @@ export const placesRouter = createTRPCRouter({
         address: z.string().optional(),
         city: z.string().optional(),
         zipcode: z.string().optional(),
-        heartPlace: z.boolean().default(false),
+        group: z.boolean().default(false),
         openingHours: z.record(z.string()).optional(),
         category: z.string().optional(),
         tags: z.array(z.string()).optional(),
@@ -48,7 +48,7 @@ export const placesRouter = createTRPCRouter({
         id: z.string().optional(),
         name: z.string().optional(),
         city: z.string().optional(),
-        heartPlace: z.boolean().optional(),
+        group: z.boolean().optional(),
         creatorId: z.string().optional(),
         tags: z.array(z.string()).optional(),
       })
@@ -61,7 +61,7 @@ export const placesRouter = createTRPCRouter({
           id: input.id,
           name: input.name ? { contains: input.name, mode: 'insensitive' } : undefined,
           city: input.city,
-          heartPlace: input.heartPlace,
+          group: input.group,
           creatorId: input.creatorId,
           tags: input.tags ? { hasSome: input.tags } : undefined,
         },
@@ -76,6 +76,64 @@ export const placesRouter = createTRPCRouter({
       }));
     }),
 
+  //Verify Place
+  toggleVerified: publicProcedure
+  .input(
+    z.object({
+      id: z.string(),
+    })
+  )
+  .mutation(async ({ ctx, input }) => {
+    const userRole = ctx.session?.user?.role;
+
+    if (userRole !== 'admin') {
+      throw new Error('Unauthorized access');
+    }
+
+    const place = await ctx.db.place.findUnique({
+      where: { id: input.id },
+    });
+
+    if (!place) {
+      throw new Error('Place not found');
+    }
+
+    const updatedPlace = await ctx.db.place.update({
+      where: { id: input.id },
+      data: { verified: !place.verified },
+      select: {
+        id: true,
+        verified: true,
+      },
+    });
+
+    return updatedPlace;
+  }),
+
+  //Get Places Admin
+  getSimplifiedPlaces: protectedProcedure
+  .query(async ({ ctx }) => {
+    const userRole = ctx.session?.user?.role;
+
+    if (userRole !== 'admin') {
+      throw new Error('Unauthorized access');
+    }
+
+    const places = await ctx.db.place.findMany({
+      select: {
+        id: true,
+        name: true,
+        city: true,
+        group: true,
+        verified: true,
+        createdAt: true,
+        creatorId: true,
+      },
+    });
+
+    return places;
+  }),
+
   // Update a place
   updatePlace: protectedProcedure
     .input(
@@ -88,7 +146,7 @@ export const placesRouter = createTRPCRouter({
           address: z.string().optional(),
           city: z.string().optional(),
           zipcode: z.string().optional(),
-          heartPlace: z.boolean().optional(),
+          group: z.boolean().optional(),
           openingHours: z.record(z.string()).optional(),
           category: z.string().optional(),
           tags: z.array(z.string()).optional(),

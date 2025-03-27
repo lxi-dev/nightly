@@ -1,4 +1,5 @@
 import { BentoBox } from 'nglty/components/elements/box';
+import { AdminPlacesList } from 'nglty/components/places/admin-places-list';
 import { UsersList } from 'nglty/components/users/all-users';
 import { ProfileCard } from 'nglty/components/users/profile-card';
 import { auth } from 'nglty/server/auth';
@@ -21,6 +22,9 @@ export default async function Page() {
                     <p className="text-2xl dark:text-slate-700 mt-8">All Users on Nightly</p>
                 <BentoBox colSpan="4" rowSpan="5" className="mt-2">
                 { session?.user.handle && <UsersList />}
+                </BentoBox>
+                <BentoBox animated>
+                    <AdminPlacesList />
                 </BentoBox>
                 <BentoBox colSpan="4" rowSpan="5" className="mt-2">
                     <p className="text-2xl dark:text-white">Display places User is in</p>

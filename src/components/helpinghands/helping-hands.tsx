@@ -7,9 +7,10 @@ import { HelpingHand } from "lucide-react"
 
 export const HelpingHands = ({happeningId, owner} : {happeningId: string, owner: boolean}) => {
 
+    if (owner) {
     return (
         <ShiftSchedulerProvider>
-            <main className="container mx-auto">
+            <main className="container mx-auto min-h-screen">
                 <div className="flex flex-row p-4 align-baseline">
                     <HelpingHand />
                     <h2 className="ml-4 text-black dark:text-white text-2xl flex flex-row"> Helping Hands</h2>
@@ -19,8 +20,7 @@ export const HelpingHands = ({happeningId, owner} : {happeningId: string, owner:
                         <ShiftScheduler owner={owner}/>
                     </div>
                 
-                    <div className="space-y-8">
-                    {owner && 
+                    <div className={`space-y-8`}> 
                         <BentoBox className="p-4">
                         <div>
                             <h3>Save Schedule</h3>
@@ -30,11 +30,24 @@ export const HelpingHands = ({happeningId, owner} : {happeningId: string, owner:
                             <SaveScheduleForm happeningId={happeningId} />
                         </div>
                         </BentoBox>
-                                            
-                                        }
-                        <ScheduleList happeningId={happeningId} />
+                        
+                        <ScheduleList happeningId={happeningId} owner={owner}/>
                     </div>
                 </div>
+            </main>
+        </ShiftSchedulerProvider>
+    )
+    }
+
+    return (
+        <ShiftSchedulerProvider>
+            <main className="container mx-auto">
+                <div className="flex flex-row p-4 align-baseline">
+                    <HelpingHand />
+                    <h2 className="ml-4 text-black dark:text-white text-2xl flex flex-row"> Helping Hands</h2>
+                </div>
+                <ScheduleList happeningId={happeningId} owner={owner}/>
+                <ShiftScheduler owner={owner}/>
             </main>
         </ShiftSchedulerProvider>
     )

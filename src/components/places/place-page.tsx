@@ -84,22 +84,30 @@ const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
   )
 
   return (
-    <section className="flex flex-col md:flex-row">
-      <div className="w-lg p-4 dark:text-white">
-      <div className="flex flex-row md:flex-col items-center gap-2">
-        <div id="heading">
-        {owner && <h3 className="hidden text-right md:flex text-lg font-semibold dark:text-white">This is your place!</h3>}
-        </div>
-        {owner && <VenueActions place={place} />}
-        <VenueDetails openingHours={place.openingHours} address={`${place.address}, ${place.zipcode} ${place.city}`}/>
+    <main>
+  {/* Information Section */}
+    {owner && (
+      <div id="heading w-full">
+      <h3 className="hidden md:block text-right text-lg font-semibold dark:text-white">
+      This is your place!
+      </h3>
       </div>
-    </div>
-    <div className="w-full">
-      <div className="dark:text-white p-4">
-        <img
+    )}
+    <section className={`flex flex-col md:flex-row gap-4 w-full ${owner ? '' : 'mt-4'}`}>
+  <div className="flex flex-col space-y-4">
+    { owner && <VenueActions place={place} />}
+    { !place.group && <VenueDetails
+      openingHours={place.openingHours}
+      address={`${place.address}, ${place.zipcode} ${place.city}`}
+    />}
+  </div>
+
+  {/* Image Section */}
+  <div className="w-full md:w-7/8">
+    <img
           src={place.picture}
           alt={place.name}
-          className="w-full h-64 object-cover rounded-md mb-4"
+          className="w-full h-64 object-cover rounded-2xl mb-4"
         />
         <div className="flex w-full justify-between items-center">
           <h1 className="text-2xl font-bold mb-2">{place.name}</h1>
@@ -115,7 +123,9 @@ const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
         { (!owner && place.applicationsEnabled) &&<ApplyToPlaceButton placeId={place.id} />}
           </div>
         </div>
-
+        <div className="w-full">
+          {place.category}
+        </div>
         <Tabs defaultActiveTab="info">
         <Tab id="info" label="Description">
           <TabContent>
@@ -152,7 +162,7 @@ const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
           </TabContent>
         </Tab>
       </Tabs>   
-        {place.heartPlace && (
+        {place.group && (
           <div className="mt-4">
             <span className="px-3 py-1 bg-red-500 text-white rounded-full text-sm">
               ❤️ Place in my heart
@@ -160,8 +170,8 @@ const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
           </div>
         )}
       </div>
-    </div>
     </section>
+    </main>
   );
 };
 

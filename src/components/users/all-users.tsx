@@ -2,15 +2,6 @@
 import { api } from "nglty/trpc/react";
 import { UserListItem } from "./user";
 
-// type usersData = {
-//     image: string | null;
-//     id: string;
-//     name: string | null;
-//     handle: string | null;
-//     location: string | null;
-// }
-
-
 export const UsersList = () => {
     const { data: users, isLoading, isError } = api.user.getAllUsers.useQuery();
 

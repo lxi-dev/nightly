@@ -23,12 +23,18 @@ export type ShiftSchedule = {
   positions: Position[]
 }
 
+export type Shift = {
+  positionName: string
+  timeSlot: TimeSlot
+}
+
 interface ShiftSchedulerContextType {
   // State
   startTime: string
   endTime: string
   positions: Position[]
   isOverallPeriodOvernight: boolean
+  highlighted?: Shift
 
   // Actions
   setStartTime: (time: string) => void
@@ -45,6 +51,7 @@ interface ShiftSchedulerContextType {
     endDay: number,
   ) => void
   removeTimeSlot: (positionId: string, slotId: string) => void
+  setHighlightTimeSlot: (positionId: string, slotId: string) => void
 
   // Data access for persistence
   getScheduleData: () => ShiftSchedule
@@ -57,6 +64,7 @@ export function ShiftSchedulerProvider({ children }: { children: ReactNode }) {
   const [startTime, setStartTime] = useState("18:00")
   const [endTime, setEndTime] = useState("23:00")
   const [positions, setPositions] = useState<Position[]>([])
+  const [highlighted, setHighlighted] = useState<Shift | undefined>(undefined)
 
   // Helper function to check if time1 is before time2
   const isTimeBefore = (time1: string, time2: string): boolean => {
@@ -200,6 +208,18 @@ export function ShiftSchedulerProvider({ children }: { children: ReactNode }) {
     )
   }
 
+  const setHighlightTimeSlot = (positionId: string, slotId: string) => {
+    const position = positions.find((p) => p.id === positionId)
+    if (!position) return;
+    const timeslot = position.timeSlots.find((ts) => ts.id === slotId);
+    if (!timeslot) return;
+    const highlightedShift: Shift = {
+      positionName: position.name,
+      timeSlot: timeslot
+    }
+    setHighlighted(highlightedShift);
+  }
+
   const calculateEndTime = (start: string, minutesToAdd: number) => {
     const [hours, minutes] = start.split(":").map(Number)
     const date = new Date()
@@ -257,6 +277,7 @@ export function ShiftSchedulerProvider({ children }: { children: ReactNode }) {
         startTime,
         endTime,
         positions,
+        highlighted,
         isOverallPeriodOvernight,
         setStartTime,
         setEndTime,
@@ -267,6 +288,7 @@ export function ShiftSchedulerProvider({ children }: { children: ReactNode }) {
         removeTimeSlot,
         getScheduleData,
         setScheduleData,
+        setHighlightTimeSlot
       }}
     >
       {children}

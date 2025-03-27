@@ -1,8 +1,3 @@
-//import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-// import { Badge } from "@/components/ui/badge";
-
-// import { MapPin, Calendar, Check, Star } from "lucide-react";
-// import PropTypes from "prop-types";
 import { BentoBox } from "../elements/box";
 import type { Place } from "@prisma/client";
 import { Badge } from "../ui/badge";
@@ -25,10 +20,9 @@ const PlaceTile = ({ place  } : { place : Place}) => {
               </div>
             )}
           </div>
-          {place.heartPlace && (
+          {place.verified && (
             <Badge variant="outline" className="flex items-center gap-1 text-xs">
               <Check className="h-3 w-3" />
-              <span>Favorite</span>
             </Badge>
           )}
         </div>
@@ -80,7 +74,7 @@ const PlaceTile = ({ place  } : { place : Place}) => {
 //     name: PropTypes.string.isRequired,
 //     picture: PropTypes.string,
 //     address: PropTypes.string,
-//     heartPlace: PropTypes.bool,
+//     group: PropTypes.bool,
 //     posts: PropTypes.arrayOf(PropTypes.object),
 //     categories: PropTypes.arrayOf(PropTypes.string),
 //     rating: PropTypes.number,

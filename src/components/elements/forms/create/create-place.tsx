@@ -89,14 +89,15 @@ export const PlaceInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
   };
 
 export const LocationForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
-    const [data, setData] = useState<AddressDetails>({ heartplace: true, address: "", city: "" });
+    const [data, setData] = useState<AddressDetails>({ group: true, address: "", city: "" });
   
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target;
       setData((prev) => ({ ...prev, [name]: value }));
     };
-    const setHeartPlace = (e: boolean) => {
-      setData((prev) => ({ ...prev, heartplace: e }));
+    const setgroup = (e: boolean) => {
+      console.log(e);
+      setData((prev) => ({ ...prev, group: e }));
     };
 
     const setAdress = (e: string) => {
@@ -112,14 +113,14 @@ export const LocationForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
       <form onSubmit={handleSubmit} className="space-y-4">
           <h2 className="text-xl">Where is your place?</h2>
           <div className="mt-4 flex flex-col md:flex-row gap-6">
-          {/* <CheckboxHeartHouse name="heartplace" value={data.heartplace} onChange={(e) => setHeartPlace(e)}></CheckboxHeartHouse> */}
-          <PickerInput options={[{id: '0', label: 'Heartplace', description:'For Groups without a House'},{id: '1', label: 'Local', description:'This is it, when you have an address!'}]} value={data.heartplace ? '0' : '1'} onChange={(e) => setHeartPlace(e === '0' ? true: false)} />
+          {/* <CheckboxHeartHouse name="group" value={data.group} onChange={(e) => setgroup(e)}></CheckboxHeartHouse> */}
+          <PickerInput options={[{id: '0', label: 'group', description:'For Groups without a House'},{id: '1', label: 'Local', description:'This is it, when you have an address!'}]} value={data.group ? '0' : '1'} onChange={(e) => setgroup(e === '0' ? true: false)} />
           </div>
           <p>Your Place can either be a real place or a place in your heart. Real Places are better suited for any kind of business, where as a place in your heart better represents a common idea. </p>
           <small>Tap the icon to change what kind of place you want to own. This decision is irreversable</small>
           
           <div className="w-full flex flex-col gap-4 mt-5">
-          { !data.heartplace &&
+          { !data.group &&
             <TextInput
               label="Address"
               name="address"
@@ -357,20 +358,21 @@ export const OpeningHoursFormInfoForm: React.FC<FormProps<FunnelData>> = ({ onSu
       const placeData = placeDataEntry as Partial<PlaceCreate>;
       const locationData = locationDataEntry as Partial<PlaceCreate>;
       const placeInfo = openingHoursEntry as Partial<PlaceCreate>;
-
       const defaultPictureUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLC0VtEAnU3BQVLsXVa8ytCHqYS0sn9fdYDA&s";
       const commonPayload = {
         name: placeData.name!,
         category: placeData.category!,
         picture: placeData.picture === "" ? defaultPictureUrl : placeData.picture!,
         description: placeData.description,
-        heartPlace: locationData?.heartplace,
+        group: locationData?.group,
+        applicationsEnabled: placeInfo.applicationsEnabled,
+        privacy: placeInfo.visibility,
         tags: placeInfo.tags
       };
       const openingHours = placeInfo.openingHours;
       let place;
       try {
-        if (!openingHours || locationData?.heartplace) {
+        if (!openingHours || locationData?.group) {
           place = await createPlaceMutation.mutateAsync(commonPayload);
         } else {
           place = await createPlaceMutation.mutateAsync({

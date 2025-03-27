@@ -1,8 +1,8 @@
 'use client';
-import { HeartPlaceList } from "./heartplaces-list";
 import { PlaceList } from "./places-list";
 import YourPlaceCard from "./your-place-card";
 import { Tabs, Tab, TabContent } from "../ui/tabs";
+import { GroupList } from "./heartplaces-list";
 
 type Props = {
     userId: string;
@@ -18,9 +18,9 @@ export const PlacesComponent: React.FC<Props> = ({ userId  }) => {
   
             </TabContent>
             </Tab>
-            <Tab id="heartplaces" label="Heart Places">
+            <Tab id="heartplaces" label="Groups">
               <TabContent>
-                <HeartPlaceList />
+                <GroupList />
               </TabContent>
             </Tab>
             <Tab id="myplace" label="My Places">

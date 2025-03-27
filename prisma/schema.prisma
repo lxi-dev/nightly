@@ -103,10 +103,10 @@ model Place {
   address        String?
   city           String?
   zipcode        String?
-  heartPlace     Boolean   // Indicates if this is a "place in my heart"
-  verified       Boolean  @default(false)
-  posts          Post[]    // One-to-many relationship with posts
-  openingHours   Json?     // Optional, to store opening hours in a structured format (e.g., { "monday": "9:00-17:00" })
+  group          Boolean          @default(false)// Indicates if this is a "place in my heart"
+  verified       Boolean          @default(false)
+  posts          Post[]           // One-to-many relationship with posts
+  openingHours   Json?            // Optional, to store opening hours in a structured format (e.g., { "monday": "9:00-17:00" })
   followers       User[]          @relation("PlaceFollowers") // Users who follow this place
   creatorId       String          // User ID of the creator
   creator         User            @relation(fields: [creatorId], references: [id])

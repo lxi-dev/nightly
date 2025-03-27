@@ -64,7 +64,7 @@ export type PlaceCreate = {
   address?: string;
   city: string;
   zipcode?: number;
-  heartplace: boolean;
+  group: boolean;
   category?: string;
   openingHours: OpeningHourDay[];
   tags?: string[],
@@ -96,7 +96,7 @@ export type PersonalInfo = {
  } 
 
 export type AddressDetails = {
-    heartplace: boolean;
+    group: boolean;
     address?: string;
     city: string;
     zip?: number;

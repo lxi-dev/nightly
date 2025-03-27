@@ -141,7 +141,11 @@ export const BasicDetailsForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) 
         console.log(place);
         if(!place) return;
         setPlace(place);
-        setData((prev) => ({...prev, "venue": place.name, "venueId": place.id, "type": 'placebound'}));
+        setData((prev) => ({...prev, 
+          "venue": place.group ? '' : place.name, 
+          "venueId": place.id, 
+          "type": 'placebound'
+        }));
     }
     hideLoading();
 
@@ -183,7 +187,7 @@ export const BasicDetailsForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) 
             value={data.venue || ""}
             onChange={handleChange}
             required
-            disabled={place && true} />
+            disabled={(place && !place.group )&& true} />
         </div>
       )}
       <div>

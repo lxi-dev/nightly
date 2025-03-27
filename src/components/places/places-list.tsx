@@ -30,7 +30,7 @@ export const PlaceList = () => {
               alt={place.name}
               className="w-full h-full object-cover rounded-2xl"
             />
-            {place.heartPlace && (
+            {place.group && (
               <div className="absolute top-2 right-2 bg-white dark:bg-gray-800 p-2 rounded-full shadow">
                 <HeartIcon className="w-5 h-5 text-red-500" />
               </div>

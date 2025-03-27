@@ -3,8 +3,12 @@
 import { useShiftScheduler } from "nglty/contexts/shift-scheduler"
 import { useMemo } from "react"
 
-export function ShiftsPreview() {
-  const { positions, startTime, endTime } = useShiftScheduler()
+type ShiftsPreviewProps = {
+  onShiftClick: (e: {positionId: string, shiftId: string}) => void;
+}
+
+export function ShiftsPreview({onShiftClick} : ShiftsPreviewProps) {
+  const { positions, startTime, endTime, highlighted } = useShiftScheduler()
 
   // Convert time string to minutes since midnight
   const timeToMinutes = (time: string): number => {
@@ -161,8 +165,9 @@ export function ShiftsPreview() {
                 return (
                   <div
                     key={slot.id}
-                    className="absolute top-0 h-full bg-primary/80 rounded text-xs text-primary-foreground flex items-center justify-center overflow-hidden"
+                    className={`absolute top-0 h-full ${ highlighted?.timeSlot.id === slot.id ? 'bg-violet-300' : 'bg-primary/80'} rounded text-xs text-primary-foreground flex items-center justify-center overflow-hidden`}
                     style={{ left, width }}
+                    onClick={() => onShiftClick({positionId: position.id, shiftId: slot.id})}
                   >
                     <div className="flex items-center gap-1 px-1">
                       <span className="truncate">

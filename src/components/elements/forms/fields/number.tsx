@@ -22,7 +22,6 @@ const NumberInput: React.FC<NumberInputProps> = ({
     label,
     name,
     value,
-    defaultValue = 0,
     onChange,
     required = false,
   }) => {
@@ -37,7 +36,6 @@ const NumberInput: React.FC<NumberInputProps> = ({
           name={name}
           value={value}
           min={0}
-          defaultValue={defaultValue}
           onChange={onChange}
           className="flex-grow block w-full rounded-md border-gray-300 dark:border-gray-700 dark:text-white dark:bg-aurora border-2 p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm appearance-none"
           required={required}
