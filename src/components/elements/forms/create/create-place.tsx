@@ -32,7 +32,7 @@ export const PlaceInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
 
     const setImageUrl = (e: string | null) => {
       if(!e) return;
-      setData((prev) => ({...prev , "image": e }));
+      setData((prev) => ({...prev , "picture": e }));
     }
 
     const setCategory = (e: string | null) => {
