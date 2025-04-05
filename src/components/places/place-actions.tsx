@@ -24,7 +24,7 @@ const VenueActions: React.FC<VenueActionsProps> = ({ place }) => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           type="button"
-          className="flex items-center w-full justify-start gap-2 p-2 border bg-violet-700 text-white border-violet-700 rounded-lg hover:bg-violet-700 focus:outline-none focus:ring focus:ring-blue-300"
+          className="flex items-center w-full justify-start gap-2 p-2 border bg-violet-300 text-white border-violet-700 rounded-lg hover:bg-violet-300 focus:outline-none focus:ring focus:ring-blue-300"
         >
             <motion.div
               initial={{ rotate: 0 }}
@@ -47,7 +47,7 @@ const VenueActions: React.FC<VenueActionsProps> = ({ place }) => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           type="button"
-          className="flex items-center w-full justify-start gap-2 p-2 border bg-violet-700 text-white border-violet-700 rounded-lg hover:bg-violet-700 focus:outline-none focus:ring focus:ring-blue-300"
+          className="flex items-center w-full justify-start gap-2 p-2 border bg-violet-300 text-white border-violet-700 rounded-lg hover:bg-violet-300 focus:outline-none focus:ring focus:ring-blue-300"
         >
             <motion.div
               initial={{ rotate: 0 }}
@@ -68,7 +68,7 @@ const VenueActions: React.FC<VenueActionsProps> = ({ place }) => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           type="button"
-          className="flex items-center w-full justify-start gap-2 p-2 border bg-violet-700 text-white border-violet-700 rounded-lg hover:bg-violet-700 focus:outline-none focus:ring focus:ring-blue-300"
+          className="flex items-center w-full justify-start gap-2 p-2 border bg-violet-300 text-white border-violet-700 rounded-lg hover:bg-violet-300 focus:outline-none focus:ring focus:ring-blue-300"
         >
         <Link className="flex-row flex"
           href={`${place.id}/applicants`}>
@@ -92,7 +92,7 @@ const VenueActions: React.FC<VenueActionsProps> = ({ place }) => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           type="button"
-          className="flex items-center w-full justify-start gap-2 p-2 border bg-violet-700 text-white border-violet-700 rounded-lg hover:bg-violet-700 focus:outline-none focus:ring focus:ring-blue-300"
+          className="flex items-center w-full justify-start gap-2 p-2 border bg-violet-300 text-white border-violet-700 rounded-lg hover:bg-violet-300 focus:outline-none focus:ring focus:ring-blue-300"
         >
             <motion.div
               initial={{ scale: 1 }}

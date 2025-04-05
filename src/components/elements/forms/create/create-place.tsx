@@ -1,6 +1,6 @@
 'use client';
 
-import type { FormProps, FunnelData, AddressDetails, Step, OpeningHourDay, PlaceCreate } from "nglty/models/funnel";
+import type { FormProps, FunnelData, AddressDetails, Step, OpeningHourDay, PlaceCreate } from "nglty/types/funnel";
 import { useState } from "react";
 import { Funnel } from "../funnel";
 import { Editor, EditorProvider } from "react-simple-wysiwyg";
@@ -80,7 +80,7 @@ export const PlaceInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
         </div>
         <button
           type="submit"
-          className="bg-violet-700 text-white px-4 py-2 rounded-lg hover:bg-violet-700"
+          className="bg-violet-300 text-white px-4 py-2 rounded-lg hover:bg-violet-300"
         >
           Next
         </button>
@@ -139,7 +139,7 @@ export const LocationForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
         </div>
         <button
           type="submit"
-          className="bg-violet-700 text-white px-4 py-2 rounded-lg hover:bg-violet-700"
+          className="bg-violet-300 text-white px-4 py-2 rounded-lg hover:bg-violet-300"
         >
           Next
         </button>
@@ -314,7 +314,7 @@ export const OpeningHoursFormInfoForm: React.FC<FormProps<FunnelData>> = ({ onSu
         </div>
         <button
           type="submit"
-          className="bg-violet-700 text-white px-4 py-2 rounded-lg hover:bg-violet-700"
+          className="bg-violet-300 text-white px-4 py-2 rounded-lg hover:bg-violet-300"
         >
           Next
         </button>

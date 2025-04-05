@@ -6,8 +6,9 @@ import { usePathname } from "next/navigation";
 
 const links = [
     { name: 'Places', href: '/places', icon: HomeIcon, admin: false },
-    { name: 'Admin', href: '/profile', icon: UserGroupIcon, admin: true },
     { name: 'Happenings', href: '/happen', icon: TableCellsIcon, admin: false },
+    { name: 'Admin', href: '/admin', icon: UserGroupIcon, admin: true },
+    { name: 'Profile', href: '/profile', icon: UserIcon, admin: false}
 ];
 
 export const PageNavLinks = ({role}: {role: string}) => {
@@ -28,11 +29,6 @@ export const PageNavLinks = ({role}: {role: string}) => {
                     </Link>
                     );
                 })}
-            <Link
-                href={"/api/auth/signout"}
-                className="flex flex-wrap items-center justify-center flex flex-col bg-white overflow-hidden w-10 h-10 border-slate-700 shadow-sm rounded-md hover:bg-violet-300 pt-3 pb-3 text-sm font-medium hover:text-gray-100">
-                <UserIcon />
-            </Link>
             </div>
         </main>
     );

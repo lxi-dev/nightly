@@ -53,6 +53,7 @@ export const HappeningsList: React.FC<Props> = ({ happenings, deletable }) => {
                     happeningVenue={happening.venue ?? ''} 
                     happeningStart={happening.dateHappening?.toString() ?? ''} 
                     color={happening.color}
+                    venueId={happening.venueId ?? undefined}
                     onDelete={deletable ? onDelete : undefined}/>)}
                  </div>
             }

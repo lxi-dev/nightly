@@ -39,13 +39,33 @@ export const happeningRouter = createTRPCRouter({
         })
     )
     .mutation(async ({ input, ctx }) => {
+
         const happening = await ctx.db.happening.create({
             data: {
-                ...input,
-                dateHappening: input.dateHappening ? new Date(input.dateHappening) : null,
-                createdBy: {
-                  connect: { id: ctx.session?.user.id },
-                },
+              type: input.type,
+              published: input.published,
+              name: input.name,
+              venue: input.venue,
+              //venueId: input.venueId ?? null, // Explicitly pass it
+              color: input.color,
+              text: input.text,
+              dateHappening: input.dateHappening ? new Date(input.dateHappening) : null,
+              postsEnabled: input.postsEnabled,
+              helpingHandsEnabled: input.helpingHandsEnabled,
+              maxParticipants: input.maxParticipants,
+              tags: input.tags,
+              coverImageUrl: input.coverImageUrl,
+              externalLinks: input.externalLinks,
+              isRecurring: input.isRecurring,
+              recurrencePattern: input.recurrencePattern,
+              privacyLevel: input.privacyLevel,
+              cancellationReason: input.cancellationReason,
+              archived: input.archived,
+              createdBy: {
+                connect: { id: ctx.session?.user.id },
+              },
+              ...(input.venueId ? { place: { connect: { id: input.venueId } } } : {}), // ✅ Only connect if venueId is provided
+            // }
             }
         });
         return happening;
@@ -92,13 +112,18 @@ export const happeningRouter = createTRPCRouter({
           createdBy: true,
         },
       });
-
       if (!happening) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Happening not found",
         });
       }
+
+      // if (happening?.venueId) {
+      //   const place = await ctx.db.place.findUnique({
+      //     where: { id: happening.venueId}
+      //   });
+      // }
 
       return happening;
     }),
@@ -249,6 +274,7 @@ getByVenue: protectedProcedure
           gte: today,
           lte: futureDate,
         },
+        type: { not: 'private'}
       },
       include: {
         createdBy: true,

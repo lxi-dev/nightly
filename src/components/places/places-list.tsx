@@ -4,9 +4,14 @@ import { motion } from "motion/react";
 import { api } from "nglty/trpc/react";
 import { redirect } from "next/navigation";
 import PlaceTile from "./place-tile";
+import { useProfile } from "nglty/contexts/profileContext";
 
 export const PlaceList = () => {
-    const { data: places, isLoading } = api.places.getPlaces.useQuery({city: 'Bremen'});
+  const { location } = useProfile();
+    const { data: places, isLoading } = api.places.getPlaces.useQuery(
+      { city: location!.displayName.split(',')[0]}
+     ,{ enabled: !!location }
+    );
   
     if (isLoading) return <p>Loading places...</p>;
   

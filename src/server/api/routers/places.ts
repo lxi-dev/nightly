@@ -13,6 +13,7 @@ export const placesRouter = createTRPCRouter({
           .object({
             latitude: z.number(),
             longitude: z.number(),
+            displayName: z.string(),
           })
           .optional(),
         address: z.string().optional(),
@@ -132,6 +133,27 @@ export const placesRouter = createTRPCRouter({
     });
 
     return places;
+  }),
+
+  //Get Places Admin
+  getSimplePlace: protectedProcedure
+  .input(z.object({
+    id: z.string()
+  }))
+  .query(async ({ input, ctx }) => {
+
+    const place = await ctx.db.place.findUnique({
+      where: {id : input.id},
+      select: {
+        name: true,
+        city: true,
+        picture: true,
+        verified: true,
+
+      },
+    });
+
+    return place;
   }),
 
   // Update a place

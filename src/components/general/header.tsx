@@ -1,14 +1,14 @@
+'use client';
 import Search from "../elements/search";
 import { PageNavLinks } from "./navlinks";
 import { AurorasBackground } from "../backgrounds/auroras";
 import LogoCubicle from "../elements/logo/logo-cubicle";
-import { auth } from "nglty/server/auth";
 import GenericNotification from "../elements/notification-pills/generic";
+import { useProfile } from "nglty/contexts/profileContext";
 
-export const Header = async () => {
+export const Header = () => {
 
-  const session = await auth();
-  const role = session?.user.role;
+  const { user } = useProfile();
 
   return (
     <nav>
@@ -26,7 +26,9 @@ export const Header = async () => {
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-violet-700">
                     Nightly
                 </span>
-                {role === 'admin' && <GenericNotification text="admin" />}
+                { user && <span>
+                {user.role === 'admin' && <GenericNotification text="admin" />}
+                </span>}
             </div>
             </a>
             <div className="relative hidden md:block">
@@ -34,7 +36,7 @@ export const Header = async () => {
             </div>
         </div>
         <div className="flex items-center">
-            <PageNavLinks role={role!}/>
+            {user && <PageNavLinks role={user.role}/>}
         </div>
         </div>
         </header>

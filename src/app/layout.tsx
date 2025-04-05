@@ -9,6 +9,7 @@ import { Header } from "nglty/components/general/header"
 import { auth } from "nglty/server/auth"
 import { ThemeProvider } from "nglty/contexts/themeProvider"
 import { Mona_Sans } from "next/font/google"
+import { UserProvider } from "nglty/contexts/profileContext"
 
 const fontSans = Mona_Sans({
   subsets: ["latin"],
@@ -25,6 +26,31 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const session = await auth()
 
+  if (!session) {
+    return (
+      <html lang="en" suppressHydrationWarning className={`font-sans antialiased ${fontSans.className}`}>
+        <head>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        </head>
+        <body>
+          <ThemeProvider attribute="class" defaultTheme="light" disableTransitionOnChange>
+            <div className="min-h-screen dark:bg-aurora">
+              <TRPCReactProvider>
+  
+                <main className="mx-auto px-3 sm:px-3 w-full sm:max-w-2xl md:max-w-3xl lg:max-w-5xl xl:max-w-7xl">
+                  <LoadingProvider>
+                    {children}
+                    </LoadingProvider>
+                </main>
+  
+              </TRPCReactProvider>
+            </div>
+          </ThemeProvider>
+  
+        </body>
+      </html>
+    );
+  }
   return (
     <html lang="en" suppressHydrationWarning className={`font-sans antialiased ${fontSans.className}`}>
       <head>
@@ -34,13 +60,20 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <ThemeProvider attribute="class" defaultTheme="light" disableTransitionOnChange>
           <div className="min-h-screen dark:bg-aurora">
             <TRPCReactProvider>
-              {session?.user && <Header />}
+              <UserProvider>
+              <Header />
+
               <main className="mx-auto px-3 sm:px-3 w-full sm:max-w-2xl md:max-w-3xl lg:max-w-5xl xl:max-w-7xl">
-                <LoadingProvider>{children}</LoadingProvider>
+                <LoadingProvider>
+                  {children}
+                  </LoadingProvider>
               </main>
+
+              </UserProvider>
             </TRPCReactProvider>
           </div>
         </ThemeProvider>
+
       </body>
     </html>
   )

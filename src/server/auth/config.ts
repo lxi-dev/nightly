@@ -16,8 +16,6 @@ declare module "next-auth" {
     user: {
       id: string;
       handle?:          string;
-      age?:             string;
-      location?:        string;
       role:             string;
       // ...other properties
       // role: UserRole;

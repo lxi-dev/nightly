@@ -10,7 +10,7 @@ export function SignInScreen() {
 
   return (
     <div className="flex h-screen flex-col-reverse md:p-24">
-      <div className="w-full h-1/2 md:h-full dark:bg-black shadow-lg dark:text-white flex justify-center flex-col items-center p-8 ">
+      <div className="w-full h-1/2 md:h-full dark:bg-black shadow-lg dark:text-white flex justify-center md:justify-start flex-col items-center p-8 ">
         {/* <LoginForm /> */}
         <Seperator text="Login"></Seperator>
         <SocialMediaLogin />
@@ -22,8 +22,8 @@ export function SignInScreen() {
       >
         {/* Right side can hold any additional content */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 z-0">
-          <AurorasBackground className="blur-md">
+          <div className="absolute inset-0 z-0 bg-black dark:bg-white">
+          <AurorasBackground>
           <StarsBackground />
 
           </AurorasBackground >

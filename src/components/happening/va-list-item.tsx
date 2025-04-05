@@ -1,12 +1,14 @@
 /* eslint-disable */
 'use client';
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
 import { EyeIcon, EyeSlashIcon, HomeIcon, MapPinIcon } from "@heroicons/react/24/outline";
 import dayjs from "dayjs";
 import { BentoBox } from "../elements/box";
 import { Button } from "../ui/button";
 import { TrashIcon } from "lucide-react";
+import { api } from "nglty/trpc/react";
+import GenericNotification from "../elements/notification-pills/generic";
 
 type VaListItemProps = {
   happeningId: string,
@@ -14,11 +16,19 @@ type VaListItemProps = {
   happeningName: string,
   happeningVenue: string,
   happeningStart: string,
+  venueId?: string,
   color: string
   onDelete?: Function;
 }
 
-const VaListItem: React.FC<VaListItemProps> = ({ happeningId, happeningStatus, happeningName, happeningVenue, happeningStart, color, onDelete }) => {
+const VaListItem: React.FC<VaListItemProps> = ({ happeningId, happeningStatus, happeningName, happeningVenue, happeningStart, color, onDelete, venueId }) => {
+  const { data } = api.places.getSimplePlace.useQuery({id: venueId!}, { enabled: !!venueId});
+  const [ venuePicture, setVenuePicture] = useState<string | undefined>(undefined);
+  useEffect(() => {
+    if(!data) return;
+    setVenuePicture(data.picture);
+  }, [data])
+  
   const va = {
     id: happeningId,
     status: happeningStatus,
@@ -28,7 +38,7 @@ const VaListItem: React.FC<VaListItemProps> = ({ happeningId, happeningStatus, h
         venue: happeningVenue,
         startTime: happeningStart,
         startDay: dayjs(happeningStart).format('DD'),
-        startWeekday: dayjs(happeningStart).format('ddd'),
+        startWeekday: dayjs(happeningStart).format('MMM'),
         color: color,
       },
     borderColor: `bg-${color}`
@@ -63,12 +73,19 @@ return(
         <p className="font-bold text-xs">{va.data.config.startWeekday.toUpperCase()}</p>
       </div>
       <div className={`h-16 w-[5px] bg-gradient-to-b ${gradientClass} rounded-sm`}></div>
-      <div className={`flex flex-col items-start h-16 pl-4 w-72 pt-1 pb-2 `}>
+      <div className={`flex flex-col items-start h-16 pl-4 w-72 pt-1`}>
         <h2 className={`text-sm lg:text-xl text-left`}>{va.data.config.name}</h2>
-        <div className="flex flex-row items-left pt-2">
+          {(!venueId && va.data.config.venue )&&
+        <div className="flex flex-row items-left">
+          
         <MapPinIcon className="h-4 w-4"/>
           <h5 className='text-xs lg:text-sm ml-2 max-w-45 overflow-hidden text-ellipsis'>{va.data.config.venue}</h5>
-      </div>
+          
+        </div>
+          }
+          <div className="mt-1">
+        <GenericNotification text={va.data.config.color} />
+          </div>
       </div>
     </div>
     <div className='flex'>
@@ -76,10 +93,13 @@ return(
       {onDelete !== undefined && <Button onClick={(e) => onDelete(va.id)}><TrashIcon /></Button>}
       <div className="flex flex-row items-center pb-2">
           
-          { va.status === 'placebound' && <HomeIcon className="w-[14px] h-[14px] mr-2"/>}
+          { va.status === 'placebound' && 
+            <div className="w-32 h-14 bg-violet-300 rounded-xl">
+              {venuePicture && <img className="h-20 rounded-xl border md:border-2 border-gray-300 dark:border-gray-700" src={venuePicture} />}
+            </div>}
           { va.status === 'private' && <EyeSlashIcon className="w-[14px] h-[14px] mr-2"/>}
-          { va.status === 'public' && <EyeIcon className="w-[14px] h-[14px] mr-2"/>}
-           { va.status } event
+          { va.status === 'public' && <span><EyeIcon className="w-[14px] h-[14px] mr-2"/>{ va.status }</span>}
+          
           </div>
       {/*<TimeNotification startTime={va.data.config!.startTime}/> */}
       </div>

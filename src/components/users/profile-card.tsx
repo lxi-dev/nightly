@@ -1,17 +1,18 @@
 'use client'
+import { useProfile } from "nglty/contexts/profileContext";
 import { UserProfileIcon } from "../elements/user-icon";
-import type { Session } from "next-auth";
 
-export const ProfileCard = ({profile} : {profile : Session}) => {
+export const ProfileCard = () => {
 
-    
+    const { user } = useProfile();
+    if (!user) return null;
     return (
         <main>
             <div className="flex flex-row">
                 <div className="flex flex-row w-full items-center justify-between p-4 border-b dark:border-slate-800">
                     <div className="flex flex-row items-center">
-                    <UserProfileIcon src={profile.user.image}/>
-                    <p className="ml-4">Hey {profile.user.name}, Welcome to your Profile! 🎉</p>
+                    <UserProfileIcon src={user.image}/>
+                    <p className="ml-4">Hey {user.name}, Welcome to your Profile! 🎉</p>
                 </div>
                 <div
                     className="flex w-12 mr-2 flex-col items-center hover:text-aurora-900 dark:text-white cursor-pointer">
@@ -25,8 +26,7 @@ export const ProfileCard = ({profile} : {profile : Session}) => {
                             <label className="text-sm text-slate-600">Handle / Username</label>
                             <input
                             disabled
-                                value={profile.user.handle}
-                                //className="bg-transparent text-lg mr-6 disabled:text-white"
+                            value={user.handle!}
                                 placeholder='set your handle'
                                 className="p-2 bg-transparent text-black dark:text-white invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline focus:outline-sky-500 focus:invalid:border-pink-500 focus:invalid:outline-pink-500 disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-500 disabled:shadow-none dark:disabled:border-gray-700 dark:disabled:bg-gray-800/20 ..."
 
@@ -35,7 +35,7 @@ export const ProfileCard = ({profile} : {profile : Session}) => {
                             <label className="text-sm text-slate-600">Location</label>
                             <input
                                 disabled
-                                value={profile.user.location}
+                                value={user.location!}
                                 //className="bg-transparent text-lg mr-6 disabled:text-white"
                                 placeholder='set your location'
                                 className="p-2 bg-transparent invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline focus:outline-sky-500 focus:invalid:border-pink-500 focus:invalid:outline-pink-500 disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-500 disabled:shadow-none dark:disabled:border-gray-700 dark:disabled:bg-gray-800/20 ..."
@@ -45,7 +45,7 @@ export const ProfileCard = ({profile} : {profile : Session}) => {
                             <label className="text-sm text-slate-600">Age</label>
                             <input
                                 disabled
-                                value={profile.user.age}
+                                value={user.age!}
                                 //className="bg-transparent text-lg mr-6 disabled:text-white"
                                 placeholder='13.12.2000'
                                 className="p-2 bg-transparent invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline focus:outline-sky-500 focus:invalid:border-pink-500 focus:invalid:outline-pink-500 disabled:border-gray-200 bg-gray-50 disabled:text-gray-500 disabled:shadow-none dark:disabled:border-gray-700 dark:disabled:bg-gray-800/20"
@@ -53,20 +53,20 @@ export const ProfileCard = ({profile} : {profile : Session}) => {
                             </input>
                         </div>
                         <small>Email</small>
-                        <p className="p-2 text-slate-400">{profile.user.email}</p>
+                        <p className="p-2 text-slate-400">{user.email}</p>
                     </div>
                     <div className="flex-1">   
                         <div className="flex flex-col">
-                    {/* <label>Bio</label>
+                    <label>Bio</label>
                     <textarea
                     disabled
-                    value={profile.user.bio}
+                    value={user.bio!}
                     //className="bg-transparent text-lg mr-6 disabled:text-white"
                     placeholder='nothing here'
                     className="p-2 h-36 bg-transparent invalid:border-pink-500 invalid:text-pink-600 focus:border-sky-500 focus:outline focus:outline-sky-500 focus:invalid:border-pink-500 focus:invalid:outline-pink-500 disabled:border-gray-200 bg-gray-50 disabled:text-gray-500 disabled:shadow-none dark:disabled:border-gray-700 dark:disabled:bg-gray-800/20"
-                    > */}
+                    > 
 
-                        {/* </textarea> */}
+                     </textarea>
                 </div>
             </div>
                             

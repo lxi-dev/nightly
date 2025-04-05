@@ -70,7 +70,7 @@ export const HappeningView = ({ data, session, posts } : { data: Happening, sess
       {/* <div className={`relative z-10 grid`}> 
   return (
     <main>
-            <div className="min-w-screen min-h-46 bg-violet-700">
+            <div className="min-w-screen min-h-46 bg-violet-300">
         { data.coverImageUrl ? (<img className="min-w-screen min-h-46" src={data.coverImageUrl ?? ''} />) : (
           <div className="absolute min-w-screen min-h-46">
           <AurorasBackground /></div>)}

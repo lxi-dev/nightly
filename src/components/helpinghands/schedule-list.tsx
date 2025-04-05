@@ -13,7 +13,7 @@ interface ScheduleListProps {
 }
 
 export function ScheduleList({ happeningId, owner }: ScheduleListProps) {
-  const { setScheduleData } = useShiftScheduler();
+  const { setScheduleData, setScheduleId } = useShiftScheduler();
 
   // tRPC queries and mutations
   const schedulesQuery = api.schedule.getByHappeningId.useQuery(
@@ -36,6 +36,7 @@ export function ScheduleList({ happeningId, owner }: ScheduleListProps) {
     try {
       const scheduleResult = await utils.schedule.getById.fetch({ id: scheduleId });
       if (scheduleResult.scheduleData) {
+        setScheduleId(scheduleId);
         setScheduleData(scheduleResult.scheduleData);
       }
     } catch (error) {
@@ -56,6 +57,7 @@ export function ScheduleList({ happeningId, owner }: ScheduleListProps) {
     try {
       const scheduleResult = await utils.schedule.getById.fetch({ id: scheduleId });
       if (scheduleResult.scheduleData) {
+        setScheduleId(scheduleId);
         setScheduleData(scheduleResult.scheduleData);
       }
     } catch (error) {

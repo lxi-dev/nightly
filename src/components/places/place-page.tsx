@@ -9,6 +9,7 @@ import { Tab, TabContent, Tabs } from "../ui/tabs";
 import { PostComponent } from "../elements/post";
 import { HappeningsList } from "../happening/happenings-list";
 import { ApplyToPlaceButton } from "./apply-button";
+import MapComponent from "../elements/map";
 
 const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
   const { data: places, isLoading, isError } = api.places.getPlaces.useQuery(
@@ -33,6 +34,14 @@ const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
   const followMutation = api.places.followPlace.useMutation();
   const [owner, setOwner] = useState(false);
   const [following, setFollowing] = useState(false);
+
+  const locations = [
+    { 
+      lat: 51.505, 
+      lng: -0.09, 
+      name: 'Home',
+      color: '#4A90E2'
+    }];
 
   // Update the following state based on the returned data
   useEffect(() => {
@@ -96,6 +105,15 @@ const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
     <section className={`flex flex-col md:flex-row gap-4 w-full ${owner ? '' : 'mt-4'}`}>
   <div className="flex flex-col space-y-4">
     { owner && <VenueActions place={place} />}
+    <div className="rounded-xl border-2 border-gray-300 dark:border-gray-700 overflow-hidden h-32">
+    <MapComponent 
+              locations={locations} 
+              zoom={18}
+              center={[locations[0]!.lat, locations[0]!.lng]}
+              interactive={false} 
+              mapStyle="default" 
+              className="pointer-events-none" />
+              </div>
     { !place.group && <VenueDetails
       openingHours={place.openingHours}
       address={`${place.address}, ${place.zipcode} ${place.city}`}
@@ -115,7 +133,7 @@ const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
           { !owner && <button
           onClick={handleFollow}
           className={`px-4 py-2 rounded-lg transition ${
-            following ? "bg-green-500 hover:bg-green-600 text-white" : "bg-violet-700 hover:bg-violet-700 text-white"
+            following ? "bg-green-500 hover:bg-green-600 text-white" : "bg-violet-300 hover:bg-violet-300 text-white"
           }`}
         >
           {following ? "Following" : "Follow this place"}

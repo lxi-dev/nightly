@@ -1,6 +1,6 @@
 'use client';
 
-import type { FormProps, FunnelData, PersonalInfo, PaymentInfo, Step } from "nglty/models/funnel";
+import type { FormProps, FunnelData, PersonalInfo, PaymentInfo, Step } from "nglty/types/funnel";
 import { useState } from "react";
 import { Funnel } from "./funnel";
 
@@ -43,7 +43,7 @@ export const PersonalInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) 
         </div>
         <button
           type="submit"
-          className="bg-violet-700 text-white px-4 py-2 rounded-lg hover:bg-violet-700"
+          className="bg-violet-300 text-white px-4 py-2 rounded-lg hover:bg-violet-300"
         >
           Next
         </button>
@@ -90,7 +90,7 @@ export const PaymentInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) =
         </div>
         <button
           type="submit"
-          className="bg-violet-700 text-white px-4 py-2 rounded-lg hover:bg-violet-700"
+          className="bg-violet-300 text-white px-4 py-2 rounded-lg hover:bg-violet-300"
         >
           Next
         </button>

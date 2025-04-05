@@ -1,53 +1,31 @@
 import { ShiftSchedulerProvider } from "nglty/contexts/shift-scheduler"
 import { ShiftScheduler } from "./Scheduler"
-import { BentoBox } from "../elements/box"
-import { SaveScheduleForm } from "./save-helping"
 import { ScheduleList } from "./schedule-list"
-import { HelpingHand } from "lucide-react"
+import { AppWindow, HeartHandshake } from "lucide-react"
+import Link from "next/link"
+import { ShiftSignupForm } from "./shift-signup"
 
 export const HelpingHands = ({happeningId, owner} : {happeningId: string, owner: boolean}) => {
-
-    if (owner) {
-    return (
-        <ShiftSchedulerProvider>
-            <main className="container mx-auto min-h-screen">
-                <div className="flex flex-row p-4 align-baseline">
-                    <HelpingHand />
-                    <h2 className="ml-4 text-black dark:text-white text-2xl flex flex-row"> Helping Hands</h2>
-                </div>
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div className="lg:col-span-2">
-                        <ShiftScheduler owner={owner}/>
-                    </div>
-                
-                    <div className={`space-y-8`}> 
-                        <BentoBox className="p-4">
-                        <div>
-                            <h3>Save Schedule</h3>
-                            <h5>Save this schedule for the happening</h5>
-                        </div>
-                        <div>
-                            <SaveScheduleForm happeningId={happeningId} />
-                        </div>
-                        </BentoBox>
-                        
-                        <ScheduleList happeningId={happeningId} owner={owner}/>
-                    </div>
-                </div>
-            </main>
-        </ShiftSchedulerProvider>
-    )
-    }
 
     return (
         <ShiftSchedulerProvider>
             <main className="container mx-auto">
-                <div className="flex flex-row p-4 align-baseline">
-                    <HelpingHand />
+                <div className="flex flex-row p-4 align-baseline justify-between">
+                    <div className="flex flex-row space-x-2 align-center items-center">
+                    <HeartHandshake />
                     <h2 className="ml-4 text-black dark:text-white text-2xl flex flex-row"> Helping Hands</h2>
+                    </div>
+                    {owner && 
+                    <Link href={`/happen/h/${happeningId}/helpers`}>
+                        <div className="flex flex-row space-x-2 gap-2 align-center items-center ">
+                        Settings <AppWindow /> 
+                        </div>
+                        </Link>
+                    }
                 </div>
-                <ScheduleList happeningId={happeningId} owner={owner}/>
-                <ShiftScheduler owner={owner}/>
+                <ShiftSignupForm />
+                <ScheduleList happeningId={happeningId} owner={false}/>
+                <ShiftScheduler owner={false}/>
             </main>
         </ShiftSchedulerProvider>
     )

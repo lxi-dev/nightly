@@ -16,11 +16,48 @@ export const userRouter = createTRPCRouter({
           message: "Happening not found",
         });
       }
-
-
-
       return {image: user.image, name: user.name};
     }),
+
+    getUserProfile: protectedProcedure
+        .input(z.object({id : z.string().optional() }))
+        .query(async ({ input, ctx }) => {
+            let profile;
+            if (!input.id) {
+                const userId = ctx.session.user.id
+                profile = await ctx.db.user.findUnique({
+                    where: {id: userId},
+                    include: { geoCoordinate: true },
+                });
+            } else {
+                profile = await ctx.db.user.findUnique({
+                    where: { id: input.id },
+                });
+            }
+            if (!profile) {
+                throw new TRPCError({
+                    code: 'NOT_FOUND',
+                    message: 'User not found',
+                });
+            }
+            return {profile};
+        }),
+        getMyProfile: protectedProcedure
+        .query(async ({ ctx }) => {
+                const userId = ctx.session.user.id
+                const profile = await ctx.db.user.findUnique({
+                    where: {id: userId},
+                    include: { geoCoordinate: true },
+                });
+            if (!profile) {
+                throw new TRPCError({
+                    code: 'NOT_FOUND',
+                    message: 'User not found',
+                });
+            }
+            return {profile};
+        }),
+
     updateProfile: protectedProcedure
         .input(
             z.object({
@@ -29,28 +66,51 @@ export const userRouter = createTRPCRouter({
                 image: z.string().optional(),
                 handle: z.string().optional(),
                 location: z.string().optional(),
+                geoCoordinates: z.object({
+                    latitude: z.string(),
+                    longitude: z.string(),
+                    displayName: z.string()
+                }).optional(),
                 age: z.string().optional(),
                 bio: z.string().optional(),
                 tos: z.boolean()
             })
         )
         .mutation(async ({ input, ctx }) => {
-            const { id, handle, location, age, bio, name, image, tos } = input;
+            const { id, handle, location, age, bio, name, image, tos, geoCoordinates } = input;
 
-            const updatedUser = await ctx.db.user.update({
-                where: { id },
-                data: {
-                    handle,
-                    location,
-                    age,
-                    bio,
-                    name,
-                    image,
-                    tos
-                },
-            });
-
-            return updatedUser;
+            const geoCoordinateData = geoCoordinates
+            ? {
+                  upsert: {
+                      create: {
+                          latitude: +geoCoordinates.latitude,
+                          longitude: +geoCoordinates.longitude,
+                          displayName: geoCoordinates.displayName,
+                      },
+                      update: {
+                          latitude: +geoCoordinates.latitude,
+                          longitude: +geoCoordinates.longitude,
+                          displayName: geoCoordinates.displayName,
+                      },
+                  },
+              }
+            : undefined;
+              
+        const updatedUser = await ctx.db.user.update({
+            where: { id },
+            data: {
+                handle,
+                location,
+                age,
+                bio,
+                name,
+                image,
+                tos,
+                geoCoordinate: geoCoordinateData,
+            },
+        });
+        console.log(updatedUser);
+        return updatedUser;
         }),
 
       checkHandleAvailability: protectedProcedure
@@ -91,4 +151,64 @@ export const userRouter = createTRPCRouter({
   
           return users;
       }),
+      // Admin route to delete a user
+    deleteUserAsAdmin: protectedProcedure
+.input(z.object({ id: z.string() }))
+.mutation(async ({ input, ctx }) => {
+  const isAdmin = ctx.session?.user?.role === "admin"; // Assuming role-based access control
+
+  if (!isAdmin) {
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: "You do not have permission to perform this action.",
+    });
+  }
+
+  const user = await ctx.db.user.findUnique({
+    where: { id: input.id },
+  });
+
+  if (!user) {
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: "User not found.",
+    });
+  }
+
+  await ctx.db.user.delete({
+    where: { id: input.id },
+  });
+
+  return { message: "User successfully deleted." };
+}),
+
+// User route to delete their own account
+deleteOwnUser: protectedProcedure
+.mutation(async ({ ctx }) => {
+  const userId = ctx.session?.user?.id; // Assuming session contains user info
+
+  if (!userId) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "You must be logged in to delete your account.",
+    });
+  }
+
+  const user = await ctx.db.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!user) {
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: "User not found.",
+    });
+  }
+
+  await ctx.db.user.delete({
+    where: { id: userId },
+  });
+
+  return { message: "Your account has been successfully deleted." };
+})
 });

@@ -17,7 +17,6 @@ export function ShiftScheduler({owner} : {owner: boolean}) {
     startTime,
     endTime,
     positions,
-    highlighted,
     setStartTime,
     setEndTime,
     addPosition,
@@ -129,11 +128,7 @@ export function ShiftScheduler({owner} : {owner: boolean}) {
       </BentoBox>
     </div>}
 
-    { highlighted && 
-     <p className="text-xl">{JSON.stringify(highlighted)}</p>
-    }
-
-
+  
       {positions.length > 0 && (
         <BentoBox className="p-4">
           <div>

@@ -1,5 +1,5 @@
 'use client'
-import type { FunnelProps } from "nglty/models/funnel";
+import type { FunnelProps } from "nglty/types/funnel";
 import React, { useState } from "react";
 
 const FunnelStep: React.FC<{

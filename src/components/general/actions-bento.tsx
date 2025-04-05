@@ -1,28 +1,49 @@
 'use client';
 import { StarsBackground } from "../backgrounds/stars";
 import { BentoBox } from "../elements/box";
-import type { Session } from "next-auth";
 import { UserProfileIcon } from "../elements/user-icon";
 import Link from "next/link";
-import { useState, useEffect } from "react";
 import { redirect } from "next/navigation";
-import { UserIcon } from "lucide-react";
-import { Button } from "../ui/button";
-type UserData = {
-  image?: string;
-  name?: string;
-  handle?: string;
-}
-export const ActionsBento = ({ session } : { session: Session}) => {
-  const [user, setUser] = useState<UserData>({});
+import MapComponent from "../elements/map";
+import { useProfile } from "nglty/contexts/profileContext";
 
-  useEffect(() => {
-    if(session.user) setUser(session.user as UserData);
-  }, [session])
+export const ActionsBento = () => {
+  const { user, location } = useProfile(); 
 
-  const bentoClass = "flex rounded-lg border-2 flex-col bg-gray-200 dark:bg-slate-900 dark:border-white/10 border-opacity-60"
+  const locations = [
+    { 
+      lat: location ? location.latitude : 51.505, 
+      lng: location ? location.longitude : -0.09, 
+      name: 'Home',
+      color: '#4A90E2',
+      icon: false
+    },
+    // { 
+    //   lat: 51.515, 
+    //   lng: -0.1, 
+    //   name: 'Coffee Shop',
+    //   icon: Coffee,
+    //   color: '#8B4513'
+    // },
+    // { 
+    //   lat: 51.495, 
+    //   lng: -0.08, 
+    //   name: 'Hospital',
+    //   icon: Hospital,
+    //   color: '#FF6347'
+    // },
+    // { 
+    //   lat: 51.525, 
+    //   lng: -0.11, 
+    //   name: 'Store',
+    //   icon: Store,
+    //   color: '#2E8B57'
+    // }
+  ];
+  if (!user) return null;
+
   return (
-    <div className="relative h-full flex flex-row items-center justify-between gap-4 pt-6 pb-0">
+    <div className="relative min-h-screen flex flex-row items-start justify-between gap-4 pt-6 pb-0">
     <div className="relative z-10 flex flex-col w-full gap-4 p-2">
       <div className="flex flex-col">
         { user.handle && 
@@ -51,15 +72,12 @@ export const ActionsBento = ({ session } : { session: Session}) => {
 
         </div>
       </div>
-      { user.handle && (
+      {/* user.handle && (
       <BentoBox colSpan="1" rowSpan="4" className="p-4" animated>
         <h2 className="dark:text-white text-2xl mb-4">Feed (mock)</h2>
               <div className="space-y-4">
                 <div className="flex items-start gap-3 pb-4 border-b dark:border-zinc-800">
                   <UserIcon className="h-8 w-8" />
-                    {/* <AvatarImage src="/placeholder.svg?height=32&width=32" alt="@lxia" />
-                    <AvatarFallback>LX</AvatarFallback> */}
-                  {/* </Avatar> */}
                   <div className="space-y-1">
                     <p className="text-sm">
                       <Link href="#" className="font-medium text-rose-600 hover:underline">
@@ -78,7 +96,7 @@ export const ActionsBento = ({ session } : { session: Session}) => {
                   <UserIcon className="h-8 w-8" />
                     {/* <AvatarImage src="/placeholder.svg?height=32&width=32" alt="@mstreue" />
                     <AvatarFallback>MS</AvatarFallback>
-                  </Avatar> */}
+                  </Avatar> 
                   <div className="space-y-1">
                     <p className="text-sm">
                       <Link href="#" className="font-medium text-rose-600 hover:underline">
@@ -97,7 +115,7 @@ export const ActionsBento = ({ session } : { session: Session}) => {
                 <UserIcon className="h-8 w-8" />
                     {/* <AvatarImage src="/placeholder.svg?height=32&width=32" alt="@mstreue" />
                     <AvatarFallback>MS</AvatarFallback>
-                  </Avatar> */}
+                  </Avatar> 
                   <div className="space-y-1">
                     <p className="text-sm">
                       <span className="text-zinc-500 dark:text-zinc-400">It's </span>
@@ -114,7 +132,7 @@ export const ActionsBento = ({ session } : { session: Session}) => {
                 <UserIcon className="h-8 w-8" />
                     {/* <AvatarImage src="/placeholder.svg?height=32&width=32" alt="@mstreue" />
                     <AvatarFallback>MS</AvatarFallback>
-                  </Avatar> */}
+                  </Avatar> *
                   <div className="space-y-1">
                     <p className="text-sm">
                       <Link href="#" className="font-medium text-rose-600 hover:underline">
@@ -133,7 +151,7 @@ export const ActionsBento = ({ session } : { session: Session}) => {
                 <UserIcon className="h-8 w-8" />
                     {/* <AvatarImage src="/placeholder.svg?height=32&width=32" alt="@mstreue" />
                     <AvatarFallback>MS</AvatarFallback>
-                  </Avatar> */}
+                  </Avatar> *
                   <div className="space-y-1">
                     <p className="text-sm">
                       <Link href="#" className="font-medium text-rose-600 hover:underline">
@@ -157,38 +175,41 @@ export const ActionsBento = ({ session } : { session: Session}) => {
               </Button>
 
       </BentoBox>
-      )}
+      )*/}
       <div className="flex flex-row gap-4">
-      <BentoBox animated hover className="overflow-hidden min-h-48 w-1/2  bg-[url(/images/places-card-3.jpg)] bg-center bg-cover bg-no-repeat">
-        <div className="w-full h-full">
-          <div className="absolute z-10 rounded-2xl bg-black/30 m-4 p-2 ">
-
-        <a 
-          href="/places"
-          className="dark:text-white text-2xl mb-4">Discover Places
-          </a>
-          </div>
-
+      <BentoBox animated hover className="overflow-hidden w-1/2 shadow-none">
+        <Link href="/places">
+        <div className="w-full h-full p-4 flex flex-col md:flex-row justify-start items-start">
+          <div className="w-full md:w-24 h-16 overflow-hidden rounded-lg border-2 border-gray-300 dark:border-gray-700">
+            <MapComponent 
+              locations={locations}
+              zoom={12}
+              interactive={false} 
+              mapStyle="satellite" 
+              className="pointer-events-none" />
         </div>
-        <img src='' className="z-0 relative -translate-y-16"/> 
-
+        <div className="md:pl-4 mt-2">
+        <p 
+          className="dark:text-white text-xl">Discover whats around you
+          </p>
+          <p className="dark:text-white text-sm">Find Groups and Places to follow.</p>
+        </div>
+        </div> 
+      </Link>
       </BentoBox>
 
-      <BentoBox animated className="overflow-hidden min-h-48 dark:hover:border-aurora-700 transition cursor-pointer bg-[url(/images/happeing-card-bg.png)] bg-top bg-cover bg-no-repeat">
+      <BentoBox animated className="overflow-hidden w-1/2 cursor-pointer shadow-none p-4">
        <Link href="/happen">
-       <div className="h-14 p-4">
-
-        <h2 className="dark:text-white text-2xl mb-4">Happenings</h2>
-       </div>
-        <div className="w-full min-h-32 h-full z-10">
-          <p className="hidden md:flex dark:text-white p-4 text-justify">
-            Create another Memory. Either Placebound, Private or Public. Invite people to your happening and manage helping hands! Chat about whatever is important with all attendees.
+       <div className="pl-4">
+        <p 
+          className="dark:text-white text-xl mt-2">Happenings
           </p>
+          <p className="dark:text-white text-sm mt-1">Get Updates on current Events and participate</p>
         </div>
         </Link>
       </BentoBox>
       </div>
-      <div 
+      {/* <div 
         className={`${bentoClass} col-span-1 p-6 row-span-3 hover:border-aurora-600`}
       >
         <p className="text-2xl dark:text-white">Place verwalten</p>
@@ -198,10 +219,10 @@ export const ActionsBento = ({ session } : { session: Session}) => {
         className={`${bentoClass} col-span-1 row-span-2 p-6 hover:border-aurora-800`}
       >
         <p className="text-2xl dark:text-white">Freunde hinzufügen</p>
-      </div>
+      </div> */}
     
       </div>
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 blur-lg opacity-20">
       <StarsBackground />
       </div>
     </div>

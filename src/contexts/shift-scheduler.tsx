@@ -18,6 +18,7 @@ export type Position = {
 }
 
 export type ShiftSchedule = {
+  id?: string
   startTime: string
   endTime: string
   positions: Position[]
@@ -52,10 +53,13 @@ interface ShiftSchedulerContextType {
   ) => void
   removeTimeSlot: (positionId: string, slotId: string) => void
   setHighlightTimeSlot: (positionId: string, slotId: string) => void
+  resetHighlightTimeSlot: () => void
 
   // Data access for persistence
   getScheduleData: () => ShiftSchedule
   setScheduleData: (data: ShiftSchedule) => void
+  setScheduleId: (id: string) => void
+  scheduleId: string
 }
 
 const ShiftSchedulerContext = createContext<ShiftSchedulerContextType | undefined>(undefined)
@@ -65,6 +69,7 @@ export function ShiftSchedulerProvider({ children }: { children: ReactNode }) {
   const [endTime, setEndTime] = useState("23:00")
   const [positions, setPositions] = useState<Position[]>([])
   const [highlighted, setHighlighted] = useState<Shift | undefined>(undefined)
+  const [scheduleId, setScheduleId] = useState<string>('');
 
   // Helper function to check if time1 is before time2
   const isTimeBefore = (time1: string, time2: string): boolean => {
@@ -220,6 +225,10 @@ export function ShiftSchedulerProvider({ children }: { children: ReactNode }) {
     setHighlighted(highlightedShift);
   }
 
+  const resetHighlightTimeSlot = () => {
+    setHighlighted(undefined);
+  }
+
   const calculateEndTime = (start: string, minutesToAdd: number) => {
     const [hours, minutes] = start.split(":").map(Number)
     const date = new Date()
@@ -288,7 +297,10 @@ export function ShiftSchedulerProvider({ children }: { children: ReactNode }) {
         removeTimeSlot,
         getScheduleData,
         setScheduleData,
-        setHighlightTimeSlot
+        setHighlightTimeSlot,
+        resetHighlightTimeSlot,
+        setScheduleId,
+        scheduleId
       }}
     >
       {children}

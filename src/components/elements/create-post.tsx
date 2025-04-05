@@ -92,7 +92,7 @@ export const CreatePostComponent = ({
                         <Button
                           onClick={submitPost}
                           disabled={!postText.trim()}
-                          className="bg-violet-600 hover:bg-violet-700 text-white rounded-full px-4 transition-all duration-200 hover:shadow-md disabled:opacity-50"
+                          className="bg-violet-300 hover:bg-violet-200 text-white rounded-full px-4 transition-all duration-200 hover:shadow-md disabled:opacity-50"
                         >
                           Post
                         </Button>

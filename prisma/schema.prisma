@@ -2,203 +2,232 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
- 
+
 generator client {
   provider = "prisma-client-js"
 }
 
 model Happening {
-  id                    String            @id @default(cuid())
-  type                  String            // 'private' | 'placebound' | 'public'
-  published             Boolean           @default(false)
-  name                  String
-  venue                 String?
-  venueId               String?
-  color                 String
-  text                  String?
-  dateHappening         DateTime?
-  createdAt             DateTime          @default(now())
-  updatedAt             DateTime          @updatedAt
+  id        String  @id @default(cuid())
+  type      String // 'private' | 'placebound' | 'public'
+  published Boolean @default(false)
+  name      String
+  venue     String?
+  venueId   String?
+  place     Place?  @relation(fields: [venueId], references: [id], onDelete: Cascade)
 
-  postsEnabled          Boolean           @default(true) // Enables or disables posts for the event
-  helpingHandsEnabled   Boolean           @default(false) // Enables or disables a feature for recruiting helpers for the event
+  color         String
+  text          String?
+  dateHappening DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
-  maxParticipants       Int?              // Maximum number of participants allowed
-  tags                  String[]          // Tags or categories for filtering/searching events
-  coverImageUrl         String?           // URL for the cover image of the event
-  externalLinks         String[]          // Links to external resources (e.g., tickets, livestreams)
-  isRecurring           Boolean           @default(false) // Indicates if the event recurs periodically
-  recurrencePattern     String?           // Details about recurrence (e.g., 'weekly', 'monthly', etc.)
-  privacyLevel          String            @default("open")
-  cancellationReason    String?           // Reason for event cancellation, if applicable
-  archived              Boolean           @default(false) // Marks the event as archived, not shown in active lists
+  postsEnabled        Boolean @default(true) // Enables or disables posts for the event
+  helpingHandsEnabled Boolean @default(false) // Enables or disables a feature for recruiting helpers for the event
 
-  creatorId             String
-  createdBy             User              @relation("HappeningCreator", fields: [creatorId], references: [id])
-  invitees              User[]            @relation("HappeningInvitees")
-  posts                 Post[]
-  follows               HappeningFollow[]
-  schedules   Schedule[] // One Happening can have multiple schedules
+  maxParticipants    Int? // Maximum number of participants allowed
+  tags               String[] // Tags or categories for filtering/searching events
+  coverImageUrl      String? // URL for the cover image of the event
+  externalLinks      String[] // Links to external resources (e.g., tickets, livestreams)
+  isRecurring        Boolean  @default(false) // Indicates if the event recurs periodically
+  recurrencePattern  String? // Details about recurrence (e.g., 'weekly', 'monthly', etc.)
+  privacyLevel       String   @default("open")
+  cancellationReason String? // Reason for event cancellation, if applicable
+  archived           Boolean  @default(false) // Marks the event as archived, not shown in active lists
+
+  creatorId String
+  createdBy User              @relation("HappeningCreator", fields: [creatorId], references: [id], onDelete: Cascade)
+  invitees  User[]            @relation("HappeningInvitees")
+  posts     Post[]
+  follows   HappeningFollow[]
+  schedules Schedule[] // One Happening can have multiple schedules
 }
 
 // Overall shift schedule
 model Schedule {
-  id          String     @id @default(cuid())
-  name        String
-  startTime   String     // Format: "HH:MM" (24-hour)
-  endTime     String     // Format: "HH:MM" (24-hour)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  
+  id        String   @id @default(cuid())
+  name      String
+  startTime String // Format: "HH:MM" (24-hour)
+  endTime   String // Format: "HH:MM" (24-hour)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   // Relationship to Happening
   happeningId String
-  happening   Happening  @relation(fields: [happeningId], references: [id], onDelete: Cascade)
-  
+  happening   Happening @relation(fields: [happeningId], references: [id], onDelete: Cascade)
+
   // Positions in this schedule
-  positions   Position[]
+  positions         Position[]
+  shiftApplications ShiftApplication[]
 
   @@map("schedules")
 }
 
 // Position (e.g., Bartender, Server, Host)
 model Position {
-  id          String     @id @default(cuid())
-  name        String
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   // Relationship to Schedule
-  scheduleId  String
-  schedule    Schedule   @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
-  
+  scheduleId String
+  schedule   Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+
   // Time slots for this position
-  timeSlots   TimeSlot[]
+  timeSlots TimeSlot[]
 
   @@map("positions")
 }
 
 // Time slot for a position
 model TimeSlot {
-  id          String     @id @default(cuid())
-  start       String     // Format: "HH:MM" (24-hour)
-  end         String     // Format: "HH:MM" (24-hour)
-  startDay    Int        // 0 = first day, 1 = second day, etc.
-  endDay      Int        // 0 = first day, 1 = second day, etc.
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  
+  id        String   @id @default(cuid())
+  start     String // Format: "HH:MM" (24-hour)
+  end       String // Format: "HH:MM" (24-hour)
+  startDay  Int // 0 = first day, 1 = second day, etc.
+  endDay    Int // 0 = first day, 1 = second day, etc.
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   // Relationship to Position
-  positionId  String
-  position    Position   @relation(fields: [positionId], references: [id], onDelete: Cascade)
+  positionId        String
+  position          Position           @relation(fields: [positionId], references: [id], onDelete: Cascade)
+  shiftApplications ShiftApplication[]
 
   @@map("time_slots")
 }
 
+model ShiftApplication {
+  id         String   @id @default(cuid())
+  timeSlotId String
+  timeSlot   TimeSlot @relation(fields: [timeSlotId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  scheduleId String
+  schedule   Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+
+  message   String? // Optional message from the user applying
+  status    String   @default("pending") // Status: "pending", "accepted", "declined"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, timeSlotId])
+}
+
 model Place {
-  id             String    @id @default(cuid())
-  name           String
-  picture        String    // URL for the image
-  description    String?
-  geoCoordinate  GeoCoordinate?
-  address        String?
-  city           String?
-  zipcode        String?
-  group          Boolean          @default(false)// Indicates if this is a "place in my heart"
-  verified       Boolean          @default(false)
-  posts          Post[]           // One-to-many relationship with posts
-  openingHours   Json?            // Optional, to store opening hours in a structured format (e.g., { "monday": "9:00-17:00" })
-  followers       User[]          @relation("PlaceFollowers") // Users who follow this place
-  creatorId       String          // User ID of the creator
-  creator         User            @relation(fields: [creatorId], references: [id])
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
-  applicationsEnabled Boolean     @default(false)
-  applications    PlaceApplication[] // Applications for joining the place
-  category        String?         // Optional category (e.g., "Restaurant", "Park", "Museum")
-  tags            String[]        // Array of tags for flexible categorization and search
-  visibility      String          @default("public") // Visibility status: "public", "private", "restricted"
+  id                  String             @id @default(cuid())
+  name                String
+  picture             String // URL for the image
+  description         String?
+  geoCoordinate       GeoCoordinate?
+  address             String?
+  city                String?
+  zipcode             String?
+  group               Boolean            @default(false) // Indicates if this is a "place in my heart"
+  verified            Boolean            @default(false)
+  posts               Post[] // One-to-many relationship with posts
+  openingHours        Json? // Optional, to store opening hours in a structured format (e.g., { "monday": "9:00-17:00" })
+  followers           User[]             @relation("PlaceFollowers") // Users who follow this place
+  creatorId           String // User ID of the creator
+  creator             User               @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+  applicationsEnabled Boolean            @default(false)
+  applications        PlaceApplication[] // Applications for joining the place
+  category            String? // Optional category (e.g., "Restaurant", "Park", "Museum")
+  tags                String[] // Array of tags for flexible categorization and search
+  visibility          String             @default("public") // Visibility status: "public", "private", "restricted"
+  happenings          Happening[]
 }
 
 model PlaceApplication {
-  id          String   @id @default(cuid())
-  placeId     String
-  place       Place    @relation(fields: [placeId], references: [id])
-  userId      String
-  user        User     @relation(fields: [userId], references: [id])
-  message     String?  // Optional message from the user applying
-  status      String   @default("pending") // Status: "pending", "accepted", "declined"
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  placeId   String
+  place     Place    @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  message   String? // Optional message from the user applying
+  status    String   @default("pending") // Status: "pending", "accepted", "declined"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model GeoCoordinate {
-  id        String   @id @default(cuid())
-  latitude  Float
-  longitude Float
-  placeId   String   @unique// Relation to Place
-  place     Place    @relation(fields: [placeId], references: [id])
+  id          String  @id @default(cuid())
+  latitude    Float
+  longitude   Float
+  displayName String
+  placeId     String? @unique // Relation to Place
+  place       Place?  @relation(fields: [placeId], references: [id])
+  user        User?
 }
 
-
 model HappeningFollow {
-  id             String    @id @default(cuid())
-  status         String    // 'tentative' | 'going'
-  userId         String
-  happeningId    String
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  id          String   @id @default(cuid())
+  status      String // 'tentative' | 'going'
+  userId      String
+  happeningId String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  user           User      @relation(fields: [userId], references: [id])
-  happening      Happening @relation(fields: [happeningId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  happening Happening @relation(fields: [happeningId], references: [id], onDelete: Cascade)
 
   @@unique([userId, happeningId]) // Ensure a user can only follow a specific event once
 }
 
 model Post {
-  id          String   @id @default(cuid())
-  text        String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime? @updatedAt
+  id        String    @id @default(cuid())
+  text      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 
   happeningId String?
   happening   Happening? @relation(fields: [happeningId], references: [id], onDelete: Cascade)
 
-  placeId     String?
-  place       Place?     @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  placeId String?
+  place   Place?  @relation(fields: [placeId], references: [id], onDelete: Cascade)
 
-  creatorId   String
+  creatorId String
+
   @@unique([happeningId, placeId, id]) // Ensures a post is linked to either a happening or place
 }
 
 model User {
-  id              String       @id @default(cuid())
+  id              String          @id @default(cuid())
   name            String?
-  email           String       @unique
+  email           String          @unique
   emailVerified   DateTime?
   image           String?
-  handle          String?      @unique
-  role            String       @default("user")
+  handle          String?         @unique
+  role            String          @default("user")
   age             String?
   location        String?
+  geoCoordinate   GeoCoordinate?  @relation(fields: [geoCoordinateId], references: [id], onDelete: Cascade)
+  geoCoordinateId String?         @unique // Foreign key to GeoCoordinate
   bio             String?
-  tos             Boolean      @default(false)
+  tos             Boolean         @default(false)
   accounts        Account[]
   sessions        Session[]
   Authenticator   Authenticator[] // Optional for WebAuthn support
 
-  createdHappenings Happening[] @relation("HappeningCreator")
-  invitedHappenings Happening[] @relation("HappeningInvitees")
-  applications    PlaceApplication[] // Applications for joining the place
+  createdHappenings Happening[]        @relation("HappeningCreator")
+  invitedHappenings Happening[]        @relation("HappeningInvitees")
+  applications      PlaceApplication[] // Applications for joining the place
+  shiftApplications ShiftApplication[]
 
-  follows            HappeningFollow[]
-  following       Place[]  @relation("PlaceFollowers") // Places the user follows
+  follows   HappeningFollow[]
+  following Place[]           @relation("PlaceFollowers") // Places the user follows
 
-  places          Place[]  // Places created by the user
+  places Place[] // Places created by the user
 
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
- 
+
 model Account {
   userId            String
   type              String
@@ -211,12 +240,12 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
- 
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@id([provider, providerAccountId])
 }
 
@@ -225,19 +254,19 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
- 
+
 model VerificationToken {
   identifier String
   token      String
   expires    DateTime
- 
+
   @@id([identifier, token])
 }
- 
+
 // Optional for WebAuthn support
 model Authenticator {
   credentialID         String  @unique
@@ -248,8 +277,8 @@ model Authenticator {
   credentialDeviceType String
   credentialBackedUp   Boolean
   transports           String?
- 
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@id([userId, credentialID])
 }

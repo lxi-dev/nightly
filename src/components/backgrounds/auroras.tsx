@@ -12,7 +12,7 @@ interface AurorasBackgroundProps {
 const COLORS = ["#13FFAA", "#1E67C6", "#CEB4CF", "#DD335C"];
 export const AurorasBackground: React.FC<AurorasBackgroundProps> = ({children}) => {
 const color = useMotionValue(COLORS[0]);
-const backgroundImage = useMotionTemplate`radial-gradient(125% 50% at 100% 100%, ${color} -100%, rgba(0,0,0,0) 140%)`;
+const backgroundImage = useMotionTemplate`radial-gradient(125% 50% at 100% 100%, ${color} -100%, rgba(0,0,0,0) 200%)`;
 
 useEffect(() => {
     animate(color, COLORS, {

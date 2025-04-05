@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Funnel } from "../funnel";
-import type { FormProps, FunnelData, HappeningCreate, Step } from "nglty/models/funnel";
+import type { FormProps, FunnelData, HappeningCreate, Step } from "nglty/types/funnel";
 
 import { motion } from "framer-motion";
 import { MdOutlinePublic } from "react-icons/md";
@@ -22,6 +22,8 @@ import { Calendar } from "nglty/components/ui/calendar";
 import { bentoClass } from "../../box";
 import { ImageUpload } from "../fields/image-upload";
 import { colorOptions } from "nglty/lib/defaults";
+import PickerInput from "../fields/picker";
+import TimeInput from "../fields/time";
 
 type CheckboxHeartHouseProps = {
   name: string;
@@ -164,32 +166,36 @@ export const BasicDetailsForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) 
     onSubmit({ type: "happeningBasicDetails", data });
   };
 
+  const options = [
+    {id: 'public', label: 'public', description: 'All Members can see your happening!'},
+    {id: 'private', label: 'private', description: 'You have to invite Members to your happening.'}
+  ]
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="flex flex-col md:flex-row gap-6">
         <TripleCheckbox
           name="type"
-          value={data.type}
+          // value={data.type}
           onChange={(type) => setData((prev) => ({ ...prev, type }))}
-          overwrite={ place ? {value: 'placebound', locked: true} : undefined}
+          overwrite={{value: data.type, locked: true}}
         />
-        <p>Choose if the event is private, venue-bound, or public.</p>
+        { place && <div><img className="h-20 rounded-lg border md:border-2 border-gray-300 dark:border-gray-700" src={place.picture} /></div>}
+        { !place && <PickerInput options={options} value={data.type} onChange={(type) => {setData((prev => ({...prev, type}))) }} />}
       </div>
       <div>
         <TextInput 
           label="Name" name="name" value={data.name} onChange={handleChange} required/>
       </div>
-      {data.type !== "public" && (
         <div>
           <TextInput
-            label="Venue"
+            label="Location"
             name="venue"
             value={data.venue || ""}
             onChange={handleChange}
             required
             disabled={(place && !place.group )&& true} />
         </div>
-      )}
       <div>
         <NumberInput 
           label="Max Participants"
@@ -198,7 +204,7 @@ export const BasicDetailsForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) 
           onChange={handleChange}
         />
       </div>
-      <button type="submit" className="bg-violet-700 text-white px-4 py-2 rounded">
+      <button type="submit" className="bg-violet-300 text-white px-4 py-2 rounded">
         Next
       </button>
     </form>
@@ -259,7 +265,7 @@ export const TypeColorForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
             options={colorOptions}
           />
         </div>
-        <button type="submit" className="bg-violet-700 text-white px-4 py-2 rounded">
+        <button type="submit" className="bg-violet-300 text-white px-4 py-2 rounded">
           Next
         </button>
       </form>
@@ -272,6 +278,8 @@ export const TypeColorForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
       externalLinks: [],
       isRecurring: false,
       recurrencePattern: "",
+      startTime: '',
+      endTime: '',
     });
   
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -299,8 +307,9 @@ export const TypeColorForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
               className={`${bentoClass} shadow-none`}
               />
             <div className="w-full">
-              <TextInput label={'Start Time'} name={""} value={""} onChange={(e) => {console.log(e)}} />
-              <TextInput label={'End Time'} name={""} value={""} onChange={(e) => {console.log(e)}} />
+              <TimeInput label={'Start Time'} name={"startTime"} value={data.startTime!} onChange={(e) => {console.log(e)}} />
+              <TimeInput label={'End Time'} name={"endtime"} value={data.endTime!} onChange={(e) => {console.log(e)}} />
+              <p className="text-sm text-semibold mt-4 ">If no End Time is selected, the Happening is planned to be open ended!</p>
 
             </div>
             </div>
@@ -340,7 +349,7 @@ export const TypeColorForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
             />
           </div>
         )}
-        <button type="submit" className="bg-violet-700 text-white px-4 py-2 rounded">
+        <button type="submit" className="bg-violet-300 text-white px-4 py-2 rounded">
           Next
         </button>
       </form>
@@ -348,7 +357,7 @@ export const TypeColorForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
   };
   
 // 4. Summary and Submission
-export const SummaryForm: React.FC<FormProps<FunnelData>> = ({ onSubmit, initialData }) => {
+export const SummaryForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
     const [data, setData] = useState<Partial<HappeningCreate>>({
         helpingHandsEnabled: false,
         postsEnabled: true,
@@ -361,16 +370,15 @@ export const SummaryForm: React.FC<FormProps<FunnelData>> = ({ onSubmit, initial
     onSubmit({ type: "happeningSummary", data });
   };
 
-  const privacyOptions = [
-    { value: 'open', label: 'public'},
-    { value: 'invite-only', label: 'Invite Only'},
-    { value: 'rsvp-req', label: 'Reserveration required'}
-  ]
+  // const privacyOptions = [
+  //   { value: 'open', label: 'public'},
+  //   { value: 'invite-only', label: 'Invite Only'},
+  //   { value: 'rsvp-req', label: 'Reserveration required'}
+  // ]
 
   return (
     <div className="space-y-4">
-      <h3>Review Your Happening</h3>
-      <pre className="bg-gray-100 p-4 rounded">{JSON.stringify(initialData, null, 2)}</pre>
+      <h3>Settings</h3>
     <div className="flex flex-row items-start align-center">
       <ToggleInput 
         label="Enable Posts for this Event" name="postsEnabled" value={data.postsEnabled!} onChange={(e) =>setData((prev) => ({...prev, postsEnabled:e}))}      
@@ -385,7 +393,7 @@ export const SummaryForm: React.FC<FormProps<FunnelData>> = ({ onSubmit, initial
         /> 
     </div>
     <div>
-      <DropdownInput label="Privacy" name="privacyLevel" value={data.privacyLevel!} options={privacyOptions} onChange={(e) => setData((prev) => ({...prev, privacyLevel: e.target.value}))} />
+      {/* <DropdownInput label="Privacy" name="privacyLevel" value={data.privacyLevel!} options={privacyOptions} onChange={(e) => setData((prev) => ({...prev, privacyLevel: e.target.value}))} /> */}
 
       </div>
       <button
@@ -452,7 +460,7 @@ const HappeningFunnel = () => {
           type: commonPayload.type === 'public' ? 'public' : commonPayload.type === 'private' ? 'private' : 'placebound',
           dateHappening: commonPayload.dateHappening?.toString(),
           privacyLevel: commonPayload.privacyLevel === 'open' ? 'open' : commonPayload.type === 'invite-only' ? 'invite-only' : 'rsvp-required',
-          venueId: generalInfoData.venueId ?? undefined
+          venueId: generalInfoData.venueId ?? ''
         });
     } catch (error) {
       console.error('Error creating happening:', error);

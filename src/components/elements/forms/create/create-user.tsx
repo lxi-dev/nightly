@@ -1,16 +1,24 @@
 'use client';
 
-import type { FormProps, FunnelData, Step, Handle, UserProfileInfo } from "nglty/models/funnel";
+import type { FormProps, FunnelData, Step, Handle, UserProfileInfo, GeoCoordinates } from "nglty/types/funnel";
 import { useEffect, useState } from "react";
 import { Funnel } from "../funnel";
 import { api } from "nglty/trpc/react";
 import { motion } from "framer-motion";
 import { CheckCircle, Loader2Icon, XCircle } from "lucide-react";
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
 import type { User } from "next-auth";
 import { redirect } from "next/navigation";
 import Spinner from "../../spinner";
+import ToggleInput from "../fields/toggle";
+import { Button } from "nglty/components/ui/button";
+import TextInput from "../fields/text";
+import { getGeoCoordinates } from "nglty/lib/locationService";
+import MapComponent from "../../map";
+import { BentoBox } from "../../box";
+import DateInput from "../fields/date-picker";
+import TextAreaInput from "../fields/text-area";
+
 
 export const AGBInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
   const [acceptedAGB, setAcceptedAGB] = useState<boolean>(false);
@@ -26,8 +34,7 @@ export const AGBInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
     <form onSubmit={handleSubmit} className="space-y-6 max-w-xl mx-auto p-4">
       <div className="text-slate-600 text-left text-lg space-y-4">
         <p>
-          This is your personal space where you can introduce yourself to the
-          network. Without filling out your profile, you will stay anonymous.
+          Welcome to Nightly
         </p>
         <motion.small
           initial={{ opacity: 0 }}
@@ -37,68 +44,16 @@ export const AGBInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
           INFO
         </motion.small>
         <p>Nightly stores your authentication provider's information. This usually includes a picture, name, and email address.</p>
-        <p>You can use Nightly without providing further personal information. Other users cannot see your email address.</p>
-        <p>
-          If you opt into the social services, other users can find you by your
-          email address.
-        </p>
+
         <p className="font-medium">
           Complete your profile to personalize your experience and connect with
           what matters most. Let’s make your nights unforgettable!
         </p>
       </div>
 
-      <motion.div
-        initial={{ scale: 1, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        className="flex items-center space-x-3"
-      >
-        <motion.input
-          type="checkbox"
-          checked={acceptedAGB}
-          onChange={(e) => setAcceptedAGB(e.target.checked)}
-          className="w-5 h-5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-          whileTap={{ scale: 1.2 }} // Adds a small scale effect when toggling the checkbox
-          transition={{
-            type: "spring",
-            stiffness: 300,
-            damping: 8,
-          }}
-        />
-        <motion.span
-          className="text-sm dark:text-gray-600"
-          animate={{ x: acceptedAGB ? 5 : 0 }}
-          transition={{ type: "spring", stiffness: 200, damping: 12 }}
-        >
-          Agree to platform rules and privacy agreement.
-        </motion.span>
-      </motion.div>
-
-
-      <motion.button
-        whileHover={{ scale: 1.001 }}
-        whileTap={{ scale: 0.99 }}
-        type="submit"
-        disabled={!acceptedAGB}
-        className={`w-full py-2 rounded-lg text-white text-lg ${
-          acceptedAGB
-            ? "bg-indigo-600 hover:bg-indigo-700"
-            : "bg-gray-300 cursor-not-allowed"
-        }`}
-      >
-        Next
-      </motion.button>
-      <Link
-        href="/">
-      <motion.button
-        whileHover={{ scale: 1.001 }}
-        whileTap={{ scale: 0.99 }}
-        type="button"
-        className={`mt-4 w-full py-2 rounded-lg text-white text-md bg-gray-400 hover:bg-gray-300`}
-      >
-        Back
-      </motion.button>
-      </Link>
+    <ToggleInput label={'Agree to Platform Rules and Privacy'} name={"tos"} value={acceptedAGB} onChange={(e) => setAcceptedAGB(e)} />
+      
+    <Button type="submit" disabled={!acceptedAGB}>Next</Button>
     </form>
   );
 }
@@ -212,13 +167,10 @@ export const UserHandleForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) =>
       </div>
       <small className="text-xs text-gray-500 mb-2">Your unique identifier on the platform. Must be between 3-15 characters.</small>
       </div>
-        <button
-          type="submit"
-          disabled={!handleAvailable || !data}
-          className="bg-violet-700 text-white px-4 py-2 rounded-lg hover:bg-violet-700 disabled:bg-gray-300"
-        >
-          Next
-        </button>
+      <Button type="submit"          disabled={!handleAvailable || !data}
+      >
+        Next
+      </Button>
       </form>
     );
   };
@@ -227,15 +179,44 @@ export const UserInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit, props 
     const [data, setData] = useState<UserProfileInfo>({});
     const [defaultName, setDefaultName] = useState('');
     const [sessionData, setSessionData] = useState<undefined | User>(undefined);
+    const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(null);
+    const [mapData, setMapData] = useState<GeoCoordinates | undefined>(undefined);
+
+  async function fetchCoordinates(value: string) {
+    try {
+      const result: GeoCoordinates = await getGeoCoordinates(value);
+      return result;
+    } catch (error) {
+      console.error('Failed to fetch GeoCoordinates:', error);
+    }
+  }
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      console.log(e);
       const { name, value } = e.target;
-      setData((prev) => ({ ...prev, [name]: value }));
+
+  // Update the state with the current input value
+  setData((prev) => ({ ...prev, [name]: value }));
+
+  // Only debounce if the input name is 'location'
+  if (name === 'location') {
+    if (debounceTimer) clearTimeout(debounceTimer);
+
+    const timer = setTimeout(() => {
+      void (async () => {
+        const result = await fetchCoordinates(value);
+        setMapData(result);
+        setData((prev) => ({ ...prev, "geoCoordinates": result }));
+      })();
+    }, 200);
+    setDebounceTimer(timer);
+  }
     };
   
     const handleSubmit = (e: React.FormEvent) => {
       e.preventDefault();
       console.log(data);
+      
+      
 
       const defaultPictureUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLC0VtEAnU3BQVLsXVa8ytCHqYS0sn9fdYDA&s";
       if (!data.image && !sessionData?.image) setData({"image":defaultPictureUrl});
@@ -263,16 +244,13 @@ export const UserInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit, props 
           </div>
           <div className="flex flex-col w-full pl-4">
             <div>
-              <label className="block text-gray-700">Name</label>
-              <input
-                type="text"
-                name="name"
-                value={data.name}
-                defaultValue={defaultName ?? ''}
-                onChange={handleChange}
-                className="flex-grow block w-full rounded-md border-gray-300 border-2 p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                required
-              />
+              <TextInput 
+              label={'Name'} 
+              name={"name"}
+              placeholder={defaultName}
+              value={data.name!} 
+              onChange={handleChange} 
+              required/>
             </div>
             <label className="block text-gray-500 mt-2 ml-2 text-sm ">Email: {sessionData?.email ?? 'unavailable'}</label>
           </div>
@@ -280,43 +258,26 @@ export const UserInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit, props 
         <p className="text-slate-600">The Above information is gathered through your authentication provider. You can change the profile picture and name to your liking!</p>
         <p className="text-slate-600">Furthermore you can provide information about your Location and a small biography. The provided location will be used to show places around you.</p>
         <div>
-          <label className="block text-gray-700">Location</label>
-          <input
-            type="text"
-            name="location"
-            value={data.location}
-            onChange={handleChange}
-            className="flex-grow block w-full rounded-md border-gray-300 border-2 p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            
-          />
+          <TextInput 
+            label={"Location"} 
+            name={"location"}
+            value={data.location!} 
+            onChange={handleChange} 
+            required />
+            { mapData && 
+            <BentoBox className="mt-6 h-32 overflow-hidden shadow-none">
+              <MapComponent locations={[{lat: +mapData.latitude, lng: +mapData.longitude,name: mapData.displayName}]} />
+            </BentoBox>
+            }
         </div>
         <div>
-          <label className="block text-gray-700">Age</label>
-          <input
-            type="date"
-            name="age"
-            value={data.age}
-            onChange={handleChange}
-            className="flex-grow block w-full rounded-md border-gray-300 border-2 p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            
-          />
+          <DateInput label={'Date of Birth'} name={'age'} value={data.age!} onChange={handleChange} />
         </div>
         <div>
-          <label className="block text-gray-700">Bio</label>
-          <textarea
-            name="bio"
-            value={data.bio}
-            onChange={() => handleChange}
-            className="flex-grow block w-full rounded-md border-gray-300 border-2 p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            
-          />
+          <TextAreaInput label={"Bio"} name={"bio"} value={data.bio!} onChange={() => handleChange}            
+            />
         </div>
-        <button
-          type="submit"
-          className="bg-violet-700 text-white px-4 py-2 rounded-lg hover:bg-violet-700"
-        >
-          Next
-        </button>
+        <Button type="submit">Next</Button>
       </form>
     );
   };
@@ -343,15 +304,6 @@ export const UserInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit, props 
 
       if(!agb || !handleData || !infoData) return;
 
-      // const commonPayload = {
-      //   id: user.id,
-      //   name: infoData.name,
-      //   image: infoData.image,
-      //   bio: infoData.bio,
-      //   age: infoData?.age,
-      //   handle: handleData.handle,
-      //   tos: true
-      // };
       try {
         setLoading(true);
         const updatedProfile = await updateUserMutation.mutateAsync({
@@ -359,7 +311,11 @@ export const UserInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit, props 
           name: infoData.name!,
           image: infoData.image,
           location: infoData.location,
-
+          geoCoordinates: {
+            latitude: infoData.geoCoordinates!.latitude,
+            longitude:infoData.geoCoordinates!.longitude,
+            displayName:infoData.geoCoordinates!.displayName
+          },
           bio: infoData.bio,
           age: infoData?.age,
           handle: handleData.handle,

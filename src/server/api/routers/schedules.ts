@@ -264,4 +264,65 @@ export const scheduleRouter = createTRPCRouter({
         });
       }
     }),
+
+    // Handle applications for a place
+  applyToShift: protectedProcedure
+  .input(
+    z.object({
+      scheduleId: z.string(),
+      timeslotId: z.string(),
+      message: z.string().optional(),
+    })
+  )
+  .mutation(async ({ ctx, input }) => {
+    const application = await ctx.db.shiftApplication.create({
+      data: {
+        scheduleId: input.scheduleId,
+        timeSlotId: input.timeslotId,
+        userId: ctx.session.user.id,
+        message: input.message,
+      },
+    });
+    return application;
+  }),
+  getApplications: protectedProcedure
+    .input(
+      z.object({
+        happeningId: z.string(),
+        scheduleId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const happening = await ctx.db.happening.findUnique({
+        where: { id: input.happeningId },
+      });
+
+      if (!happening || happening.creatorId !== ctx.session.user.id) {
+        throw new Error('You are not authorized to view applications for this place');
+      }
+
+      const applications = await ctx.db.shiftApplication.findMany({
+        where: { scheduleId: input.scheduleId },
+        include: { user: { select: { id: true, name: true } } },
+      });
+
+      return applications;
+    }),
+
+  respondToApplication: protectedProcedure
+    .input(
+      z.object({
+        applicationId: z.string(),
+        status: z.enum(["accepted", "declined", "pending"]),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+
+      const updatedApplication = await ctx.db.placeApplication.update({
+        where: { id: input.applicationId },
+        data: { status: input.status },
+      });
+
+      return updatedApplication;
+    }),
 });

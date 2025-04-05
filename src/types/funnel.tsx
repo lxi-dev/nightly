@@ -44,6 +44,8 @@ export type HappeningCreate = {
   dateHappening?: Date;
   createdAt: Date;
   updatedAt: Date;
+  startTime?: string;
+  endTime?: string
   postsEnabled?: boolean; // Enables or disables posts for the event
   helpingHandsEnabled?: boolean; // Enables or disables a feature for recruiting helpers
   maxParticipants?: number; // Maximum number of participants allowed
@@ -71,6 +73,11 @@ export type PlaceCreate = {
   visibility?: string,
   applicationsEnabled?: boolean,
 }
+export type GeoCoordinates = {
+  latitude: string;
+  longitude: string;
+  displayName: string;
+}
 
 export type UserProfileInfo = {
   name?: string;
@@ -78,6 +85,7 @@ export type UserProfileInfo = {
   age?: string;
   location?: string;
   bio?:string;
+  geoCoordinates?: GeoCoordinates;
 }
 export type PlaceInfo = {
     name: string;

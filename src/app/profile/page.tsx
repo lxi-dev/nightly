@@ -1,41 +1,28 @@
+import { Power } from 'lucide-react';
+import Link from 'next/link';
 import { BentoBox } from 'nglty/components/elements/box';
-import { AdminPlacesList } from 'nglty/components/places/admin-places-list';
-import { UsersList } from 'nglty/components/users/all-users';
 import { ProfileCard } from 'nglty/components/users/profile-card';
-import { auth } from 'nglty/server/auth';
 import { HydrateClient } from 'nglty/trpc/server';
 import React from "react";
 
 export default async function Page() {
-    const session = await auth();
 
   return (
         <HydrateClient>
             <main className='h-screen'>
         
-            <div className="flex flex-col items-center justify-between gap-4">
+            <div className="flex flex-col items-center justify-between gap-4 pt-4">
                 <div className="w-full dark:text-white">
                 <BentoBox colSpan="4" rowSpan="5" className="shadow-lg" animated>
-                    <ProfileCard profile={session!} />
+                    <ProfileCard />
                 </BentoBox>
-
-                    <p className="text-2xl dark:text-slate-700 mt-8">All Users on Nightly</p>
-                <BentoBox colSpan="4" rowSpan="5" className="mt-2">
-                { session?.user.handle && <UsersList />}
-                </BentoBox>
-                <BentoBox animated>
-                    <AdminPlacesList />
-                </BentoBox>
-                <BentoBox colSpan="4" rowSpan="5" className="mt-2">
-                    <p className="text-2xl dark:text-white">Display places User is in</p>
-                    <p className="text-2xl dark:text-white">Display Happenings a User is participating in</p>
-                </BentoBox>
+                <Link
+                href={"/api/auth/signout"}
+                className="flex flex-wrap items-center w-full justify-center flex flex-col bg-white overflow-hidden w-10 h-10 border-slate-700 shadow-sm rounded-md hover:bg-violet-300 pt-3 pb-3 text-sm font-medium hover:text-gray-100">
+                <div className="flex flex-row items-center gap-4 ">
+                <Power className="w-4 h-4"/> Sign Out
                 </div>
-                <div className="grid h-full w-full gap-4 p-2 grid-cols-4 grid-rows-5">
-                    {/* <BentoBox colSpan="1" rowSpan="5">
-                        <p className="text-2xl dark:text-white">235</p>
-                        <p className="text-2xl dark:text-white">Friends</p>
-                    </BentoBox> */}
+            </Link>
                 </div>
                 </div>
             </main>
