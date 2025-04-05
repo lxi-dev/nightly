@@ -120,7 +120,7 @@ model ShiftApplication {
 model Place {
   id                  String             @id @default(cuid())
   name                String
-  picture             String // URL for the image
+  picture             String? // URL for the image
   description         String?
   geoCoordinate       GeoCoordinate?
   address             String?

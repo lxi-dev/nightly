@@ -32,7 +32,7 @@ const ToggleInput: React.FC<ToggleInputProps> = ({
         <motion.div
           id={name}
           className={`relative w-14 h-6 rounded-full ${
-            value ? 'bg-teal-500' : 'bg-gray-300 dark:bg-gray-700'
+            value ? 'bg-violet-300' : 'bg-gray-300 dark:bg-gray-700'
           } cursor-pointer`}
           whileHover={{ scale: 1.009 }}
           whileTap={{ scale: 0.95 }}

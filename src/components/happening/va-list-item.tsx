@@ -23,10 +23,15 @@ type VaListItemProps = {
 
 const VaListItem: React.FC<VaListItemProps> = ({ happeningId, happeningStatus, happeningName, happeningVenue, happeningStart, color, onDelete, venueId }) => {
   const { data } = api.places.getSimplePlace.useQuery({id: venueId!}, { enabled: !!venueId});
-  const [ venuePicture, setVenuePicture] = useState<string | undefined>(undefined);
+  const [ place, setPlace] = useState<{
+    name: string;
+    picture: string | null;
+    city: string | null;
+    verified: boolean;
+} | null | undefined | undefined>(undefined);
   useEffect(() => {
     if(!data) return;
-    setVenuePicture(data.picture);
+    setPlace(data);
   }, [data])
   
   const va = {
@@ -73,7 +78,7 @@ return(
         <p className="font-bold text-xs">{va.data.config.startWeekday.toUpperCase()}</p>
       </div>
       <div className={`h-16 w-[5px] bg-gradient-to-b ${gradientClass} rounded-sm`}></div>
-      <div className={`flex flex-col items-start h-16 pl-4 w-72 pt-1`}>
+      <div className={`flex flex-col items-start h-16 pl-4 w-full pt-1`}>
         <h2 className={`text-sm lg:text-xl text-left`}>{va.data.config.name}</h2>
           {(!venueId && va.data.config.venue )&&
         <div className="flex flex-row items-left">
@@ -83,19 +88,20 @@ return(
           
         </div>
           }
-          <div className="mt-1">
-        <GenericNotification text={va.data.config.color} />
-          </div>
+          { (venueId && place) && <div className="flex flex-row items-left">
+                      <h5 className='text-xs lg:text-sm max-w-45 overflow-hidden text-ellipsis'>{place.name}, {place.city}</h5>
+            
+          </div>}
       </div>
     </div>
     <div className='flex'>
-      <div className="flex flex-col min-w-32 justify-end items-end">
+      <div className="flex flex-col justify-end items-end">
       {onDelete !== undefined && <Button onClick={(e) => onDelete(va.id)}><TrashIcon /></Button>}
-      <div className="flex flex-row items-center pb-2">
+      <div className="flex flex-row items-center">
           
           { va.status === 'placebound' && 
-            <div className="w-32 h-14 bg-violet-300 rounded-xl">
-              {venuePicture && <img className="h-20 rounded-xl border md:border-2 border-gray-300 dark:border-gray-700" src={venuePicture} />}
+            <div className="max-h-12">
+              {place?.picture && <img className="max-w-32 rounded-xl border md:border-2 border-gray-300 dark:border-gray-700" src={place.picture} />}
             </div>}
           { va.status === 'private' && <EyeSlashIcon className="w-[14px] h-[14px] mr-2"/>}
           { va.status === 'public' && <span><EyeIcon className="w-[14px] h-[14px] mr-2"/>{ va.status }</span>}

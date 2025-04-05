@@ -7,7 +7,7 @@ export const placesRouter = createTRPCRouter({
     .input(
       z.object({
         name: z.string(),
-        picture: z.string().url(),
+        picture: z.string().url().optional(),
         description: z.string().optional(),
         geoCoordinate: z
           .object({

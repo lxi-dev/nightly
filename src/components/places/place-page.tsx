@@ -122,11 +122,13 @@ const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
 
   {/* Image Section */}
   <div className="w-full md:w-7/8">
+  { place.picture && 
     <img
           src={place.picture}
           alt={place.name}
           className="w-full h-64 object-cover rounded-2xl mb-4"
         />
+  }
         <div className="flex w-full justify-between items-center">
           <h1 className="text-2xl font-bold mb-2">{place.name}</h1>
           <div>

@@ -1,10 +1,16 @@
 'use client'
 import { useProfile } from "nglty/contexts/profileContext";
 import { UserProfileIcon } from "../elements/user-icon";
+import { useEffect } from "react";
 
 export const ProfileCard = () => {
 
-    const { user } = useProfile();
+    const { user, refreshUser } = useProfile();
+
+    useEffect(() => {
+        refreshUser();
+    }, []);
+    
     if (!user) return null;
     return (
         <main>

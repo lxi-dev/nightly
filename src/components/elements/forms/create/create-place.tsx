@@ -1,6 +1,6 @@
 'use client';
 
-import type { FormProps, FunnelData, AddressDetails, Step, OpeningHourDay, PlaceCreate } from "nglty/types/funnel";
+import type { FormProps, FunnelData, Step, OpeningHourDay, PlaceCreate, GeoCoordinates } from "nglty/types/funnel";
 import { useState } from "react";
 import { Funnel } from "../funnel";
 import { Editor, EditorProvider } from "react-simple-wysiwyg";
@@ -17,9 +17,12 @@ import { api } from "nglty/trpc/react";
 import CSVInput from "../fields/csv";
 import { ImageUpload } from "../fields/image-upload";
 import ToggleInput from "../fields/toggle";
+import { fetchCoordinates } from "nglty/lib/locationService";
+import { BentoBox } from "../../box";
+import MapComponent from "../../map";
 
 export const PlaceInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
-    const [data, setData] = useState<Partial<PlaceCreate>>({ name: "", description: "", picture: "", category: 'bar' });
+    const [data, setData] = useState<Partial<PlaceCreate>>({ name: "", group: false, description: ""});
   
     const handleChange = (e: React.ChangeEvent<HTMLInputElement> | { target: { value: string } }) => {
       if (e.target instanceof HTMLInputElement) {
@@ -30,15 +33,11 @@ export const PlaceInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
       }
     };
 
-    const setImageUrl = (e: string | null) => {
-      if(!e) return;
-      setData((prev) => ({...prev , "picture": e }));
-    }
+    const setgroup = (e: boolean) => {
+      console.log(e);
+      setData((prev) => ({ ...prev, group: e }));
+    };
 
-    const setCategory = (e: string | null) => {
-      if(!e) return;
-      setData((prev) => ({...prev, 'category': e}))
-    }
   
     const handleSubmit = (e: React.FormEvent) => {
       e.preventDefault();
@@ -47,26 +46,11 @@ export const PlaceInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
   
     return (
       <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="mt-4 flex flex-col md:flex-row gap-6">
+          <PickerInput options={[{id: '0', label: 'group', description:'For Groups without a House'},{id: '1', label: 'Local', description:'This is it, when you have an address!'}]} value={data.group ? '0' : '1'} onChange={(e) => setgroup(e === '0' ? true: false)} />
+          </div>
         <div>
           <TextInput label={'Name'} name={'name'} value={data.name!} onChange={handleChange} required/>
-        </div>
-        <div>
-          <DropdownInput 
-            label={'Category'} 
-            name={'category'} 
-            value={data.category!} 
-            options={categoryOptions} 
-            onChange={(e) => setCategory(e.target.value)} />
-        </div>
-        <div>
-          <ImageUpload
-              id="cover"
-              label="Cover Image"
-              description="Drag and drop an image, or click to browse"
-              value={data.picture ?? undefined}
-              onChange={setImageUrl}
-              maxSizeMB={5}
-            />
         </div>
         <div>
           <label className="block font-semibold dark:text-slate-700 mb-2">Description</label>
@@ -89,18 +73,38 @@ export const PlaceInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
   };
 
 export const LocationForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
-    const [data, setData] = useState<AddressDetails>({ group: true, address: "", city: "" });
-  
+    const [data, setData] = useState<Partial<PlaceCreate>>({ address: "", city: "",  picture: "", category: 'bar'  });
+    const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(null);
+    const [mapData, setMapData] = useState<GeoCoordinates | undefined>(undefined);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target;
       setData((prev) => ({ ...prev, [name]: value }));
-    };
-    const setgroup = (e: boolean) => {
-      console.log(e);
-      setData((prev) => ({ ...prev, group: e }));
+      if (name === 'city') {
+        setAdress(value);
+      }
     };
 
+    const setImageUrl = (e: string | null) => {
+      if(!e) return;
+      setData((prev) => ({...prev , "picture": e }));
+    }
+
+    const setCategory = (e: string | null) => {
+      if(!e) return;
+      setData((prev) => ({...prev, 'category': e}))
+    }
+
     const setAdress = (e: string) => {
+      if (debounceTimer) clearTimeout(debounceTimer);
+      const timer = setTimeout(() => {
+        void (async () => {
+          const result = await fetchCoordinates(e);
+          setMapData(result);
+          setData((prev) => ({ ...prev, "geoCoordinates": result }));
+        })();
+      }, 200);
+      setDebounceTimer(timer);
       setData((prev) => ({ ...prev, address: e}));
     }
   
@@ -111,14 +115,7 @@ export const LocationForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
   
     return (
       <form onSubmit={handleSubmit} className="space-y-4">
-          <h2 className="text-xl">Where is your place?</h2>
-          <div className="mt-4 flex flex-col md:flex-row gap-6">
-          {/* <CheckboxHeartHouse name="group" value={data.group} onChange={(e) => setgroup(e)}></CheckboxHeartHouse> */}
-          <PickerInput options={[{id: '0', label: 'group', description:'For Groups without a House'},{id: '1', label: 'Local', description:'This is it, when you have an address!'}]} value={data.group ? '0' : '1'} onChange={(e) => setgroup(e === '0' ? true: false)} />
-          </div>
-          <p>Your Place can either be a real place or a place in your heart. Real Places are better suited for any kind of business, where as a place in your heart better represents a common idea. </p>
-          <small>Tap the icon to change what kind of place you want to own. This decision is irreversable</small>
-          
+          <h2 className="text-xl">Tell something about your place?</h2>
           <div className="w-full flex flex-col gap-4 mt-5">
           { !data.group &&
             <TextInput
@@ -130,12 +127,37 @@ export const LocationForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
           }
         </div>
         <div className="w-full flex flex-row gap-4">
+          { !data.group && 
           <div className="flex flex-col w-1/4">
-          <NumberInput label="Zipcode" name="zip" value={data.zip!} onChange={handleChange} />
+          <NumberInput label="Zipcode" name="zipcode" value={data.zipcode!} onChange={handleChange} />
           </div>
+          }
           <div className="flex flex-col w-3/4">
-          <TextInput label="City" name="city" value={data.city} onChange={handleChange} />
+          <TextInput label="City" name="city" value={data.city!} onChange={handleChange} />
         </div>
+        </div>
+        { mapData && 
+            <BentoBox className="mt-6 h-32 overflow-hidden shadow-none">
+              <MapComponent locations={[{lat: +mapData.latitude, lng: +mapData.longitude,name: mapData.displayName}]} />
+            </BentoBox>
+            }
+                <div>
+          <DropdownInput 
+            label={'Category'} 
+            name={'category'} 
+            value={data.category!} 
+            options={categoryOptions} 
+            onChange={(e) => setCategory(e.target.value)} />
+        </div>
+        <div>
+          <ImageUpload
+              id="cover"
+              label="Cover Image"
+              description="Drag and drop an image, or click to browse"
+              value={data.picture ?? undefined}
+              onChange={setImageUrl}
+              maxSizeMB={5}
+            />
         </div>
         <button
           type="submit"
@@ -293,7 +315,7 @@ export const LocationForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
     
 export const OpeningHoursFormInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
     const [data, setData] = useState<Partial<PlaceCreate>>({ openingHours: [], tags: [], applicationsEnabled: false, visibility: 'public' });
-  
+    const [displayOpeningHours, setDisplayOpeningHours] = useState<boolean>(false);
 
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -304,8 +326,8 @@ export const OpeningHoursFormInfoForm: React.FC<FormProps<FunnelData>> = ({ onSu
     return (
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-gray-700">Opening Hours</label>
-          <OpeningHoursInput name="openingHours" onChange={(e) => setData((prev) => ({...prev, 'openingHours': e}))}/>
+        <ToggleInput label={'Opening Hours'} name={'openingHoursEnabled'} value={displayOpeningHours} onChange={(e) => setDisplayOpeningHours(e)} />
+        {displayOpeningHours && <OpeningHoursInput name="openingHours" onChange={(e) => setData((prev) => ({...prev, 'openingHours': e}))}/>}
         </div>
         <CSVInput label={'Tags'} name={'tags'} value={data.tags!.join(',')} onChange={(e) => setData((prev) => ({...prev, 'tags': e.split(',')}))} />
         <ToggleInput label={'Visible'} name={'visibility'} value={data.visibility === 'public' ? true : false} onChange={(e) => setData((prev) => ({...prev, 'visibility': e ? 'public' : 'private'}))} />
@@ -361,10 +383,10 @@ export const OpeningHoursFormInfoForm: React.FC<FormProps<FunnelData>> = ({ onSu
       const defaultPictureUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLC0VtEAnU3BQVLsXVa8ytCHqYS0sn9fdYDA&s";
       const commonPayload = {
         name: placeData.name!,
-        category: placeData.category!,
-        picture: placeData.picture === "" ? defaultPictureUrl : placeData.picture!,
+        category: locationData.category!,
+        picture: locationData.picture === "" ? defaultPictureUrl : locationData.picture!,
         description: placeData.description,
-        group: locationData?.group,
+        group: placeData?.group,
         applicationsEnabled: placeInfo.applicationsEnabled,
         privacy: placeInfo.visibility,
         tags: placeInfo.tags

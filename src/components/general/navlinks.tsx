@@ -1,19 +1,23 @@
 'use client';
 
-import { HomeIcon,UserGroupIcon, TableCellsIcon, UserIcon } from "@heroicons/react/24/outline";
+import { HomeIcon, TableCellsIcon, UserIcon } from "@heroicons/react/24/outline";
+import { Shield } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useProfile } from "nglty/contexts/profileContext";
 
 const links = [
     { name: 'Places', href: '/places', icon: HomeIcon, admin: false },
     { name: 'Happenings', href: '/happen', icon: TableCellsIcon, admin: false },
-    { name: 'Admin', href: '/admin', icon: UserGroupIcon, admin: true },
+    { name: 'Admin', href: '/admin', icon: Shield, admin: true },
     { name: 'Profile', href: '/profile', icon: UserIcon, admin: false}
 ];
 
 export const PageNavLinks = ({role}: {role: string}) => {
     const pathname = usePathname()
+    const { location } = useProfile();
 
+    if (!location) return null;
     return (
         <main>
             <div className="flex flex-row items-center justify-between gap-4">

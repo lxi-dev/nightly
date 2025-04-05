@@ -14,12 +14,14 @@ return (
             <span>Create Event</span>
         </Button>
         </a>
+        { location && 
         <div className="flex items-center gap-2 text-sm">
             <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-muted/50 text-muted-foreground">
                 <MapPin className="h-3.5 w-3.5" />
                 <span>{location?.displayName}</span>
             </div>
         </div>
+        }  
         </div>
         );
 }

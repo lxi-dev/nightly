@@ -1,5 +1,7 @@
 // services/nominatimService.js
 
+import type { GeoCoordinates } from "nglty/types/funnel";
+
 export async function getGeoCoordinates(query: string) {
     try {
       if (!query) {
@@ -34,6 +36,15 @@ export async function getGeoCoordinates(query: string) {
     } catch (error) {
       console.error("Error in getGeoCoordinates:", error);
       throw error;
+    }
+  }
+
+  export async function fetchCoordinates(value: string) {
+    try {
+      const result: GeoCoordinates = await getGeoCoordinates(value);
+      return result;
+    } catch (error) {
+      console.error('Failed to fetch GeoCoordinates:', error);
     }
   }
   

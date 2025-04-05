@@ -56,11 +56,13 @@ const YourPlaceCard: React.FC<Props> = ({ userId  }) => {
       >
         <div className="flex flex-col gap-4 p-2">
             <BentoBox className="relative w-full h-48">
+                {place.picture && 
                 <img
                 src={place.picture}
                 alt={place.name}
                 className="w-full h-full object-cover rounded-lg"
                 />
+                }
                 {place.group && (
                 <div className="absolute top-2 right-2 bg-white dark:bg-gray-800 p-2 rounded-full shadow">
                     <Heart className="w-5 h-5 text-red-500" />

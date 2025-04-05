@@ -20,7 +20,7 @@ const Alert = ({ message, locationEnabled, onAction, actionLabel = "Change" } : 
           <Compass className="h-4 w-4" />
         </div>
         <div className="text-sm">
-          {(locationEnabled && location)? (
+          {(locationEnabled && location?.displayName) ? (
             <>Exploring places near <span className="font-medium">{location.displayName.split(',')[0]}</span></>
           ) : (
             <>{message}</>

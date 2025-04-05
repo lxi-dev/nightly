@@ -6,6 +6,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import MapComponent from "../elements/map";
 import { useProfile } from "nglty/contexts/profileContext";
+import { Button } from "../ui/button";
 
 export const ActionsBento = () => {
   const { user, location } = useProfile(); 
@@ -55,16 +56,17 @@ export const ActionsBento = () => {
             </div>
         </div>
         }
-        { !user.handle && (
-          <BentoBox animated className="z-10">
-          <div className="flex flex-row dark:text-white p-4 justify-between">
+        { (!user.handle || !location )&& (
+          <BentoBox animated className="z-10 mt-4 p-4">
+          <div className="flex flex-row justify-between">
             <h2 className="p-2">Seems like you're new here, complete your Profile!</h2>
-            <button 
+            <Button 
               onClick={() => redirect('/profile/complete')}
-              type="button" className="w-32 rounded-md font-semibold bg-aurora-900">
+              variant="outline"
+              type="button">
               lets go!
             
-            </button>
+            </Button>
           </div>  
           </BentoBox>
         )}
@@ -176,6 +178,7 @@ export const ActionsBento = () => {
 
       </BentoBox>
       )*/}
+      { location && 
       <div className="flex flex-row gap-4">
       <BentoBox animated hover className="overflow-hidden w-1/2 shadow-none">
         <Link href="/places">
@@ -209,6 +212,7 @@ export const ActionsBento = () => {
         </Link>
       </BentoBox>
       </div>
+      }
       {/* <div 
         className={`${bentoClass} col-span-1 p-6 row-span-3 hover:border-aurora-600`}
       >

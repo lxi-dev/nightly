@@ -180,7 +180,7 @@ export const BasicDetailsForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) 
           onChange={(type) => setData((prev) => ({ ...prev, type }))}
           overwrite={{value: data.type, locked: true}}
         />
-        { place && <div><img className="h-20 rounded-lg border md:border-2 border-gray-300 dark:border-gray-700" src={place.picture} /></div>}
+        { place && <div><img className="h-20 rounded-lg border md:border-2 border-gray-300 dark:border-gray-700" src={place.picture!} /></div>}
         { !place && <PickerInput options={options} value={data.type} onChange={(type) => {setData((prev => ({...prev, type}))) }} />}
       </div>
       <div>

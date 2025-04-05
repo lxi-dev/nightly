@@ -9,15 +9,15 @@ import { CheckCircle, Loader2Icon, XCircle } from "lucide-react";
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import type { User } from "next-auth";
 import { redirect } from "next/navigation";
-import Spinner from "../../spinner";
 import ToggleInput from "../fields/toggle";
 import { Button } from "nglty/components/ui/button";
 import TextInput from "../fields/text";
-import { getGeoCoordinates } from "nglty/lib/locationService";
+import { fetchCoordinates } from "nglty/lib/locationService";
 import MapComponent from "../../map";
 import { BentoBox } from "../../box";
 import DateInput from "../fields/date-picker";
 import TextAreaInput from "../fields/text-area";
+import { useLoading } from "nglty/contexts/loadingContext";
 
 
 export const AGBInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
@@ -182,15 +182,6 @@ export const UserInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit, props 
     const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(null);
     const [mapData, setMapData] = useState<GeoCoordinates | undefined>(undefined);
 
-  async function fetchCoordinates(value: string) {
-    try {
-      const result: GeoCoordinates = await getGeoCoordinates(value);
-      return result;
-    } catch (error) {
-      console.error('Failed to fetch GeoCoordinates:', error);
-    }
-  }
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target;
 
@@ -283,7 +274,7 @@ export const UserInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit, props 
   };
 
   const UserCompleteFunnel = ({ user }: { user: User }) => {
-    const [loading, setLoading] = useState(false);
+    const { showLoading, hideLoading } = useLoading();
     const updateUserMutation = api.user.updateProfile.useMutation({
       onSuccess: () => {
         console.log('place created');
@@ -305,7 +296,7 @@ export const UserInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit, props 
       if(!agb || !handleData || !infoData) return;
 
       try {
-        setLoading(true);
+        showLoading();
         const updatedProfile = await updateUserMutation.mutateAsync({
           id: user.id!,
           name: infoData.name!,
@@ -324,28 +315,21 @@ export const UserInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit, props 
         });
         if (updatedProfile) {
           setTimeout(() => {
-            redirect('/profile');
+            hideLoading();
+            redirect('/');
 
           }, 200);
           
         }
       } catch (error) {
+        hideLoading();
         console.error(error);
       } finally {
-        setLoading(false);
       }
     
       console.log("Funnel completed with data:", data);
     };
     
-    if (loading) {
-      return (
-        <div className="flex justify-center items-center h-screen">
-          <Spinner />
-        </div>
-      );
-    }
-
     return <Funnel steps={steps} onComplete={handleComplete} user={user}/>;
   };
   
