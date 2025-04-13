@@ -11,7 +11,7 @@ const FunnelStep: React.FC<{
   return (
     <div
       onClick={() => onClick(stepIndex)}
-      className={`cursor-pointer py-2 px-4 rounded ${
+      className={`cursor-pointer py-2 px-4 hidden md:block rounded ${
         stepIndex === currentStep
         ? "bg-violet-100 text-violet-700 font-medium"
         : "text-gray-600 hover:bg-gray-100"

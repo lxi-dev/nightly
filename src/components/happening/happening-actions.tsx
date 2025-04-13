@@ -1,12 +1,13 @@
 "use client"
 
 import { useState } from "react"
-import { BookmarkPlus, Heart, HeartOff, Users, UserPlus } from "lucide-react"
+import { BookmarkPlus, Heart, HeartOff, Users, HeartHandshake } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 import { Button } from "../ui/button"
-import GenericNotification from "../elements/notification-pills/generic"
+import { redirect } from "next/navigation"
 
 interface EventActionsProps {
+  happeningId: string
   owner: boolean
   followers: number
   pending: number
@@ -19,6 +20,7 @@ interface EventActionsProps {
 }
 
 export function HappeningActions({
+  happeningId = '',
   owner = false,
   followers = 128,
   pending = 12,
@@ -27,11 +29,9 @@ export function HappeningActions({
   onFollow = () => {console.warn('not implemented')},
   onBookmark = () => {console.warn('not implemented')},
   participateEnabled = false,
-  onParticipate = () => {console.warn('not implemented')},
 }: EventActionsProps) {
   const [following, setFollowing] = useState(isFollowing)
   const [bookmarked, setBookmarked] = useState(isBookmarked)
-  const [participationRequested, setParticipationRequested] = useState(false)
 
   const handleFollow = () => {
     setFollowing(!following)
@@ -43,17 +43,17 @@ export function HappeningActions({
     onBookmark()
   }
 
-  const handleParticipate = () => {
-    if(owner) return;
-    setParticipationRequested(true)
-    onParticipate()
+  const navigateToParticipate = () => {
+    if (!owner) return;
+    redirect(`${happeningId}/helpers`)
   }
 
   return (
     <div>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-row md:flex-col gap-4 items-center justify-between md:justify-around">
+        <div className="flex flex-row gap-2">
         {!owner && 
-            <div className="flex gap-2">
+        <div className="flex gap-2">
             <TooltipProvider>
                 <Tooltip>
                 <TooltipTrigger asChild>
@@ -61,14 +61,14 @@ export function HappeningActions({
                     onClick={handleFollow}
                     variant={following ? "default" : "outline"}
                     className={`flex-1 gap-2 transition-all ${
-                        following ? "bg-primary text-primary-foreground" : "hover:bg-primary/10"
-                        }`}
-                        >
+                      following ? "bg-primary text-primary-foreground" : "hover:bg-primary/10"
+                    }`}
+                    >
                     {following ? (
-                        <HeartOff className="h-4 w-4" />
-                        ) : (
-                            <Heart className={`h-4 w-4 ${following ? "fill-primary-foreground" : "fill-primary"}`} />
-                        )}
+                      <HeartOff className="h-4 w-4" />
+                    ) : (
+                      <Heart className={`h-4 w-4 ${following ? "fill-primary-foreground" : "fill-primary"}`} />
+                    )}
                     {following ? "Following" : "Follow"}
                     </Button>
                 </TooltipTrigger>
@@ -97,35 +97,37 @@ export function HappeningActions({
             </TooltipProvider>
             </div>
         }
-        {participateEnabled && 
-        <Button
-          onClick={handleParticipate}
-          variant="secondary"
-          className={`w-full gap-2 transition-all ${
-            participationRequested
-              ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400"
-              : "bg-secondary text-secondary-foreground"
-          }`}
-          disabled={participationRequested}
-        >
-          <UserPlus className="h-4 w-4" />
-          { owner ? 'Manage Helpers' :
-           participationRequested ? "Request Sent" : "Participate as Helper"}
-          
-        </Button>
+          {(participateEnabled) && 
+          <div>
+            <TooltipProvider>
+                <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="destructive" className="flex flex-row items-center text-xs" onClick={navigateToParticipate}>
+                    <HeartHandshake className="text-aurora-300"/>
+                  </Button>
+          </TooltipTrigger>
+                <TooltipContent>
+                    <p>This happening is looking for helpers!</p>
+                </TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
+            </div>
         }
-        { !participateEnabled || owner && 
-        <div className="flex items-center justify-between mt-2 text-sm text-muted-foreground gap-3">
+        </div>
+        <div className="flex items-center justify-between text-sm text-muted-foreground gap-3">
           <div className="flex items-center gap-2">
             <Users className="h-4 w-4" />
             <span className="font-medium">{followers}</span>
             <span>followers</span>
           </div>
-          <GenericNotification text={`${pending} pending`}>
-            
-          </GenericNotification>
+          {owner &&           
+          <div className="flex items-center gap-2">
+            <Users className="h-4 w-4" />
+            <span className="font-medium">{pending}</span>
+            <span>pending</span>
+          </div>}
         </div>
-        }
+        
       </div>
     </div>
   )

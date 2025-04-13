@@ -1,4 +1,4 @@
-import { happeningRouter } from "nglty/server/api/routers/post";
+import { happeningRouter } from "nglty/server/api/routers/happening";
 import { createCallerFactory, createTRPCRouter } from "nglty/server/api/trpc";
 import { userRouter } from "./routers/user";
 import { placesRouter } from "./routers/places";

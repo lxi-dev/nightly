@@ -452,23 +452,27 @@ const HappeningFunnel = () => {
       archived: false
   };
   
-  let happening;
   try {
       showLoading();
-      happening = await createHappening.mutateAsync({
+      const happening = await createHappening.mutateAsync({
           ...commonPayload,
           type: commonPayload.type === 'public' ? 'public' : commonPayload.type === 'private' ? 'private' : 'placebound',
           dateHappening: commonPayload.dateHappening?.toString(),
           privacyLevel: commonPayload.privacyLevel === 'open' ? 'open' : commonPayload.type === 'invite-only' ? 'invite-only' : 'rsvp-required',
           venueId: generalInfoData.venueId ?? ''
         });
-    } catch (error) {
-      console.error('Error creating happening:', error);
+      if(!happening) return;
+      
+      hideLoading();
+      const happeningId = happening as string;
+      redirect(`h/${happeningId}`);
+    } catch {
+      console.error('Error creating happening:');
     } finally {
-      if(happening) {
-        hideLoading();
-        redirect(`h/${happening.id}`);
-      }
+      // if(happening) {
+      //   hideLoading();
+      //   redirect(`h/${happening}`);
+      // }
   }
   };
 

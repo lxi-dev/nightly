@@ -32,9 +32,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <head>
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         </head>
-        <body>
+        <body className="dark:bg-aurora">
           <ThemeProvider attribute="class" defaultTheme="light" disableTransitionOnChange>
-            <div className="min-h-screen dark:bg-aurora">
+            <div className="min-h-screen">
               <TRPCReactProvider>
   
                 <main className="mx-auto px-3 sm:px-3 w-full sm:max-w-2xl md:max-w-3xl lg:max-w-5xl xl:max-w-7xl">

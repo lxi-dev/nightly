@@ -12,6 +12,7 @@ import { ApplyToPlaceButton } from "./apply-button";
 import MapComponent from "../elements/map";
 
 const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
+  const [following, setFollowing] = useState(false);
   const { data: places, isLoading, isError } = api.places.getPlaces.useQuery(
     { id },
     {
@@ -20,7 +21,7 @@ const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
   );
   const { data: posts } = api.places.getPosts.useQuery(
     { placeId : id }, 
-    { enabled : !!id,
+    { enabled : !!id && following,
 
     }
   )
@@ -33,7 +34,6 @@ const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
 
   const followMutation = api.places.followPlace.useMutation();
   const [owner, setOwner] = useState(false);
-  const [following, setFollowing] = useState(false);
 
   const locations = [
     { 
@@ -159,14 +159,15 @@ const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
         <Tab id="posts" label="Posts">
           <TabContent>
             <div className="flex flex-col w-full">
-              {owner && <CreatePostComponent type={"place"} session={null} data={{
+              {owner && <CreatePostComponent type={"place"} data={{
                 place: place,
               }} />
-              }
+            }
               <section className="flex flex-col">
-        { !posts && <h2 className="text-2xl text-black dark:text-white">There are no Posts yet.</h2>}
+        { (!posts && following) && <h2 className="text-2xl text-black dark:text-white">There are no Posts yet.</h2>}
           
-        { posts && 
+            { !following && <p>Follow this place to see posts.</p>}
+        { ( posts && following )&& 
           <div className="flex flex-col space-y-4">
             {posts?.slice().reverse().map((item, index) => (
               <PostComponent key={index} post={item} />

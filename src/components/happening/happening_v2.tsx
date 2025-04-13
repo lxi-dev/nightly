@@ -1,11 +1,11 @@
 'use client';
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import type { Happening, Post } from "@prisma/client";
+import type { Happening } from "@prisma/client";
 import { DateSmallSquare } from "../elements/date-small";
 import dayjs from "dayjs";
 import RelativeTime from "dayjs/plugin/relativeTime";
-import { CalendarDaysIcon } from "lucide-react";
+import { CalendarDaysIcon, MapPin } from "lucide-react";
 import { HelpingHands } from "../helpinghands/helping-hands";
 import { Tab, TabContent, Tabs } from "../ui/tabs";
 import { CreatePostComponent } from "../elements/create-post";
@@ -13,6 +13,7 @@ import { PostComponent } from "../elements/post";
 import GenericNotification from "../elements/notification-pills/generic";
 import { HappeningActions } from "./happening-actions";
 import { api } from "nglty/trpc/react";
+import { InviteToHappeningButton } from "./invite-button";
 
 type FollowersProp = {
   followers: number;
@@ -20,8 +21,13 @@ type FollowersProp = {
   isFollowing: boolean;
 }
 
-const EventPage: React.FC<{ event: Happening, posts?: Post[], userId?: string, followers: FollowersProp }> = ({ event, posts, userId, followers }) => {
-//   const utils = api.useContext();
+const EventPage: React.FC<{ event: Happening, userId?: string, followers: FollowersProp }> = ({ event, userId, followers }) => {
+
+  const { data: posts } = api.happening.getPostsByHappening.useQuery(
+    { happeningId : event.id }, 
+    { enabled : !!event.id && followers.isFollowing}
+  )
+
   dayjs.extend(RelativeTime);
   const [owner, setOwner] = useState(false);
 
@@ -50,43 +56,44 @@ const EventPage: React.FC<{ event: Happening, posts?: Post[], userId?: string, f
   }
 
   return (
+    <section>
     <div className={`min-h-screen w-full dark:text-white text-gray-900"}`}>
-        <div className="flex flex-col h-64">
-            <div className="flex h-16">
-                {event.coverImageUrl && (
-                <img
-                    src={event.coverImageUrl}
-                    alt="Cover"
-                    className="w-full h-64 object-cover"
-                />
-                )}
-            </div>
-            <motion.div
-          className="flex mx-auto bg-white justify-between dark:bg-aurora border-2 border-gray-300 dark:border-gray-700 shadow-lg rounded-2xl p-6 w-11/12 mt-24 z-10"
+      { event.coverImageUrl && 
+        <img
+          src={event.coverImageUrl}
+          alt="cover"
+          className="w-full h-36 object-cover rounded-2xl border md:border-2 border-gray-300 dark:border-gray-700 translate-y-8 z-0"
+        />
+      }
+      <motion.div
+          className="flex mx-auto bg-white flex-col md:flex-row justify-between dark:bg-aurora border-2 border-gray-300 dark:border-gray-700 shadow-lg rounded-2xl p-4 z-10 relative"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
         >
-            <div className="flex flex-col">
-                <h1 className="text-2xl font-bold mb-2">
-                    {event.name}
-                </h1>   
-                <div className="flex flex-col md:flex-row w-full justify-between gap-4">
+            <div className="flex flex-row">
                     {event.dateHappening && (
                         <DateSmallSquare date={event.dateHappening} />
                     )}
+                    <div className="ml-2">
+                <h1 className="text-2xl font-bold">
+                    {event.name}
+                </h1>   
+                <div className="flex flex-col md:flex-row w-full justify-between gap-4">
                     {event.venue && 
-                    <div className="flex flex-col">
-                      <p className="text-sm mb-2">Venue:</p>
+                    <div className="flex flex-row items-center justify-baseline">
+                      <MapPin className="w-4 h-4 text-sm mr-1"/>
                       <p> {event.venue || "Not specified"}</p>
                     </div>}
                     {event.isRecurring && event.recurrencePattern && (             
                       <p className="text-sm mb-2">Recurrence: {event.recurrencePattern}</p>
                     )}
                 </div>
+                </div>
             </div>
-            <div>
+            <div className="mt-4 md:mt-0">
               <HappeningActions 
+                happeningId={event.id}
                 owner={owner} 
                 followers={followers.followers} 
                 pending={followers.pending}
@@ -96,13 +103,17 @@ const EventPage: React.FC<{ event: Happening, posts?: Post[], userId?: string, f
               />
             </div>
         </motion.div>
+        <div className="flex flex-row w-full justify-between px-4 mt-2">
+
         <div className="flex flex-wrap gap-2">
             {event.tags.map((tag) => (
               <GenericNotification text={tag}/>
             ))}
           </div>
-        </div>    
-      <motion.div className="mt-48 sm:mt-34 md:mt-20">
+          <InviteToHappeningButton happeningId={event.id}/>
+
+        </div>
+      <motion.div className="mt-4">
         <Tabs>
           <Tab id={'info'} label={'Information'}>
             <TabContent>
@@ -131,15 +142,21 @@ const EventPage: React.FC<{ event: Happening, posts?: Post[], userId?: string, f
           </Tab>
           <Tab id={'posts'} label={'Posts'}>
             <TabContent>
-              <section className="flex flex-col">
-                <CreatePostComponent type={"happening"} session={null} data={{happeningId: event.id}} />
+                { followers.isFollowing && 
+              <section className="flex flex-col"> 
+                <CreatePostComponent type={"happening"} data={{happeningId: event.id}} />
               { !posts && <h2 className="text-2xl text-black dark:text-white">There are no Posts yet.</h2>}
-              </section>
               <div className="flex flex-col space-y-4">
-        { posts?.slice().reverse().map((item, index) => (
-              <PostComponent key={index} post={item} />)
-        )}
-            </div>
+                { posts?.slice().reverse().map((item, index) => (
+                  <PostComponent key={index} post={item} />)
+                )}
+                    </div>
+                </section>
+              }
+              { !followers.isFollowing && 
+              <section className="flex flex-col">
+                <p>Follow this happening to see messages.</p>
+              </section>}
             </TabContent>
           </Tab>
           {event.helpingHandsEnabled &&
@@ -158,7 +175,9 @@ const EventPage: React.FC<{ event: Happening, posts?: Post[], userId?: string, f
         <CalendarDaysIcon className="w-4 h-4 text-slate-500"/>
         <p className="text-slate-500 text-1xl">happening {dayjs(event.dateHappening).fromNow()} </p>
       </div>
-    </div>
+      </div>    
+
+    </section>
   );
 };
 

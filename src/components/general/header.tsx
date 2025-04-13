@@ -31,10 +31,10 @@ export const Header = () => {
                 </span>}
             </div>
             </a>
-            <div className="relative hidden md:block">
+        </div>
+            <div className="relative hidden">
                 <Search />
             </div>
-        </div>
         <div className="flex items-center">
             {user && <PageNavLinks role={user.role}/>}
         </div>

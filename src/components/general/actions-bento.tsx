@@ -7,9 +7,12 @@ import { redirect } from "next/navigation";
 import MapComponent from "../elements/map";
 import { useProfile } from "nglty/contexts/profileContext";
 import { Button } from "../ui/button";
+import FeaturesGrid from "./feature-grid";
+import LogoCubicle from "../elements/logo/logo-cubicle";
+import { useEffect } from "react";
 
 export const ActionsBento = () => {
-  const { user, location } = useProfile(); 
+  const { user, location, refreshUser } = useProfile(); 
 
   const locations = [
     { 
@@ -43,6 +46,10 @@ export const ActionsBento = () => {
   ];
   if (!user) return null;
 
+  useEffect(() => {
+    refreshUser();
+  }, [])
+
   return (
     <div className="relative min-h-screen flex flex-row items-start justify-between gap-4 pt-6 pb-0">
     <div className="relative z-10 flex flex-col w-full gap-4 p-2">
@@ -58,13 +65,21 @@ export const ActionsBento = () => {
         }
         { (!user.handle || !location )&& (
           <BentoBox animated className="z-10 mt-4 p-4">
-          <div className="flex flex-row justify-between">
-            <h2 className="p-2">Seems like you're new here, complete your Profile!</h2>
+          <div className="flex flex-col items-center gap-4">
+            <LogoCubicle />
+            <div className="flex flex-row">
+            <h2 className="p-2">Seems like you're new here, Welcome to  <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-violet-700">
+                    Nightly
+                </span></h2>
+            </div>
+               
+            <FeaturesGrid />
+            <p className="text-sm dark:text-gray-200"> Get started by creating your Profile</p>
             <Button 
               onClick={() => redirect('/profile/complete')}
               variant="outline"
               type="button">
-              lets go!
+              Okay
             
             </Button>
           </div>  
@@ -179,8 +194,8 @@ export const ActionsBento = () => {
       </BentoBox>
       )*/}
       { location && 
-      <div className="flex flex-row gap-4">
-      <BentoBox animated hover className="overflow-hidden w-1/2 shadow-none">
+      <div className="flex flex-col md:flex-row gap-4">
+      <BentoBox animated hover className="overflow-hidden w-full md:w-1/2 shadow-none">
         <Link href="/places">
         <div className="w-full h-full p-4 flex flex-col md:flex-row justify-start items-start">
           <div className="w-full md:w-24 h-16 overflow-hidden rounded-lg border-2 border-gray-300 dark:border-gray-700">
@@ -201,7 +216,7 @@ export const ActionsBento = () => {
       </Link>
       </BentoBox>
 
-      <BentoBox animated className="overflow-hidden w-1/2 cursor-pointer shadow-none p-4">
+      <BentoBox animated className="overflow-hidden w-full md:w-1/2 cursor-pointer shadow-none p-4">
        <Link href="/happen">
        <div className="pl-4">
         <p 

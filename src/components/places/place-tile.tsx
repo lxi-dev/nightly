@@ -49,7 +49,7 @@ const PlaceTile = ({ place  } : { place : Place}) => {
             );
           })} */}
         <img
-          src={place.picture || "/placeholder.svg"}
+          src={place.picture ?? "/placeholder.svg"}
           alt={`${place.name} location`}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />

@@ -2,11 +2,11 @@ import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { UserProfileIcon } from "./user-icon";
 import { api } from "nglty/trpc/react";
-import type { Session } from "next-auth";
 import type { Place } from "@prisma/client";
 import { ImageIcon, MessageSquare } from "lucide-react";
 import { Button } from "../ui/button";
 import { useLoading } from "nglty/contexts/loadingContext";
+import { useProfile } from "nglty/contexts/profileContext";
 
 type CreatePostData = {
   place?: Place;
@@ -15,17 +15,16 @@ type CreatePostData = {
 
 export const CreatePostComponent = ({
   type,
-  session,
   data,
 }: {
   type: string;
-  session: Session | null;
   data: CreatePostData;
 }) => {
   const [isComposing, setIsComposing] = useState(false)
   const {showLoading, hideLoading} = useLoading();
   const [postText, setPostText] = useState<string>("");
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const { user } = useProfile();
 
   const createPlacePost = api.places.postAsOwner.useMutation({
     onSuccess: async () => {
@@ -53,11 +52,12 @@ export const CreatePostComponent = ({
   };
 
   return (
-      <div className="mb-8 shadow-lg bg-white dark:bg-gray-800 overflow-hidden">
+      <div className="mb-8 overflow-hidden">
             <div className="p-0">
               <div className="flex items-start p-4 gap-3">
-              <UserProfileIcon src={data.place?.picture ? data.place.picture : session?.user.image} />
-
+                { (data.place ?? user )&&
+                  <UserProfileIcon src={data.place?.picture ? data.place.picture : user!.image} />
+                }
                 <div className="flex-1">
                   <textarea
                     ref={textareaRef}

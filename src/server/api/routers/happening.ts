@@ -68,7 +68,16 @@ export const happeningRouter = createTRPCRouter({
             // }
             }
         });
-        return happening;
+        if (!ctx.session?.user.id) return happening;
+
+        await ctx.db.happeningFollow.create({
+          data: {
+            status: 'following',
+            userId: ctx.session?.user.id,
+            happeningId: happening.id
+          },
+        });
+        return happening.id;
     }),
   
 
@@ -186,6 +195,32 @@ export const happeningRouter = createTRPCRouter({
     });
 
     return followUpdate;
+  }),
+
+  upsertFollow: protectedProcedure
+  .input(
+    z.object({
+      status: z.string(),
+      userId: z.string(),
+      happeningId: z.string(),
+    })
+  )
+  .mutation(async ({ input, ctx }) => {
+    const follow = await ctx.db.happeningFollow.upsert({
+      where: {
+        userId_happeningId: { userId: input.userId, happeningId: input.happeningId },
+      },
+      update: {
+        status: input.status,
+      },
+      create: {
+        status: input.status,
+        userId: input.userId,
+        happeningId: input.happeningId,
+      },
+    });
+
+    return follow;
   }),
   
   getFollowing: protectedProcedure
