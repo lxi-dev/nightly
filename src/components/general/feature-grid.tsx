@@ -5,12 +5,12 @@ const FeaturesGrid = () => {
     {
       title: 'Events from Users around you.',
       description: 'Create and Discover happenings in your area - follow, discuss or participate!',
-      image: '/images/events.png',
+      image: '/images/places.png',
     },
     {
       title: 'Fun starts together',
       description: 'Follow and join places or groups to keep in touch. Organising anything? Create your own to gather people around you!',
-      image: '/images/places.png',
+      image: '/images/events.png',
     },
     {
       title: 'Its a group effort',
@@ -20,8 +20,8 @@ const FeaturesGrid = () => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col items-center py-10 px-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 w-full max-w-6xl">
+    <div className="flex flex-col items-center py-10 px-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full max-w-6xl">
         {features.map((feature, index) => (
           <div
             key={index}

@@ -116,7 +116,6 @@ export const UserHandleForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) =>
 
         <p className="text-slate-600">Your handle is your unique identity on our platform. It’s how others will recognize, connect, and interact with you. Whether you’re posting content, joining conversations, or sharing your ideas, your handle ensures you stand out.</p>
         
-        <p className="mb-3 pt-3 text-slate-600">A handle is your unique identity on our platform, helping you stand out, stay recognizable, and connect with others easily. It offers privacy by letting you choose a name that doesn’t reveal personal details while reflecting your personality and making you memorable.</p>
         <p className="mt-2 text-md text-slate-600">Tips for choosing a handle</p>
         <ul className="text-xs space-y-2 pl-4 md:list-disc">
           <li>Keep it short and easy to remember.</li>
@@ -137,7 +136,8 @@ export const UserHandleForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) =>
           id="handle"
           name="handle"
           type="text"
-          minLength={3}
+          minLength={5}
+          maxLength={15}
           required
           placeholder="Enter your handle"
           value={data}
@@ -165,7 +165,7 @@ export const UserHandleForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) =>
           </motion.span>
         }
       </div>
-      <small className="text-xs text-gray-500 mb-2">Your unique identifier on the platform. Must be between 3-15 characters.</small>
+      <small className="text-xs text-gray-500 mb-2">Your unique identifier on the platform. Must be between 5-15 characters.</small>
       </div>
       <Button type="submit"          disabled={!handleAvailable || !data}
       >
@@ -246,8 +246,8 @@ export const UserInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit, props 
             <label className="block text-gray-500 mt-2 ml-2 text-sm ">Email: {sessionData?.email ?? 'unavailable'}</label>
           </div>
         </div>
-        <p className="text-slate-600">The Above information is gathered through your authentication provider. You can change the profile picture and name to your liking!</p>
-        <p className="text-slate-600">Furthermore you can provide information about your Location and a small biography. The provided location will be used to show places around you.</p>
+        <p className="text-slate-600">The Above information is gathered through your authentication provider. Your Email-Address will not be shared with others!</p>
+        <p className="text-slate-600">Please provide information about your Location. It will be used to show places around you.</p>
         <div>
           <TextInput 
             label={"Location"} 
@@ -256,11 +256,12 @@ export const UserInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit, props 
             onChange={handleChange} 
             required />
             { mapData && 
-            <BentoBox className="mt-6 h-32 overflow-hidden shadow-none">
+            <BentoBox className="mt-6 min-h-32 overflow-hidden shadow-none">
               <MapComponent locations={[{lat: +mapData.latitude, lng: +mapData.longitude,name: mapData.displayName}]} />
             </BentoBox>
             }
         </div>
+        <p>If you like, share some information about yourself.</p>
         <div>
           <DateInput label={'Date of Birth'} name={'age'} value={data.age!} onChange={handleChange} />
         </div>

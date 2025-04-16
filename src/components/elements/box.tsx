@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react";
 
-export const bentoClass = "flex flex-col dark:text-white dark:bg-aurora border xl:border-2 border-gray-300 dark:border-gray-700 shadow-lg rounded-2xl"
+export const bentoClass = "flex flex-col h-full dark:text-white dark:bg-aurora border xl:border-2 border-gray-300 dark:border-gray-700 shadow-lg rounded-2xl"
 
 
 export const BentoBox = ({ colSpan, rowSpan, children, className, animated, hover}: { colSpan?: string, rowSpan?: string, children: React.ReactNode, className?: string, animated?: boolean, hover?: boolean}) => {

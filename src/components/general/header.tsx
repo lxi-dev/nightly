@@ -23,7 +23,7 @@ export const Header = () => {
             <a href="/">
             <div className="font-semibold text-xl flex items-center space-x-2">
                 <LogoCubicle />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-violet-700">
+                <span className="text-transparent bg-clip-text  bg-gradient-to-r from-violet-800 via-fuchsia-500 to-violet-500">
                     Nightly
                 </span>
                 { user && <span>

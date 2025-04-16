@@ -10,6 +10,7 @@ import { Button } from "../ui/button";
 import FeaturesGrid from "./feature-grid";
 import LogoCubicle from "../elements/logo/logo-cubicle";
 import { useEffect } from "react";
+import { FaCity } from "react-icons/fa";
 
 export const ActionsBento = () => {
   const { user, location, refreshUser } = useProfile(); 
@@ -52,7 +53,7 @@ export const ActionsBento = () => {
 
   return (
     <div className="relative min-h-screen flex flex-row items-start justify-between gap-4 pt-6 pb-0">
-    <div className="relative z-10 flex flex-col w-full gap-4 p-2">
+    <div className="relative z-10 flex flex-col w-full h-full gap-4 p-2">
       <div className="flex flex-col">
         { user.handle && 
         <div className="flex flex-row w-full justify-start">
@@ -64,17 +65,18 @@ export const ActionsBento = () => {
         </div>
         }
         { (!user.handle || !location )&& (
-          <BentoBox animated className="z-10 mt-4 p-4">
+          <div className="z-10 mt-4 p-4">
           <div className="flex flex-col items-center gap-4">
-            <LogoCubicle />
-            <div className="flex flex-row">
-            <h2 className="p-2">Seems like you're new here, Welcome to  <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-violet-700">
-                    Nightly
-                </span></h2>
+            <div className="flex flex-col w-full items-center">
+            <h2 className="p-2 mb-8">Seems like you're new here. </h2>
+            <h3 className="text-2xl mb-4">Welcome to</h3>         
+            <span className="scale-150 text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-violet-700 flex flex-row gap-2">
+            <LogoCubicle/> Nightly
+                </span>
             </div>
                
             <FeaturesGrid />
-            <p className="text-sm dark:text-gray-200"> Get started by creating your Profile</p>
+            <p className="text-lg dark:text-gray-200">Finish setting up your Account</p>
             <Button 
               onClick={() => redirect('/profile/complete')}
               variant="outline"
@@ -83,7 +85,7 @@ export const ActionsBento = () => {
             
             </Button>
           </div>  
-          </BentoBox>
+          </div>
         )}
         <div>
 
@@ -228,17 +230,45 @@ export const ActionsBento = () => {
       </BentoBox>
       </div>
       }
-      {/* <div 
-        className={`${bentoClass} col-span-1 p-6 row-span-3 hover:border-aurora-600`}
-      >
-        <p className="text-2xl dark:text-white">Place verwalten</p>
-      </div>
+      { user.handle && 
     
-      <div 
-        className={`${bentoClass} col-span-1 row-span-2 p-6 hover:border-aurora-800`}
-      >
-        <p className="text-2xl dark:text-white">Freunde hinzufügen</p>
-      </div> */}
+        <div className="flex flex-col sm:flex-row sm:justify-between gap-4">
+      {/* Right-hand side: Main Container */}
+      <div className="sm:w-3/4 h-[450px] rounded-lg shadow-lg flex-shrink-0">
+        {/* Content for the main container */}
+        <BentoBox>
+          <h1>This is a test</h1>
+        </BentoBox>
+      </div>
+
+      {/* Left-hand side: Containers */}
+      <div className="flex flex-row sm:flex-col gap-4 w-full sm:w-1/4 sm:h-[450px]">
+        <div className="h-[calc(450px/2)] sm:h-[50%] w-1/2 sm:w-full rounded-lg shadow-md">
+          {/* Content for the first small container */}
+          <BentoBox className="p-2 items-center">
+            <h2 className="text-bold text-xl">It seems like..</h2>
+            <p className="mb-3">you're still going rogue.</p> 
+            <div className="w-14 h-14 dark:bg-aurora-500 border border-violet-500 shadow-md p-2 rounded-xl mt-2 mb-1">
+              <FaCity className="w-10 h-10"/>
+            </div>
+            <p className="text-sm underline text-gray-700 dark:text-gray-300 mb-6">Discover communities</p>
+            <span>
+            <a className="text-violet-500" href="/places/create">Create</a> your own or <a className="text-violet-500" href="/places">join</a> one!
+            </span>
+        </BentoBox>
+        </div>
+        <div className="h-[calc(450px/2)] h-full sm:h-[50%] w-1/2 sm:w-full rounded-lg shadow-md">
+          {/* Content for the second small container */}
+            <div className="flex flex-col items-center ">
+
+              <small>created with <span className="text-pink-200">♥</span> by</small>
+              <a className="text-xs text-violet-500" href="https://www.soundcloud.com/karllachs">karl lachs</a>
+            </div>
+    
+        </div>
+      </div>
+    </div>
+    }
     
       </div>
       <div className="absolute inset-0 z-0 blur-lg opacity-20">

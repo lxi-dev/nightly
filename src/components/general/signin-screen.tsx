@@ -3,17 +3,20 @@
 import { AurorasBackground } from "nglty/components/backgrounds/auroras";
 import { StarsBackground } from "nglty/components/backgrounds/stars";
 import SocialMediaLogin from "../../app/login/_components/social-media-login";
-import { Seperator } from "../elements/seperator";
 import LogoCubicle from "../elements/logo/logo-cubicle";
 
 export function SignInScreen() {
 
   return (
     <div className="flex h-screen flex-col-reverse md:p-24">
-      <div className="w-full h-1/2 md:h-full dark:bg-black shadow-lg dark:text-white flex justify-center md:justify-start flex-col items-center p-8 ">
+      <div className="w-full min-h-1/4 bg-white md:h-full dark:bg-aurora shadow-lg dark:text-white flex justify-center md:justify-start flex-col items-center pb-4 pt-4">
         {/* <LoginForm /> */}
-        <Seperator text="Login"></Seperator>
+        <div className="my-auto">
+        <p className="mb-4">Select an authentication provide to sign in</p>
         <SocialMediaLogin />
+
+        </div>
+        {/* <Seperator text="Login"></Seperator> */}
       </div>
 
       {/* Right Side */}
