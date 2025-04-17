@@ -2,7 +2,6 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
 
 import { db } from "nglty/server/db";
-import Credentials from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 
 /**
@@ -41,28 +40,6 @@ export const authConfig: NextAuthConfig = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET
-    }),
-    Credentials({
-      async authorize(credentials : Partial<Record<string, unknown>>) {
-        if (!credentials) return null;
-        // const parsedCredentials = z
-        //   .object({ email: z.string().email(), password: z.string().min(6) })
-        //   .safeParse(credentials);
-          const { email, password } = credentials;
-          const user = {
-            email: 'test@test.com',
-            signupMail: email ? true : false,
-            password: password,
-          } //? await db.user.findUnique({ where: { email } }) : null;
-          if (!user) return null;
-          //const passwordsMatch = await bcrypt.compare(password, user.password);
-
-          if (true) {
-            return user; 
-          }
-          console.log('Invalid credentials');
-          return null;
-        }
     }),
     //DiscordProvider,
     /**

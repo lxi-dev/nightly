@@ -18,7 +18,7 @@ export default async function Page() {
                 </BentoBox>
                 <Link
                 href={"/api/auth/signout"}
-                className="flex flex-wrap items-center w-full justify-center flex flex-col bg-white overflow-hidden w-10 h-10 border-slate-700 shadow-sm rounded-md hover:bg-violet-300 pt-3 pb-3 text-sm font-medium hover:text-gray-100">
+                className="flex flex-wrap items-center w-full justify-center flex flex-col dark:text-white overflow-hidden w-10 h-10 border-slate-700 shadow-sm rounded-md hover:bg-violet-300 pt-3 pb-3 text-sm font-medium hover:text-gray-100">
                 <div className="flex flex-row items-center gap-4 ">
                 <Power className="w-4 h-4"/> Sign Out
                 </div>
