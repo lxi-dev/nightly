@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc';
+import { logActivity } from 'nglty/server/utils/logActivity';
 
 export const placesRouter = createTRPCRouter({
   // Create a new place
@@ -38,6 +39,14 @@ export const placesRouter = createTRPCRouter({
               }
             : undefined,
         },
+      });
+
+      await logActivity({
+        userId: ctx.session.user.id,
+        type: "create",
+        targetType: "Place",
+        targetId: place.id,
+        description: `${place.name} got created!`,
       });
       return place;
     }),
@@ -200,6 +209,14 @@ export const placesRouter = createTRPCRouter({
           message: input.message,
         },
       });
+
+      await logActivity({
+        userId: application.userId,
+        type: "application",
+        targetType: "Place",
+        targetId: application.placeId,
+        description: `Applied`,
+      });
       return application;
     }),
 
@@ -243,10 +260,20 @@ export const placesRouter = createTRPCRouter({
         throw new Error('You are not authorized to respond to this application');
       }
 
+      await logActivity({
+        userId: application.userId,
+        type: "application",
+        targetType: "Place",
+        targetId: application.placeId,
+        description: `Got ${input.status}`,
+      });
+
       const updatedApplication = await ctx.db.placeApplication.update({
         where: { id: input.applicationId },
         data: { status: input.status },
       });
+
+      
 
       return updatedApplication;
     }),
@@ -296,6 +323,14 @@ postAsOwner: protectedProcedure
         placeId: input.placeId,
         creatorId: ctx.session.user.id,
       },
+    });
+
+    await logActivity({
+      userId: ctx.session.user.id,
+      type: "create-post",
+      targetType: "Place",
+      targetId: input.placeId,
+      description: `Created a new post: ${input.text}`,
     });
     return post;
   }),

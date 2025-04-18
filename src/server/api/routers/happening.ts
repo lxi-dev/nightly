@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "nglty/server/api/trpc";
+import { logActivity } from "nglty/server/utils/logActivity";
 
 export const happeningRouter = createTRPCRouter({
   createHappening: publicProcedure
@@ -39,6 +40,8 @@ export const happeningRouter = createTRPCRouter({
         })
     )
     .mutation(async ({ input, ctx }) => {
+        const userId = ctx.session?.user.id;
+        if (!userId) return {error: 'Not allowed'};
 
         const happening = await ctx.db.happening.create({
             data: {
@@ -62,20 +65,27 @@ export const happeningRouter = createTRPCRouter({
               cancellationReason: input.cancellationReason,
               archived: input.archived,
               createdBy: {
-                connect: { id: ctx.session?.user.id },
+                connect: { id: userId },
               },
               ...(input.venueId ? { place: { connect: { id: input.venueId } } } : {}), // ✅ Only connect if venueId is provided
             // }
             }
         });
-        if (!ctx.session?.user.id) return happening;
 
         await ctx.db.happeningFollow.create({
           data: {
             status: 'following',
-            userId: ctx.session?.user.id,
+            userId: userId,
             happeningId: happening.id
           },
+        });
+
+        await logActivity({
+          userId,
+          type: "create",
+          targetType: "Happening",
+          targetId: happening.id,
+          description: `Created a new happening: ${happening.name}`,
         });
         return happening.id;
     }),
@@ -153,7 +163,13 @@ export const happeningRouter = createTRPCRouter({
         creatorId: input.creatorId,
       },
     });
-
+    await logActivity({
+      userId: input.creatorId,
+      type: "create-post",
+      targetType: "Happening",
+      targetId: input.happeningId,
+      description: `Created a new post: ${input.text}`,
+    });
     return post;
   }),
 
@@ -220,6 +236,13 @@ export const happeningRouter = createTRPCRouter({
       },
     });
 
+    await logActivity({
+      userId: input.userId,
+      type: "follow",
+      targetType: "Happening",
+      targetId: input.happeningId,
+      description: `${input.status}`,
+    });
     return follow;
   }),
   

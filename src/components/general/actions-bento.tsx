@@ -11,6 +11,10 @@ import FeaturesGrid from "./feature-grid";
 import LogoCubicle from "../elements/logo/logo-cubicle";
 import { useEffect } from "react";
 import { FaCity } from "react-icons/fa";
+import ActivityFeed from "./activity-feed";
+import { TbCalendarWeekFilled } from "react-icons/tb";
+import { motion } from "framer-motion";
+import Spinner from "../elements/spinner";
 
 export const ActionsBento = () => {
   const { user, location, refreshUser } = useProfile(); 
@@ -45,7 +49,7 @@ export const ActionsBento = () => {
     //   color: '#2E8B57'
     // }
   ];
-  if (!user) return null;
+  if (!user) return <Spinner/>;
 
   useEffect(() => {
     refreshUser();
@@ -91,110 +95,6 @@ export const ActionsBento = () => {
 
         </div>
       </div>
-      {/* user.handle && (
-      <BentoBox colSpan="1" rowSpan="4" className="p-4" animated>
-        <h2 className="dark:text-white text-2xl mb-4">Feed (mock)</h2>
-              <div className="space-y-4">
-                <div className="flex items-start gap-3 pb-4 border-b dark:border-zinc-800">
-                  <UserIcon className="h-8 w-8" />
-                  <div className="space-y-1">
-                    <p className="text-sm">
-                      <Link href="#" className="font-medium text-rose-600 hover:underline">
-                        @lxia
-                      </Link>
-                      <span className="text-zinc-500 dark:text-zinc-400"> posted in </span>
-                      <Link href="#" className="font-medium hover:underline">
-                        Woodgathering 2025
-                      </Link>
-                    </p>
-                    <time className="text-xs text-zinc-500 dark:text-zinc-400">2 hours ago</time>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3 pb-4 border-b dark:border-zinc-800">
-                  <UserIcon className="h-8 w-8" />
-                    {/* <AvatarImage src="/placeholder.svg?height=32&width=32" alt="@mstreue" />
-                    <AvatarFallback>MS</AvatarFallback>
-                  </Avatar> 
-                  <div className="space-y-1">
-                    <p className="text-sm">
-                      <Link href="#" className="font-medium text-rose-600 hover:underline">
-                        @mstreue
-                      </Link>
-                      <span className="text-zinc-500 dark:text-zinc-400"> posted 3 new </span>
-                      <Link href="#" className="font-medium hover:underline">
-                        Happenings
-                      </Link>
-                    </p>
-                    <time className="text-xs text-zinc-500 dark:text-zinc-400">3 hours ago</time>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3 pb-4 border-b dark:border-zinc-800">
-                <UserIcon className="h-8 w-8" />
-                    {/* <AvatarImage src="/placeholder.svg?height=32&width=32" alt="@mstreue" />
-                    <AvatarFallback>MS</AvatarFallback>
-                  </Avatar> 
-                  <div className="space-y-1">
-                    <p className="text-sm">
-                      <span className="text-zinc-500 dark:text-zinc-400">It's </span>
-                      <Link href="#" className="font-medium text-rose-600 hover:underline">
-                        @shenaya_s
-                      </Link>
-                      <span className="text-zinc-500 dark:text-zinc-400"> Birthday today!</span>
-                    </p>
-                    <time className="text-xs text-zinc-500 dark:text-zinc-400">Today</time>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3 pb-4 border-b dark:border-zinc-800">
-                <UserIcon className="h-8 w-8" />
-                    {/* <AvatarImage src="/placeholder.svg?height=32&width=32" alt="@mstreue" />
-                    <AvatarFallback>MS</AvatarFallback>
-                  </Avatar> *
-                  <div className="space-y-1">
-                    <p className="text-sm">
-                      <Link href="#" className="font-medium text-rose-600 hover:underline">
-                        @bokcu
-                      </Link>
-                      <span className="text-zinc-500 dark:text-zinc-400"> posted in </span>
-                      <Link href="#" className="font-medium hover:underline">
-                        p.ara summer closing 2025
-                      </Link>
-                    </p>
-                    <time className="text-xs text-zinc-500 dark:text-zinc-400">Yesterday</time>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
-                <UserIcon className="h-8 w-8" />
-                    {/* <AvatarImage src="/placeholder.svg?height=32&width=32" alt="@mstreue" />
-                    <AvatarFallback>MS</AvatarFallback>
-                  </Avatar> *
-                  <div className="space-y-1">
-                    <p className="text-sm">
-                      <Link href="#" className="font-medium text-rose-600 hover:underline">
-                        @margareten
-                      </Link>
-                      <span className="text-zinc-500 dark:text-zinc-400"> joined </span>
-                      <Link href="#" className="font-medium hover:underline">
-                        p.ara summer closing 2025
-                      </Link>
-                    </p>
-                    <time className="text-xs text-zinc-500 dark:text-zinc-400">2 days ago</time>
-                  </div>
-                </div>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="w-full text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-50"
-              >
-                View all activity
-              </Button>
-
-      </BentoBox>
-      )*/}
       { location && 
       <div className="flex flex-col md:flex-row gap-4">
       <BentoBox animated hover className="overflow-hidden w-full md:w-1/2 shadow-none">
@@ -218,34 +118,57 @@ export const ActionsBento = () => {
       </Link>
       </BentoBox>
 
-      <BentoBox animated className="overflow-hidden w-full md:w-1/2 cursor-pointer shadow-none p-4">
-       <Link href="/happen">
-       <div className="pl-4">
-        <p 
-          className="dark:text-white text-xl mt-2">Happenings
+      <BentoBox animated className="overflow-hidden w-full md:w-1/2 cursor-pointer shadow-none p-4 bg-gradient-to-r from-purple-500/30 via-violet-700/30 to-teal-500/30 border-none">
+      <Link href="/happen">
+      <motion.div
+        className="flex w-full flex-row"
+        whileHover="hover"
+        initial="rest"
+        animate="rest"
+      >
+        <motion.div
+          className="w-14 h-14 dark:bg-aurora-500 border border-violet-500 bg-white dark:bg-aurora shadow-md p-2 rounded-xl mt-2 mb-1"
+          variants={{
+            rest: { scale: 1 },
+            hover: { scale: 1.1 },
+          }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
+          <TbCalendarWeekFilled className="w-10 h-10" />
+        </motion.div>
+        <div className="pl-4 flex flex-col">
+          <p className="dark:text-white text-xl mt-2">Happenings</p>
+          <p className="dark:text-white text-sm mt-1">
+            Get Updates on current Events and participate
           </p>
-          <p className="dark:text-white text-sm mt-1">Get Updates on current Events and participate</p>
         </div>
-        </Link>
+      </motion.div>
+    </Link>
       </BentoBox>
       </div>
       }
-      { user.handle && 
+      { user.location && 
     
-        <div className="flex flex-col sm:flex-row sm:justify-between gap-4">
+        <div className="flex flex-col md:flex-row md:justify-between gap-4">
       {/* Right-hand side: Main Container */}
-      <div className="sm:w-3/4 h-[450px] rounded-lg shadow-lg flex-shrink-0">
+      <div className="md:w-3/4 h-[450px] flex-shrink-0">
         {/* Content for the main container */}
-        <BentoBox>
-          <h1>This is a test</h1>
-        </BentoBox>
+          <ActivityFeed />
+              <Button
+                variant="ghost"
+                size="sm"
+                className="w-full text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-50"
+              >
+                View all activity
+              </Button>
+              
       </div>
 
       {/* Left-hand side: Containers */}
-      <div className="flex flex-row sm:flex-col gap-4 w-full sm:w-1/4 sm:h-[450px]">
-        <div className="h-[calc(450px/2)] sm:h-[50%] w-1/2 sm:w-full rounded-lg shadow-md">
+      <div className="flex flex-row md:flex-col gap-4 w-full md:w-1/4 md:h-[450px]">
+        <div className="h-[calc(450px/2)] sm:h-[50%] w-1/2 sm:w-full">
           {/* Content for the first small container */}
-          <BentoBox className="p-2 items-center">
+          <BentoBox className="p-2 items-center shadow-none">
             <h2 className="text-bold text-xl">It seems like..</h2>
             <p className="mb-3">you're still going rogue.</p> 
             <div className="w-14 h-14 dark:bg-aurora-500 border border-violet-500 shadow-md p-2 rounded-xl mt-2 mb-1">
@@ -257,11 +180,11 @@ export const ActionsBento = () => {
             </span>
         </BentoBox>
         </div>
-        <div className="h-[calc(450px/2)] h-full sm:h-[50%] w-1/2 sm:w-full rounded-lg shadow-md">
+        <div className="h-[calc(450px/2)] h-full sm:h-[50%] w-1/2 sm:w-full">
           {/* Content for the second small container */}
             <div className="flex flex-col items-center ">
 
-              <small>created with <span className="text-pink-200">♥</span> by</small>
+              <small className="dark:text-white">created with <span className="text-pink-200">♥</span> by</small>
               <a className="text-xs text-violet-500" href="https://www.soundcloud.com/karllachs">karl lachs</a>
             </div>
     

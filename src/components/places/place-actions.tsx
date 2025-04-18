@@ -67,6 +67,7 @@ const VenueActions: React.FC<VenueActionsProps> = ({ place }) => {
                 }} />
             </DialogContent>
             </Dialog>
+            {place.applicationsEnabled && 
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -91,6 +92,7 @@ const VenueActions: React.FC<VenueActionsProps> = ({ place }) => {
           </motion.span>
         </Link>
         </motion.button>
+        }
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}

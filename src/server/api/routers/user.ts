@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, protectedProcedure } from "nglty/server/api/trpc";
+import { logActivity } from "nglty/server/utils/logActivity";
 
 export const userRouter = createTRPCRouter({
     getUserImage: protectedProcedure
@@ -109,7 +110,14 @@ export const userRouter = createTRPCRouter({
                 geoCoordinate: geoCoordinateData,
             },
         });
-        console.log(updatedUser);
+
+        await logActivity({
+          userId: id,
+          type: "create",
+          targetType: "User",
+          targetId: id,
+          description: `${updatedUser.handle} joined.`,
+        });
         return updatedUser;
         }),
 

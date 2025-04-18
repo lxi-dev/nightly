@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
+import { logActivity } from "nglty/server/utils/logActivity";
 
 // Zod schemas for validation
 const timeSlotSchema = z.object({
@@ -61,6 +62,14 @@ export const scheduleRouter = createTRPCRouter({
               })),
             },
           },
+        });
+
+        await logActivity({
+          userId: ctx.session.user.id,
+          type: "create",
+          targetType: "Schedule",
+          targetId: input.happeningId,
+          description: `${schedule.name} got created for ${input.happeningId}`,
         });
 
         return schedule;
@@ -221,6 +230,14 @@ export const scheduleRouter = createTRPCRouter({
             },
           });
 
+          await logActivity({
+            userId: ctx.session.user.id,
+            type: "update",
+            targetType: "Schedule",
+            targetId: input.id,
+            description: `${input.id} got updated`,
+          });
+
           return updatedSchedule;
         } else if (input.name) {
           // If we're just updating the name, it's simpler
@@ -283,6 +300,14 @@ export const scheduleRouter = createTRPCRouter({
         message: input.message,
       },
     });
+
+    await logActivity({
+      userId: ctx.session.user.id,
+      type: "application",
+      targetType: "Schedule",
+      targetId: input.scheduleId,
+      description: `A new application: ${input.message}`,
+    });
     return application;
   }),
   getApplications: protectedProcedure
@@ -321,6 +346,14 @@ export const scheduleRouter = createTRPCRouter({
       const updatedApplication = await ctx.db.placeApplication.update({
         where: { id: input.applicationId },
         data: { status: input.status },
+      });
+
+      await logActivity({
+        userId: ctx.session.user.id,
+        type: "application",
+        targetType: "Schedule",
+        targetId: input.applicationId,
+        description: `Got ${input.status}`,
       });
 
       return updatedApplication;

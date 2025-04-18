@@ -14,7 +14,7 @@ import { UserProvider } from "nglty/contexts/profileContext"
 const fontSans = Mona_Sans({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-sans",
+  variable: "--font-geist-sans",
 })
 
 export const metadata: Metadata = {

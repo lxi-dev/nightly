@@ -105,7 +105,10 @@ const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
     <section className={`flex flex-col md:flex-row gap-4 w-full ${owner ? '' : 'mt-4'}`}>
   <div className="flex flex-col space-y-4">
     { owner && <VenueActions place={place} />}
+    { !place.group && 
+    <>
     <div className="rounded-xl border-2 border-gray-300 dark:border-gray-700 overflow-hidden h-32">
+    
     <MapComponent 
               locations={locations} 
               zoom={18}
@@ -114,10 +117,11 @@ const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
               mapStyle="default" 
               className="pointer-events-none" />
               </div>
-    { !place.group && <VenueDetails
+    <VenueDetails
       openingHours={place.openingHours}
       address={`${place.address}, ${place.zipcode} ${place.city}`}
-    />}
+    />
+    </>}
   </div>
 
   {/* Image Section */}

@@ -3,6 +3,7 @@ import { createCallerFactory, createTRPCRouter } from "nglty/server/api/trpc";
 import { userRouter } from "./routers/user";
 import { placesRouter } from "./routers/places";
 import { scheduleRouter } from "./routers/schedules";
+import { activityRouter } from "./routers/activities";
 
 /**
  * This is the primary router for your server.
@@ -14,6 +15,7 @@ export const appRouter = createTRPCRouter({
   user: userRouter,
   places: placesRouter,
   schedule: scheduleRouter,
+  activity: activityRouter,
 });
 
 // export type definition of API

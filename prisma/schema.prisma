@@ -219,6 +219,7 @@ model User {
   applications      PlaceApplication[] // Applications for joining the place
   shiftApplications ShiftApplication[]
 
+  activites Activity[]
   follows   HappeningFollow[]
   following Place[]           @relation("PlaceFollowers") // Places the user follows
 
@@ -226,6 +227,20 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Activity {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  type         String   // e.g., "create", "update", "delete", "follow", "post", "apply", etc.
+  targetType   String   // e.g., "Happening", "Place", "Post", "User"
+  targetId     String?  // ID of the target entity (Happening, Place, Post, etc.)
+  
+  description  String?  // Optional detailed description of the activity
+
+  createdAt    DateTime @default(now())
 }
 
 model Account {
