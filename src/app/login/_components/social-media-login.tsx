@@ -11,7 +11,7 @@ const SocialMediaLogin = () => {
   return (
     <div className="flex justify-center items-center space-x-4 w-72">
       <motion.button
-        className="flex items-center w-[50%] h-12 rounded-md border border-gray-100 dark:border-gray-900 text-black hover:text-white shadow-lg hover:bg-aurora-900 focus:ring-2 focus:ring-blue-200 py-2 px-4"
+        className="flex items-center h-12 rounded-md border border-gray-100 dark:border-gray-900 text-black hover:text-white shadow-lg hover:bg-aurora-900 focus:ring-2 focus:ring-blue-200 py-2 px-4"
         aria-label="Login with Google"
         onClick={handleGoogleLogin}
       >

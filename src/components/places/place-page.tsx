@@ -142,7 +142,7 @@ const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
           exit={{ opacity: 0, y: -20 }}
         >
             <div className="flex flex-col">
-                    <h1 className="text-xl font-mono font-bold dark:text-white">{place.name}</h1>
+                    <h1 className="text-xl font-bold dark:text-white">{place.name}</h1>
                     <span className="flex flex-row gap-2 mt-1">
                     {place.group && (
             <GenericNotification text="❤️ Group" />

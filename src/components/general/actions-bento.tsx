@@ -90,7 +90,7 @@ export const ActionsBento = () => {
         </div>
         <div className="md:pl-4 mt-2">
         <p 
-          className="font-mono dark:text-white text-xl font-bold">Discover whats around you
+          className="font-serif dark:text-white text-xl font-bold">Discover whats around you
           </p>
           <p className="dark:text-white text-sm">Find Groups and Places to follow.</p>
         </div>
@@ -117,7 +117,7 @@ export const ActionsBento = () => {
           <TbCalendarWeekFilled className="w-10 h-10" />
         </motion.div>
         <div className="pl-4 flex flex-col">
-          <p className="font-mono dark:text-white text-xl mt-2 font-bold">Happenings</p>
+          <p className="dark:text-white text-xl mt-2 font-bold">Happenings</p>
           <p className="dark:text-white text-sm mt-1">
             Get Updates on current Events and participate
           </p>
@@ -152,7 +152,7 @@ export const ActionsBento = () => {
           {/* Content for the first small container */}
           <BentoBox className="p-2 items-center shadow-none">
             <h2 className="text-bold text-xl">It seems like..</h2>
-            <p className="font-mono mb-3">you're still going rogue.</p> 
+            <p className="mb-3">you're still going rogue.</p> 
             <div className="w-14 h-14 dark:bg-aurora-500 border border-violet-500 shadow-md p-2 rounded-xl mt-2 mb-1">
               <FaCity className="w-10 h-10"/>
             </div>

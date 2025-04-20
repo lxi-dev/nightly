@@ -5,12 +5,6 @@ export default {
     content: ["./src/**/*.tsx"],
   theme: {
   	extend: {
-  		fontFamily: {
-  			sans: [
-  				'var(--font-mona-sans)',
-                ],
-			mono: ['var(--font-hubot-sans)']
-  		},
   		colors: {
   			'aurora-200': '#01cbae',
   			'aurora-300': '#2082a6',
