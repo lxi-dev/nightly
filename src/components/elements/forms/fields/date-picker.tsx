@@ -3,7 +3,7 @@ import React from 'react';
 interface DateInputProps {
   label: string;
   name: string;
-  value: string;
+  value?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
 }

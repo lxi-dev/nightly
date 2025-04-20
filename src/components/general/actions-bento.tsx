@@ -27,27 +27,6 @@ export const ActionsBento = () => {
       color: '#4A90E2',
       icon: false
     },
-    // { 
-    //   lat: 51.515, 
-    //   lng: -0.1, 
-    //   name: 'Coffee Shop',
-    //   icon: Coffee,
-    //   color: '#8B4513'
-    // },
-    // { 
-    //   lat: 51.495, 
-    //   lng: -0.08, 
-    //   name: 'Hospital',
-    //   icon: Hospital,
-    //   color: '#FF6347'
-    // },
-    // { 
-    //   lat: 51.525, 
-    //   lng: -0.11, 
-    //   name: 'Store',
-    //   icon: Store,
-    //   color: '#2E8B57'
-    // }
   ];
   if (!user) return <Spinner/>;
 
@@ -110,7 +89,7 @@ export const ActionsBento = () => {
         </div>
         <div className="md:pl-4 mt-2">
         <p 
-          className="dark:text-white text-xl">Discover whats around you
+          className="font-mono dark:text-white text-xl font-bold">Discover whats around you
           </p>
           <p className="dark:text-white text-sm">Find Groups and Places to follow.</p>
         </div>
@@ -137,7 +116,7 @@ export const ActionsBento = () => {
           <TbCalendarWeekFilled className="w-10 h-10" />
         </motion.div>
         <div className="pl-4 flex flex-col">
-          <p className="dark:text-white text-xl mt-2">Happenings</p>
+          <p className="font-mono dark:text-white text-xl mt-2 font-bold">Happenings</p>
           <p className="dark:text-white text-sm mt-1">
             Get Updates on current Events and participate
           </p>
@@ -153,7 +132,9 @@ export const ActionsBento = () => {
       {/* Right-hand side: Main Container */}
       <div className="md:w-3/4 h-[450px] flex-shrink-0">
         {/* Content for the main container */}
+        <div className="h-[400px] overflow-scroll ">
           <ActivityFeed />
+        </div>
               <Button
                 variant="ghost"
                 size="sm"
@@ -170,7 +151,7 @@ export const ActionsBento = () => {
           {/* Content for the first small container */}
           <BentoBox className="p-2 items-center shadow-none">
             <h2 className="text-bold text-xl">It seems like..</h2>
-            <p className="mb-3">you're still going rogue.</p> 
+            <p className="font-mono mb-3">you're still going rogue.</p> 
             <div className="w-14 h-14 dark:bg-aurora-500 border border-violet-500 shadow-md p-2 rounded-xl mt-2 mb-1">
               <FaCity className="w-10 h-10"/>
             </div>

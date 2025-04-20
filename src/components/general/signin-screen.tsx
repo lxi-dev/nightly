@@ -12,11 +12,9 @@ export function SignInScreen() {
       <div className="w-full min-h-1/4 bg-white md:h-full dark:bg-aurora shadow-lg dark:text-white flex justify-center md:justify-start flex-col items-center pb-4 pt-4">
         {/* <LoginForm /> */}
         <div className="my-auto">
-        <p className="mb-4">Select an authentication provide to sign in</p>
         <SocialMediaLogin />
 
         </div>
-        {/* <Seperator text="Login"></Seperator> */}
       </div>
 
       {/* Right Side */}

@@ -8,13 +8,23 @@ import { LoadingProvider } from "nglty/contexts/loadingContext"
 import { Header } from "nglty/components/general/header"
 import { auth } from "nglty/server/auth"
 import { ThemeProvider } from "nglty/contexts/themeProvider"
-import { Mona_Sans } from "next/font/google"
+import { Hubot_Sans, Mona_Sans } from "next/font/google"
 import { UserProvider } from "nglty/contexts/profileContext"
 
 const fontSans = Mona_Sans({
+  weight: ['400', '700'],
+  style: ['normal'],
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-geist-sans",
+  variable: "--font-mona-sans",
+})
+
+const fontMono = Hubot_Sans({
+  weight: ['500'],
+  style: ['normal'],
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-hubot-sans",
 })
 
 export const metadata: Metadata = {
@@ -28,7 +38,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 
   if (!session) {
     return (
-      <html lang="en" suppressHydrationWarning className={`font-sans antialiased ${fontSans.className}`}>
+      <html lang="en" suppressHydrationWarning className={`antialiased ${fontSans.variable} ${fontMono.variable}`}>
         <head>
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         </head>

@@ -14,6 +14,7 @@ import GenericNotification from "../elements/notification-pills/generic";
 import { HappeningActions } from "./happening-actions";
 import { api } from "nglty/trpc/react";
 import { InviteToHappeningButton } from "./invite-button";
+import { useLoading } from "nglty/contexts/loadingContext";
 
 type FollowersProp = {
   followers: number;
@@ -22,7 +23,7 @@ type FollowersProp = {
 }
 
 const EventPage: React.FC<{ event: Happening, userId?: string, followers: FollowersProp }> = ({ event, userId, followers }) => {
-
+  const {hideLoading }= useLoading()
   const { data: posts } = api.happening.getPostsByHappening.useQuery(
     { happeningId : event.id }, 
     { enabled : !!event.id && followers.isFollowing}
@@ -32,6 +33,7 @@ const EventPage: React.FC<{ event: Happening, userId?: string, followers: Follow
   const [owner, setOwner] = useState(false);
 
   useEffect(() => {
+    hideLoading();
     if(!userId) return;
     setOwner(event.creatorId === userId);
   }, [userId])

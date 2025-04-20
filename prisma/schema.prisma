@@ -21,6 +21,7 @@ model Happening {
   dateHappening DateTime?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  endTime       DateTime?
 
   postsEnabled        Boolean @default(true) // Enables or disables posts for the event
   helpingHandsEnabled Boolean @default(false) // Enables or disables a feature for recruiting helpers for the event

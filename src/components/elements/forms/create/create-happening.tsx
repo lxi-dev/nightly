@@ -24,6 +24,8 @@ import { ImageUpload } from "../fields/image-upload";
 import { colorOptions } from "nglty/lib/defaults";
 import PickerInput from "../fields/picker";
 import TimeInput from "../fields/time";
+import dayjs from "dayjs";
+import DateInput from "../fields/date-picker";
 
 type CheckboxHeartHouseProps = {
   name: string;
@@ -273,7 +275,7 @@ export const TypeColorForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
   };
   export const DateTextForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
     const [data, setData] = useState<Partial<HappeningCreate>>({
-      dateHappening: new Date(),
+      dateHappening: undefined,
       text: "",
       externalLinks: [],
       isRecurring: false,
@@ -281,6 +283,8 @@ export const TypeColorForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
       startTime: '',
       endTime: '',
     });
+
+    const [toggle, setToggle] = useState(true);
   
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const { name, value } = e.target;
@@ -296,19 +300,43 @@ export const TypeColorForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="w-full">
           <div className="flex gap-6 justify-between  flex-col md:flex-row">
-            <Calendar
-              mode="single"
-              selected={data.dateHappening}
-              onSelect={(e) =>
-                setData((prev) => ({
-                  ...prev,
-                  dateHappening: e,
-                }))}
-              className={`${bentoClass} shadow-none`}
-              />
-            <div className="w-full">
-              <TimeInput label={'Start Time'} name={"startTime"} value={data.startTime!} onChange={(e) => {console.log(e)}} />
-              <TimeInput label={'End Time'} name={"endtime"} value={data.endTime!} onChange={(e) => {console.log(e)}} />
+          <Calendar
+  mode="single"
+  selected={data.dateHappening}
+  onSelect={(date) => {
+    setData((prev) => ({
+      ...prev,
+      dateHappening: date, // Update directly with the selected date
+    }));
+  }}
+  className={`${bentoClass} shadow-none`}
+/>
+            
+            <div className="w-full gap-4 flex flex-col">
+            <DateInput
+  label="Date"
+  name="dateHappening"
+  value={
+    data.dateHappening instanceof Date
+      ? dayjs(data.dateHappening).format('YYYY-MM-DD') // Use dayjs for consistent formatting
+      : ""
+  }
+  onChange={(e) => {
+    const newDate = e.target.value ? new Date(e.target.value) : null; // Parse input as Date
+    setData((prev) => ({
+      ...prev,
+      dateHappening: newDate ?? undefined, // Ensure it's undefined if not set
+    }));
+  }}
+  required
+/>
+              <TimeInput label={'Start Time'} name={"startTime"} value={data.startTime!} onChange={handleChange} required/>
+              
+              <ToggleInput label={"Is it Open Ended?"} name={"endTimeToggle"} value={toggle} onChange={(e) => setToggle(e)} />
+
+                { !toggle && 
+              <TimeInput label={'End Time'} name={"endTime"} value={data.endTime!} onChange={handleChange} />
+                }
               <p className="text-sm text-semibold mt-4 ">If no End Time is selected, the Happening is planned to be open ended!</p>
 
             </div>
@@ -428,7 +456,11 @@ const HappeningFunnel = () => {
     const configData = configEntry as Partial<HappeningCreate>;
 
     if(!generalInfoData || !typeColorData || !dateTextData || !configData) return;
-
+    if (!dateTextData.dateHappening) return;
+    const date = new Date(dateTextData.dateHappening);
+    if (!dateTextData.startTime) return;
+    const dateTime = dayjs(date).hour(+dateTextData.startTime.split(':')[0]!)
+    dateTime.minute(+dateTextData.startTime.split(':')[0]!)
     const commonPayload: HappeningCreate = {
       type: generalInfoData.type!,
       published: false,
@@ -451,6 +483,8 @@ const HappeningFunnel = () => {
       cancellationReason: undefined,
       archived: false
   };
+
+  let redirectUrl = '';
   
   try {
       showLoading();
@@ -462,18 +496,18 @@ const HappeningFunnel = () => {
           venueId: generalInfoData.venueId ?? ''
         });
       if(!happening) return;
-      
-      hideLoading();
-      const happeningId = happening as string;
-      redirect(`h/${happeningId}`);
+      console.log(happening);
+      if (happening.redirectUrl) {
+        redirectUrl = happening.redirectUrl;
+      }
     } catch {
       console.error('Error creating happening:');
-    } finally {
-      // if(happening) {
-      //   hideLoading();
-      //   redirect(`h/${happening}`);
-      // }
-  }
+    }
+    if (redirectUrl.length > 1) {
+      redirect(redirectUrl);
+    }
+    hideLoading();
+
   };
 
   return <Funnel steps={steps} onComplete={handleComplete} />;

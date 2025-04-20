@@ -87,7 +87,12 @@ export const happeningRouter = createTRPCRouter({
           targetId: happening.id,
           description: `Created a new happening: ${happening.name}`,
         });
-        return happening.id;
+
+        // Construct the URL
+        const redirectUrl = `/happen/h/${happening.id}`;
+
+        // Return the URL to the client
+        return { redirectUrl };
     }),
   
 

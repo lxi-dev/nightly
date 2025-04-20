@@ -1,5 +1,4 @@
 import { type Config } from "tailwindcss";
-import { fontFamily } from "tailwindcss/defaultTheme";
 
 export default {
 	darkMode: "class", // This ensures dark mode is class-based
@@ -8,9 +7,9 @@ export default {
   	extend: {
   		fontFamily: {
   			sans: [
-  				'var(--font-geist-sans)',
-                    ...fontFamily.sans
-                ]
+  				'var(--font-mona-sans)',
+                ],
+			mono: ['var(--font-hubot-sans)']
   		},
   		colors: {
   			'aurora-200': '#01cbae',
