@@ -263,7 +263,7 @@ export const UserInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit, props 
         </div>
         <p>If you like, share some information about yourself.</p>
         <div>
-          <DateInput label={'Date of Birth'} name={'age'} value={data.age!} onChange={handleChange} />
+          <DateInput label={'Date of Birth'} name={'age'} value={data.age} onChange={handleChange} />
         </div>
         <div>
           <TextAreaInput label={"Bio"} name={"bio"} value={data.bio!} onChange={() => handleChange}            

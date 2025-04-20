@@ -34,7 +34,7 @@ export const Tabs: React.FC<TabsProps> = ({ children, defaultActiveTab }) => {
   const { width, left } = getTabDimensions(activeTab);
 
   return (
-    <div className="h-full w-full gap-4">
+    <div className="w-full gap-4">
       <div className="relative flex flex-row gap-6 border-b border-gray-300 dark:border-gray-700 pb-2">
         {children &&
           React.Children.map(children, (child) => {

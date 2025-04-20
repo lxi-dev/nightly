@@ -59,7 +59,7 @@ export const PlaceInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => 
           <Editor
             value={data.description}
             onChange={handleChange}
-            className="w-full border-gray-300 rounded-lg shadow-sm"
+            className="w-full dark:text-white border-gray-300 rounded-lg shadow-sm"
           /></EditorProvider>
         </div>
         <button
@@ -137,7 +137,7 @@ export const LocationForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
         </div>
         </div>
         { mapData && 
-            <BentoBox className="mt-6 h-32 overflow-hidden shadow-none">
+            <BentoBox className="mt-6 h-32 min-h-[240px] overflow-hidden shadow-none">
               <MapComponent locations={[{lat: +mapData.latitude, lng: +mapData.longitude,name: mapData.displayName}]} />
             </BentoBox>
             }

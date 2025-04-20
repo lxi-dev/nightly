@@ -10,6 +10,8 @@ import { PostComponent } from "../elements/post";
 import { HappeningsList } from "../happening/happenings-list";
 import { ApplyToPlaceButton } from "./apply-button";
 import MapComponent from "../elements/map";
+import { motion } from "framer-motion";
+import GenericNotification from "../elements/notification-pills/generic";
 
 const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
   const [following, setFollowing] = useState(false);
@@ -93,7 +95,7 @@ const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
   )
 
   return (
-    <main>
+    <main className="h-full">
   {/* Information Section */}
     {owner && (
       <div id="heading w-full">
@@ -125,17 +127,30 @@ const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
   </div>
 
   {/* Image Section */}
-  <div className="w-full md:w-7/8">
+  <div className="w-full md:w-7/8 -translate-y-8">
   { place.picture && 
-    <img
+        <img
           src={place.picture}
-          alt={place.name}
-          className="w-full h-64 object-cover rounded-2xl mb-4"
+          alt="cover"
+          className="w-full h-36 object-cover rounded-2xl border md:border-2 border-gray-300 dark:border-gray-700 translate-y-8 z-0"
         />
-  }
-        <div className="flex w-full justify-between items-center">
-          <h1 className="text-2xl font-bold mb-2">{place.name}</h1>
-          <div>
+      }
+      <motion.div
+          className="flex mx-auto bg-white flex-row md:flex-row justify-between dark:bg-aurora border-2 border-gray-300 dark:border-gray-700 shadow-lg rounded-2xl p-4 z-10 relative"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+        >
+            <div className="flex flex-col">
+                    <h1 className="text-xl font-mono font-bold dark:text-white">{place.name}</h1>
+                    <span className="flex flex-row gap-2 mt-1">
+                    {place.group && (
+            <GenericNotification text="❤️ Group" />
+              
+        )}
+                    <GenericNotification text={place.category!} />
+                    </span>
+            </div>
           { !owner && <button
           onClick={handleFollow}
           className={`px-4 py-2 rounded-lg transition ${
@@ -145,16 +160,12 @@ const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
           {following ? "Following" : "Follow this place"}
         </button>}
         { (!owner && place.applicationsEnabled) &&<ApplyToPlaceButton placeId={place.id} />}
-          </div>
-        </div>
-        <div className="w-full">
-          {place.category}
-        </div>
+        </motion.div>
         <Tabs defaultActiveTab="info">
         <Tab id="info" label="Description">
           <TabContent>
         <div
-          className="text-gray-600 dark:text-gray-300 mb-12"
+          className="text-gray-600 dark:text-gray-300 mb-12 overflow-scroll"
           dangerouslySetInnerHTML={{ __html: place.description ?? "<p>No description available.</p>" }}
         ></div>    
           </TabContent>
@@ -187,13 +198,6 @@ const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
           </TabContent>
         </Tab>
       </Tabs>   
-        {place.group && (
-          <div className="mt-4">
-            <span className="px-3 py-1 bg-red-500 text-white rounded-full text-sm">
-              ❤️ Place in my heart
-            </span>
-          </div>
-        )}
       </div>
     </section>
     </main>

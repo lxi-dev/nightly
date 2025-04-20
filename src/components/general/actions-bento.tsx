@@ -15,6 +15,7 @@ import ActivityFeed from "./activity-feed";
 import { TbCalendarWeekFilled } from "react-icons/tb";
 import { motion } from "framer-motion";
 import Spinner from "../elements/spinner";
+import ProfilePictureGenerator from "../elements/forms/fields/profile-picture";
 
 export const ActionsBento = () => {
   const { user, location, refreshUser } = useProfile(); 
@@ -173,6 +174,7 @@ export const ActionsBento = () => {
       </div>
     </div>
     }
+    <ProfilePictureGenerator />
     
       </div>
       <div className="absolute inset-0 z-0 blur-lg opacity-20">
