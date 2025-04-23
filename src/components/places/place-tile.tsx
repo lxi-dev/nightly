@@ -21,7 +21,7 @@ const PlaceTile = ({ place  } : { place : Place}) => {
             )}
           </div>
           {place.verified && (
-            <Badge variant="outline" className="flex items-center gap-1 text-xs">
+            <Badge variant="outline" className="flex items-center gap-1 text-xs p-4">
               <Check className="h-3 w-3" />
             </Badge>
           )}

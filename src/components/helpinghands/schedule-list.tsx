@@ -96,7 +96,6 @@ export function ScheduleList({ happeningId, owner }: ScheduleListProps) {
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-medium">Saved Schedules</h3>
       {schedules.map((schedule) => (
         <BentoBox key={schedule.id} className="p-4">
           <div className="pb-2">

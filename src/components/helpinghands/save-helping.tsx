@@ -61,8 +61,8 @@ export function SaveScheduleForm({ happeningId }: SaveScheduleFormProps) {
     }
 
   return (
-    <div className="space-y-4">
-      <div className="space-y-2">
+    <div className="space-y-x flex flex-row w-full items-end">
+      <div className="space-y-2 w-7/8">
         <TextInput
           label='Schedule Name'
           name="schedule-name"

@@ -18,23 +18,20 @@ export const HelpingHandsPage = ({happeningId} : {happeningId: string}) => {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div className="lg:col-span-2">
                         <ShiftScheduler owner={true}/>
+                    <BentoBox className="p-4">
+                        <div className="flex flex-row w-full">
+                            <SaveScheduleForm happeningId={happeningId} />
+
+                        </div>
+                        </BentoBox>
                     </div>
                 
                     <div className={`space-y-8`}> 
-                    <BentoBox className="p-4">
-                        <div>
-                            <h3>Save Schedule</h3>
-                            <h5>Save this schedule for the happening</h5>
-                        </div>
-                        <div>
-                            <SaveScheduleForm happeningId={happeningId} />
-                        </div>
-                        </BentoBox>
                         
                         <ScheduleList happeningId={happeningId} owner={true}/>
+                        <ShiftApplicantsList happeningId={happeningId} />
                     </div>
                 </div>
-                <ShiftApplicantsList happeningId={happeningId} />
             </main>
         </ShiftSchedulerProvider>
     )

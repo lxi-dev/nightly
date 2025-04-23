@@ -12,7 +12,7 @@ export const Header = () => {
 
   return (
     <nav>
-        <header className="relative border-b sticky top-0 z-10 bg-background/95 backdrop-blur-sm overflow-hidden">
+        <header className="relative sticky top-0 z-10 bg-white/95 dark:bg-aurora/95 backdrop-blur-sm overflow-hidden">
         <div className="absolute inset-0 z-0 opacity-10">
           <div className="absolute inset-0 bg-gradient-to-r from-purple-500/30 via-violet-700/30 to-teal-500/30"> </div>
           <AurorasBackground />

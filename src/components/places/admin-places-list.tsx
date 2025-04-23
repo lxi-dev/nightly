@@ -1,12 +1,13 @@
 'use client';
 import { api } from "nglty/trpc/react";
 import PlaceListItem from "./place-list-item";
+import Spinner from "../elements/spinner";
 
 export const AdminPlacesList = () => {
     const { data: places, isLoading, isError } = api.places.getSimplifiedPlaces.useQuery();
 
     if (isLoading) {
-        return <div>Loading users...</div>;
+        return <Spinner />;
     }
 
     if (isError) {

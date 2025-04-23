@@ -188,11 +188,11 @@ const MapComponent: React.FC<MapComponentProps> = ({
   }, [locations, center, zoom, interactive, mapStyle]);
 
   return (
-    <div 
-      ref={mapRef} 
-      style={{ width: '100%', height: '100%'}} 
-      className={`map-container ${className}`}
-    />
+      <div 
+        ref={mapRef} 
+        style={{ width: '100%', height: '100%'}} 
+        className={`map-container ${className}`}
+      />
   );
 };
 

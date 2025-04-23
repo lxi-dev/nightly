@@ -361,7 +361,6 @@ export const OpeningHoursFormInfoForm: React.FC<FormProps<FunnelData>> = ({ onSu
       const result: Record<string, string> = {};
       
       if(!data) return undefined;
-      
       data.forEach((dayInfo) => {
         const hoursString = dayInfo.hours
         .map(({ from, to }) => `${from}-${to}`)
@@ -369,7 +368,6 @@ export const OpeningHoursFormInfoForm: React.FC<FormProps<FunnelData>> = ({ onSu
         
         result[dayInfo.day.toLowerCase()] = hoursString;
       });
-      
       return result;
     }
     

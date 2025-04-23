@@ -132,7 +132,7 @@ const PlaceProfile = ({ id, userId }: { id: string, userId?: string }) => {
         <img
           src={place.picture}
           alt="cover"
-          className="w-full h-36 object-cover rounded-2xl border md:border-2 border-gray-300 dark:border-gray-700 translate-y-8 z-0"
+          className="w-full h-48 object-cover rounded-2xl border md:border-2 border-gray-300 dark:border-gray-700 translate-y-8 z-0"
         />
       }
       <motion.div

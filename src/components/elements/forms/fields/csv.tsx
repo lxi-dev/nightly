@@ -24,7 +24,9 @@ const CSVInput: React.FC<CSVInputProps> = ({
   onChange,
   required = false,
 }) => {
-  const [fields, setFields] = useState<string[]>(value.split(',').filter(Boolean));
+  const [fields, setFields] = useState<string[]>(
+    value.split(',').filter(Boolean).length > 0 ? value.split(',').filter(Boolean) : ['']
+  );
 
   const handleFieldChange = (index: number, newValue: string) => {
     const updatedFields = [...fields];
@@ -43,7 +45,7 @@ const CSVInput: React.FC<CSVInputProps> = ({
         {label}
       </label>
       {fields.map((field, index) => (
-        <div key={index} className="flex items-center mt-2">
+        <div key={index} className="flex items-center mt-2 space-x-2">
           <input
             type="text"
             name={`${name}-${index}`}
@@ -52,16 +54,18 @@ const CSVInput: React.FC<CSVInputProps> = ({
             className="flex-grow block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-aurora dark:text-white border-2 p-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             required={required}
           />
+          {index === fields.length - 1 && (
+            <button
+              type="button"
+              onClick={addField}
+              className="flex items-center justify-center w-8 h-8 rounded-md border-gray-300 dark:border-gray-700 bg-gray-200 dark:bg-aurora dark:text-gray-400 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              aria-label="Add field"
+            >
+              <Plus size={16} />
+            </button>
+          )}
         </div>
       ))}
-      <button
-        type="button"
-        onClick={addField}
-        className="mt-2 flex items-center justify-center w-8 h-8 rounded-full bg-indigo-500 text-white focus:outline-none focus:ring-2 focus:ring-indigo-400"
-        aria-label="Add field"
-      >
-        <Plus size={16} />
-      </button>
     </div>
   );
 };

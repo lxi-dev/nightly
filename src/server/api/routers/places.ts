@@ -25,6 +25,7 @@ export const placesRouter = createTRPCRouter({
         category: z.string().optional(),
         tags: z.array(z.string()).optional(),
         visibility: z.enum(["public", "private", "restricted"]).default("public"),
+        applicationsEnabled: z.boolean().optional()
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -38,6 +39,16 @@ export const placesRouter = createTRPCRouter({
                 create: geoCoordinate,
               }
             : undefined,
+        },
+      });
+
+
+      await ctx.db.place.update({
+        where: { id: place.id },
+        data: {
+          followers: {
+            connect: { id: ctx.session.user.id },
+          },
         },
       });
 

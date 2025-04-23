@@ -50,7 +50,6 @@ const COLORS: string[] = [
 
 const SHAPES: Shape[] = ["circle", "square", "triangle", "diamond"];
 
-/** Component */
 export default function ProfilePictureGenerator(): JSX.Element {
   const [gridSize, setGridSize] = useState<number>(5);
   //const [selectedColor, setSelectedColor] = useState<string>(COLORS[0]!);
@@ -225,43 +224,8 @@ export default function ProfilePictureGenerator(): JSX.Element {
   return (
     <div className="flex flex-col items-center justify-center w-full max-w-4xl mx-auto p-4">
       <BentoBox className="w-full p-4">
-          <p className="text-2xl font-bold text-center">Profile Picture Generator</p>
+          <div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="flex flex-col space-y-6">
-              <div>
-                <h3 className="text-lg font-medium mb-2">Grid Size</h3>
-                <div className="flex items-center space-x-2">
-                  <Slider
-                    value={[gridSize]}
-                    min={3}
-                    max={8}
-                    step={1}
-                    onValueChange={(value) => setGridSize(value[0]!)}
-                    className="w-full"
-                  />
-                  <span className="w-12 text-center">
-                    {gridSize}×{gridSize}
-                  </span>
-                </div>
-              </div>
-
-              <div>
-                <h3 className="text-lg font-medium mb-2">Background Color</h3>
-                <div className="grid grid-cols-10 gap-2">
-                  {COLORS.map((color) => (
-                    <button
-                      key={color}
-                      className={`w-6 h-6 rounded-full border ${
-                        backgroundColor === color ? "ring-2 ring-offset-2 ring-black" : ""
-                      }`}
-                      style={{ backgroundColor: color }}
-                      onClick={() => setBackgroundColor(color)}
-                      aria-label={`Select ${color} as background color`}
-                    />
-                  ))}
-                </div>
-              </div>
 {/* 
               <Tabs defaultActiveTab="color">
                 <Tab id="color" label="Color">
@@ -301,22 +265,61 @@ export default function ProfilePictureGenerator(): JSX.Element {
                   </RadioGroup>
                 </Tab>
               </Tabs> */}
-            </div>
 
-            <div className="flex flex-col items-center space-y-6">
+            <div className="flex flex-col items-center">
               <canvas ref={canvasRef} width={300} height={300} className="border rounded-md shadow-md" />
             </div>
           </div>
-        <div className="w-full flex flex-row items-start mt-4 gap-4">
-          <Button variant="destructive" onClick={initializeGrid}>
+        <div className="w-full mt-4 items-center px-8">
+        <div className="flex flex-col">
+              <div>
+                <h3 className="text-lg font-medium mb-2">Grid Size</h3>
+                <div className="flex items-center space-x-2">
+                  <Slider
+                    value={[gridSize]}
+                    min={3}
+                    max={8}
+                    step={1}
+                    onValueChange={(value) => setGridSize(value[0]!)}
+                    className="w-full"
+                  />
+                  <span className="w-12 text-center">
+                    {gridSize}×{gridSize}
+                  </span>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-medium mb-2">Background Color</h3>
+                <div className="grid grid-cols-10 gap-2">
+                  {COLORS.map((color) => (
+                    <button
+                      key={color}
+                      className={`w-6 h-6 rounded-full border ${
+                        backgroundColor === color ? "ring-2 ring-offset-2 ring-black" : ""
+                      }`}
+                      style={{ backgroundColor: color }}
+                      onClick={() => setBackgroundColor(color)}
+                      aria-label={`Select ${color} as background color`}
+                    />
+                  ))}
+                </div>
+              </div>
+          <div className="flex flex-col gap-2 mt-4">
+            <div className="flex flex-row gap-2">
+          <Button variant="destructive" onClick={initializeGrid} className="w-1/2">
             Reset Grid
           </Button>
-          <Button onClick={generateRandomAvatar} variant="outline" className="w-full">
+          <Button onClick={generateRandomAvatar} variant="outline" className="w-1/2">
                 Generate Random Avatar
               </Button>
+            </div>
           <Button variant="ghost" onClick={downloadAvatar} className="w-full">
                 Download Avatar
               </Button>
+
+          </div>
+          </div>
           {/* <Button variant="secondary" onClick={uploadAvatar}>
             Save Avatar
           </Button> */}

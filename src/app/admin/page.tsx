@@ -1,4 +1,5 @@
 import { BentoBox } from 'nglty/components/elements/box';
+import ProfilePictureGenerator from 'nglty/components/elements/forms/fields/profile-picture';
 import { AdminPlacesList } from 'nglty/components/places/admin-places-list';
 import { UsersList } from 'nglty/components/users/all-users';
 import { auth } from 'nglty/server/auth';
@@ -13,7 +14,7 @@ export default async function Page() {
     if (!admin) return;
     return (
             <HydrateClient>
-                <div className="h-screen flex flex-col items-center justify-between gap-4">
+                <div className="min-h-screen flex flex-col items-center justify-between gap-4">
                     <div className="w-full dark:text-white">
                         <p className="text-2xl dark:text-slate-700 mt-8">All Users on Nightly</p>
                     <BentoBox colSpan="4" rowSpan="5" className="mt-2">
@@ -24,6 +25,7 @@ export default async function Page() {
                     <BentoBox animated>
                         <AdminPlacesList />
                     </BentoBox>
+                    <ProfilePictureGenerator />
 
                     </div>
                 </div>

@@ -15,7 +15,6 @@ import ActivityFeed from "./activity-feed";
 import { TbCalendarWeekFilled } from "react-icons/tb";
 import { motion } from "framer-motion";
 import Spinner from "../elements/spinner";
-import ProfilePictureGenerator from "../elements/forms/fields/profile-picture";
 
 export const ActionsBento = () => {
   const { user, location, refreshUser } = useProfile(); 
@@ -52,8 +51,8 @@ export const ActionsBento = () => {
           <div className="z-10 mt-4 p-4">
           <div className="flex flex-col items-center gap-4">
             <div className="flex flex-col w-full items-center">
-            <h2 className="p-2 mb-8">Seems like you're new here. </h2>
-            <h3 className="text-2xl mb-4">Welcome to</h3>         
+            <h2 className="p-2 mb-8 dark:text-gray-200">Seems like you're new here. </h2>
+            <h3 className="text-2xl mb-4 dark:text-gray-200">Welcome to</h3>         
             <span className="scale-150 text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-violet-700 flex flex-row gap-2">
             <LogoCubicle/> Nightly
                 </span>
@@ -173,9 +172,7 @@ export const ActionsBento = () => {
         </div>
       </div>
     </div>
-    }
-    <ProfilePictureGenerator />
-    
+    }    
       </div>
       <div className="absolute inset-0 z-0 blur-lg opacity-20">
       <StarsBackground />

@@ -3,6 +3,7 @@ import VaListItem from "./va-list-item";
 import { useEffect, useState } from "react";
 import { api } from "nglty/trpc/react";
 import { useLoading } from "nglty/contexts/loadingContext";
+import { NoContentAvailable } from "../elements/no-content";
 
 type Props = {
     happenings?: Happening[];
@@ -42,6 +43,7 @@ export const HappeningsList: React.FC<Props> = ({ happenings, deletable }) => {
     return (
         <section>
             { !happenings && <span>Loading...</span>}
+            { list?.length === 0 && <NoContentAvailable /> }
             { happenings && list && 
                 <div className="flex flex-col gap-4">
                 {list.map(

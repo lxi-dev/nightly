@@ -2,7 +2,7 @@
 import { PlaceList } from "./places-list";
 import YourPlaceCard from "./your-place-card";
 import { Tabs, Tab, TabContent } from "../ui/tabs";
-import { GroupList } from "./heartplaces-list";
+import { GroupList } from "./group-list";
 import { useProfile } from "nglty/contexts/profileContext";
 
 type Props = {

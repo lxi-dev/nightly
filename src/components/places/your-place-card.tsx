@@ -2,6 +2,7 @@ import React from "react";
 import { MapPin, Users, Calendar, Heart, TrashIcon } from "lucide-react";
 import { api } from "nglty/trpc/react";
 import { motion } from "framer-motion";import { BentoBox } from "../elements/box";
+import Spinner from "../elements/spinner";
 
 
 type Props = {
@@ -29,7 +30,7 @@ const YourPlaceCard: React.FC<Props> = ({ userId  }) => {
         }
     }
     
-    if (isLoading) return <p>Loading places...</p>;
+    if (isLoading) return <Spinner/>;
 
     
     return (

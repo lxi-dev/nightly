@@ -39,6 +39,7 @@ export const ApplyToHelpingHandsButton: React.FC = () => {
   <DialogContent>
     <DialogHeader>
       <DialogTitle>Apply to this Shift?</DialogTitle>
+    </DialogHeader>
       <DialogDescription>
       <textarea
         className="w-full p-2 border border-gray-300 rounded-md"
@@ -50,7 +51,6 @@ export const ApplyToHelpingHandsButton: React.FC = () => {
         <Button variant="outline" onClick={handleSubmit}>Apply</Button>
 
       </DialogDescription>
-    </DialogHeader>
   </DialogContent>
 </Dialog>
 

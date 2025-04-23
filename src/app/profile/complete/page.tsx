@@ -9,8 +9,8 @@ export default async function Page() {
   
   return (
         <HydrateClient>
-            <main className='w-full h-screen'>
-            <div className="flex flex-col h-full items-center justify-between md:ml-12 md:mr-12 lg:mr-36 lg:ml-36 xl:mr-72 xl:mb-72 2xl:ml-128 2xl:mr-128">
+            <main className='w-full min-h-screen'>
+            <div className="flex flex-col items-center justify-between md:ml-12 md:mr-12 lg:mr-36 lg:ml-36 xl:mr-72 xl:mb-72 2xl:ml-128 2xl:mr-128">
                 <UserCompleteFunnel user={session!.user}/>
             </div>
         </main>

@@ -14,10 +14,11 @@ import { Button } from "nglty/components/ui/button";
 import TextInput from "../fields/text";
 import { fetchCoordinates } from "nglty/lib/locationService";
 import MapComponent from "../../map";
-import { BentoBox } from "../../box";
 import DateInput from "../fields/date-picker";
 import TextAreaInput from "../fields/text-area";
 import { useLoading } from "nglty/contexts/loadingContext";
+import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogHeader, DialogTrigger } from "nglty/components/ui/dialog";
+import ProfilePictureGenerator from "../fields/profile-picture";
 
 
 export const AGBInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit }) => {
@@ -226,13 +227,30 @@ export const UserInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit, props 
   
     return (
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="flex flex-row w-full justify-left">
-          <div className="w-36 h-36">
+        <div className="flex flex-row w-full justify-between px-12 items-center">
             <img
               src={sessionData?.image ?? 'https://plus.unsplash.com/premium_photo-1671656349322-41de944d259b?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'}
-              className="w-36 h-36rounded-2xl border border-gray-200/20 shadow-lg"
+              className="w-36 h-36 rounded-2xl border border-gray-200/20 shadow-lg"
               />
-          </div>
+              <p className="dark:text-gray-200">or</p>
+              <Dialog>
+                <DialogTrigger>
+                  
+              <div className="w-36 h-36 rounded-2xl bg-aurora-500 border border-violet-500 items-center flex">
+                  <p className="mx-auto text-white">create your own</p>
+              </div>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Create your own Avatar</DialogTitle>
+                  </DialogHeader>
+                  <DialogDescription>
+                  <ProfilePictureGenerator />
+                  </DialogDescription>
+                </DialogContent>
+              </Dialog>
+        </div>
+        <div>
           <div className="flex flex-col w-full pl-4">
             <div>
               <TextInput 
@@ -246,7 +264,7 @@ export const UserInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit, props 
             <label className="block text-gray-500 mt-2 ml-2 text-sm ">Email: {sessionData?.email ?? 'unavailable'}</label>
           </div>
         </div>
-        <p className="text-slate-600">The Above information is gathered through your authentication provider. Your Email-Address will not be shared with others!</p>
+        <p className="text-gray-600">The Above information is gathered through your authentication provider. Your Email-Address will not be shared with others!</p>
         <p className="text-slate-600">Please provide information about your Location. It will be used to show places around you.</p>
         <div>
           <TextInput 
@@ -256,12 +274,18 @@ export const UserInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit, props 
             onChange={handleChange} 
             required />
             { mapData && 
-            <BentoBox className="mt-6 min-h-32 overflow-hidden shadow-none">
-              <MapComponent locations={[{lat: +mapData.latitude, lng: +mapData.longitude,name: mapData.displayName}]} />
-            </BentoBox>
+            <div className="w-full h-24 overflow-hidden rounded-lg border-2 border-gray-300 dark:border-gray-700 mt-4">
+
+              <MapComponent 
+                locations={[{lat: +mapData.latitude, lng: +mapData.longitude,name: mapData.displayName}]}
+                interactive={false} 
+                mapStyle="default" 
+                className="pointer-events-none" 
+               />
+            </div>
             }
         </div>
-        <p>If you like, share some information about yourself.</p>
+        <p className="dark:text-gray-200">If you like, share some information about yourself.</p>
         <div>
           <DateInput label={'Date of Birth'} name={'age'} value={data.age} onChange={handleChange} />
         </div>
@@ -331,7 +355,12 @@ export const UserInfoForm: React.FC<FormProps<FunnelData>> = ({ onSubmit, props 
       console.log("Funnel completed with data:", data);
     };
     
-    return <Funnel steps={steps} onComplete={handleComplete} user={user}/>;
+    return (
+
+      <>
+        <Funnel steps={steps} onComplete={handleComplete} user={user}/>;
+      </>
+    ) 
   };
   
   export default UserCompleteFunnel;
